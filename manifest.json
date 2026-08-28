@@ -1,0 +1,19 @@
+{
+  "name": "EAC Statistics e-Learning",
+  "short_name": "EAC Stats",
+  "description": "Official East African Community statistical training platform",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#0c2340",
+  "orientation": "any",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "images/eac-crest.png",
+      "sizes": "540x500",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

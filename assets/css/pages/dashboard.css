@@ -1,0 +1,399 @@
+/* ==================================================
+           DASHBOARD-SPECIFIC STYLES
+        ================================================== */
+
+        .dashboard-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-header-text h1 {
+            margin: 0;
+        }
+
+        .dashboard-header-text p {
+            margin: 0.4rem 0 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+
+        /* ==================================================
+           STAT CARDS
+        ================================================== */
+
+        .stats-row {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            position: relative;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 12px;
+            background: var(--card-bg, #ffffff);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.9rem;
+            border-radius: 10px;
+            background: rgba(12, 35, 64, 0.08);
+            color: #0c2340;
+            font-size: 1rem;
+        }
+
+        .stat-card .label {
+            margin-bottom: 0.35rem;
+            color: var(--text-secondary, #6b7280);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            color: var(--text-primary, #111827);
+            font-size: 1.65rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+
+        /* ==================================================
+           RANK CHANGE
+        ================================================== */
+
+        .rank-change {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .rank-change.up {
+            color: var(--color-success, #28a745);
+        }
+
+        .rank-change.down {
+            color: var(--color-danger, #dc3545);
+        }
+
+
+        /* ==================================================
+           PANELS
+        ================================================== */
+
+        .dashboard-panel {
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-panel-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin: 0;
+        }
+
+        .dashboard-panel-header h2 i {
+            color: #0c2340;
+            font-size: 0.95em;
+        }
+
+
+        /* ==================================================
+           COURSE LIST
+        ================================================== */
+
+        .dashboard-course-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid
+                var(--border-color, #e5e7eb);
+        }
+
+        .dashboard-course-item:last-child {
+            border-bottom: none;
+        }
+
+        .dashboard-course-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .dashboard-course-info h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-primary, #111827);
+        }
+
+        .dashboard-course-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+            color: var(--text-secondary, #6b7280);
+            font-size: 0.78rem;
+        }
+
+        .dashboard-course-action {
+            min-width: 260px;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .dashboard-progress {
+            flex: 1;
+            height: 7px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e9edf2;
+        }
+
+        .dashboard-progress-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: #0c2340;
+            transition: width 0.3s ease;
+        }
+
+        .dashboard-progress-value {
+            min-width: 38px;
+            text-align: right;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+
+        /* ==================================================
+           EMPTY / ERROR STATES
+        ================================================== */
+
+        .dashboard-state {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-secondary, #6b7280);
+        }
+
+        .dashboard-state i {
+            margin-bottom: 0.75rem;
+            color: #9ca3af;
+            font-size: 1.8rem;
+        }
+
+        .dashboard-state p {
+            margin: 0.3rem 0;
+        }
+
+        .dashboard-error {
+            color: var(--color-danger, #dc3545);
+        }
+
+
+        /* ==================================================
+           CERTIFICATES
+        ================================================== */
+
+        .certificate-list {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 1rem;
+        }
+
+        .certificate-card {
+            position: relative;
+            padding: 1.2rem;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 10px;
+            background: var(--card-bg, #ffffff);
+        }
+
+        .certificate-icon {
+            margin-bottom: 0.8rem;
+            color: #0c2340;
+            font-size: 1.5rem;
+        }
+
+        .certificate-card h4 {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .certificate-number {
+            margin: 0.45rem 0;
+            color: var(--text-secondary, #6b7280);
+            font-size: 0.8rem;
+        }
+
+        .certificate-date {
+            margin: 0;
+            color: var(--text-muted, #9ca3af);
+            font-size: 0.75rem;
+        }
+
+
+        /* ==================================================
+           LEADERBOARD
+        ================================================== */
+
+        .leaderboard-wrapper {
+            overflow-x: auto;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid
+                var(--border-color, #e5e7eb);
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        .leaderboard-table th {
+            color: var(--text-secondary, #6b7280);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .leaderboard-table tr.current-user {
+            background: rgba(12, 35, 64, 0.06);
+            font-weight: 600;
+        }
+
+        .rank-badge {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #eef0f3;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .rank-badge.rank-1 {
+            background: #f5d76e;
+            color: #5f4800;
+        }
+
+        .rank-badge.rank-2 {
+            background: #d8dde3;
+            color: #3f4650;
+        }
+
+        .rank-badge.rank-3 {
+            background: #d9a36c;
+            color: #5a3214;
+        }
+
+
+        /* ==================================================
+           LOADING
+        ================================================== */
+
+        .dashboard-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 2rem;
+            color: var(--text-secondary, #6b7280);
+        }
+
+
+        /* ==================================================
+           RESPONSIVE
+        ================================================== */
+
+        @media (max-width: 1000px) {
+
+            .stats-row {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .dashboard-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .dashboard-course-item {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .dashboard-course-action {
+                min-width: 0;
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card .value {
+                font-size: 1.45rem;
+            }
+
+            .dashboard-course-action {
+                flex-wrap: wrap;
+            }
+
+            .dashboard-course-action .btn {
+                width: 100%;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 0.65rem;
+                font-size: 0.75rem;
+            }
+
+        }
+
+.page-inline-1{width:${progress}%}

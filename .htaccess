@@ -1,0 +1,28 @@
+RewriteEngine On
+
+# Never expose application secrets, database dumps, logs, backups or development files.
+<FilesMatch "(?i)^(\.|.*\.(sql|db|sqlite|bak|bat|md|env|log))$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "(?i)^test.*\.php$">
+    Require all denied
+</FilesMatch>
+<Files "seed.php">
+    Require all denied
+</Files>
+<Files "0_deploy.txt">
+    Require all denied
+</Files>
+
+# Deny implementation directories and direct course source files.
+RewriteRule ^(?:config|data|includes|legacy_courses|legacy_pages|maintenance|storage)/ - [F,L,NC]
+RewriteRule ^courses/data/.*\.php$ - [F,L,NC]
+RewriteRule ^(?:router|seed)\.php$ - [F,L,NC]
+
+# Send every API path through the front controller, including /api/config.php.
+RewriteRule ^api(?:/.*)?$ api/index.php [QSA,L]
+
+DirectoryIndex index.php index.html
+
+# Legacy monolithic course pages are reference-only
+RedirectMatch 403 ^/legacy_courses/
