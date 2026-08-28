@@ -37,6 +37,11 @@ if ($courseUnavailable) {
 }
 
 if (!is_file($contentFile)) { http_response_code(404); exit('Course content not found.'); }
+$courseContentMarkup = (string)file_get_contents($contentFile);
+$needsAssessmentScreen = stripos($courseContentMarkup, 'id="screen-assessment"') === false
+    && stripos($courseContentMarkup, "id='screen-assessment'") === false;
+$needsCertificateScreen = stripos($courseContentMarkup, 'id="screen-certificate"') === false
+    && stripos($courseContentMarkup, "id='screen-certificate'") === false;
 
 // api/config.php is also used by the JSON API front controller and therefore
 // sets an application/json response header. These course entry points render
@@ -69,8 +74,22 @@ $courseCssVersion = is_file($courseCssFile) ? (string) filemtime($courseCssFile)
 <?php endif; ?>
 <main class="course-shell">
 <?php include $contentFile; ?>
+<?php if ($needsAssessmentScreen || $needsCertificateScreen): ?>
+<?php include __DIR__ . '/course-runtime-screens.php'; ?>
+<?php endif; ?>
 </main>
+<script>
+window.COURSE = window.COURSE || <?= json_encode([
+    'id' => (int)($courseId ?? 0),
+    'title' => (string)($courseTitle ?? 'EAC Statistics E-Learning Course'),
+    'short' => (string)($courseTitle ?? 'Course'),
+    'code' => strtoupper((string)($courseKey ?? 'CRS')),
+    'year' => (int)date('Y'),
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+</script>
+<?php if (is_file($dataJsFile)): ?>
 <script src="<?= htmlspecialchars($dataJs, ENT_QUOTES, 'UTF-8') ?>?v=<?= $dataVersion ?>"></script>
+<?php endif; ?>
 <script src="../assets/js/course.js?v=<?= $runtimeVersion ?>"></script>
 <?php if (!$isEmbedded): ?>
 <script>window.openModal = window.openModal || function(){ window.location.href = '../login.php'; };</script>

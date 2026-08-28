@@ -54,6 +54,12 @@ function courseContentSourcePath(int $courseId, string $contentPath): ?string {
         7 => 'courses/data/ess.php',
     ];
     $candidate = $builtIn[$courseId] ?? $contentPath;
+    if (!isset($builtIn[$courseId]) && preg_match('#^courses/([a-z0-9-]+)\.php$#', str_replace('\\', '/', $contentPath), $match)) {
+        $managedDataPath = 'courses/data/' . $match[1] . '.php';
+        if (is_file($root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $managedDataPath))) {
+            $candidate = $managedDataPath;
+        }
+    }
     $file = realpath($root . DIRECTORY_SEPARATOR . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $candidate));
     if (!$file || !str_starts_with($file, $root . DIRECTORY_SEPARATOR) || !is_readable($file)) {
         return null;
@@ -387,6 +393,9 @@ function validateCourseContentPath(mixed $value): string {
 function sanitiseManagedCourseContent(string $content): string {
     if (strlen($content) > 5 * 1024 * 1024) jsonError('Course content file must not exceed 5 MB.', 422);
     $content = preg_replace('/<\?(?:php|=)?[\s\S]*?\?>/i', '', $content) ?? '';
+    $content = preg_replace('#<script\b[^>]*>[\s\S]*?</script>#i', '', $content) ?? '';
+    $content = preg_replace('#<style\b[^>]*>[\s\S]*?</style>#i', '', $content) ?? '';
+    if (preg_match('#<body\b[^>]*>([\s\S]*?)</body>#i', $content, $body)) $content = $body[1];
     $allowed = '<p><h2><h3><h4><h5><ul><ol><li><strong><b><em><i><blockquote><table><thead><tbody><tr><th><td><a><br><hr>';
     $content = strip_tags($content, $allowed);
     $content = preg_replace('/\s+on[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content) ?? $content;
@@ -395,6 +404,23 @@ function sanitiseManagedCourseContent(string $content): string {
     $content = trim($content);
     if ($content === '') jsonError('The uploaded course content is empty.', 422);
     return $content;
+}
+
+function sanitiseStructuredCourseContent(string $content): ?string {
+    if (!preg_match('/id=["\']screen-hub["\']/i', $content) || !preg_match('/id=["\']screen-module["\']/i', $content)) return null;
+    $content = preg_replace('/<\?(?:php|=)?[\s\S]*?\?>/i', '', $content) ?? '';
+    $content = preg_replace('#<script\b[^>]*>[\s\S]*?</script>#i', '', $content) ?? '';
+    $content = preg_replace('#<style\b[^>]*>[\s\S]*?</style>#i', '', $content) ?? '';
+    $content = preg_replace('#<(?:iframe|object|embed)\b[^>]*>[\s\S]*?</(?:iframe|object|embed)>#i', '', $content) ?? '';
+    if (preg_match('#<body\b[^>]*>([\s\S]*?)</body>#i', $content, $body)) $content = $body[1];
+    $firstSection = stripos($content, '<section');
+    $lastSection = strripos($content, '</section>');
+    if ($firstSection === false || $lastSection === false) return null;
+    $content = substr($content, $firstSection, $lastSection + strlen('</section>') - $firstSection);
+    $content = preg_replace('/\s+on[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content) ?? $content;
+    $content = preg_replace('/\s+(?:style|srcdoc)\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content) ?? $content;
+    $content = preg_replace('/\s+(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/i', '', $content) ?? $content;
+    return trim($content) ?: null;
 }
 
 function createManagedCourseFiles(int $courseId, string $slug, string $title, array $modules): string {
@@ -409,6 +435,9 @@ function createManagedCourseFiles(int $courseId, string $slug, string $title, ar
     if (file_exists($entryFile) || file_exists($dataFile)) jsonError('A course content file already uses this slug.', 409);
 
     $safeTitle = htmlspecialchars($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $structuredContent = count($modules) === 1 && !empty($modules[0]['structured'])
+        ? trim((string)($modules[0]['content'] ?? ''))
+        : '';
     $bars = '';
     $decks = '';
     foreach ($modules as $index => $uploadedModule) {
@@ -420,7 +449,9 @@ function createManagedCourseFiles(int $courseId, string $slug, string $title, ar
         $decks .= '<div class="deck" data-mid="' . $moduleId . '" data-n="1" id="deck-' . $moduleId . '"><div class="slide active" data-i="0"><div class="slide-inner"><div class="slide-head"><div class="sn">' . $number . '</div><h3>' . $moduleTitle . '</h3></div>' . $moduleContent . '</div></div></div>';
     }
     $moduleCount = count($modules);
-    $module = '<section class="screen" id="screen-hub"><div class="hub-head"><div class="wrap"><div><h2>Course content</h2><p>' . $safeTitle . '</p></div><div class="hub-prog"><b><span id="hubDone">0</span>/<span id="hubTotal">' . $moduleCount . '</span></b><small>modules completed</small></div></div></div><div class="hub-body"><div class="wrap">' . $bars . '</div></div></section><section class="screen" id="screen-module"><div class="decks">' . $decks . '</div></section>';
+    $module = $structuredContent !== ''
+        ? $structuredContent
+        : '<section class="screen" id="screen-hub"><div class="hub-head"><div class="wrap"><div><h2>Course content</h2><p>' . $safeTitle . '</p></div><div class="hub-prog"><b><span id="hubDone">0</span>/<span id="hubTotal">' . $moduleCount . '</span></b><small>modules completed</small></div></div></div><div class="hub-body"><div class="wrap">' . $bars . '</div></div></section><section class="screen" id="screen-module"><div class="decks">' . $decks . '</div></section>';
     $entry = "<?php\ndeclare(strict_types=1);\n\$courseKey = " . var_export($slug, true) . ";\n\$courseDataKey = " . var_export($slug, true) . ";\n\$courseId = " . $courseId . ";\n\$courseTitle = " . var_export($title, true) . ";\nrequire __DIR__ . '/../includes/course-template.php';\n";
     if (file_put_contents($dataFile, $module, LOCK_EX) === false || file_put_contents($entryFile, $entry, LOCK_EX) === false) {
         if (is_file($dataFile)) unlink($dataFile);
@@ -966,6 +997,12 @@ try {
                 $rawContent=(string)($uploadedFile['content']??'');
                 $totalUploadBytes+=strlen($rawContent);
                 if ($totalUploadBytes > 5 * 1024 * 1024) jsonError('All course module files together must not exceed 5 MB.',422);
+                $structured=sanitiseStructuredCourseContent($rawContent);
+                if ($structured !== null) {
+                    if (count($d['contentFiles']) !== 1) jsonError('Upload a complete structured course by itself, or upload separate module files.',422);
+                    $uploadedModules[]=['title'=>$title,'content'=>$structured,'structured'=>true];
+                    continue;
+                }
                 $moduleTitle=trim((string)pathinfo($uploadName, PATHINFO_FILENAME));
                 $moduleTitle=preg_replace('/^[0-9]+[-_. ]*/','',$moduleTitle) ?? $moduleTitle;
                 $moduleTitle=trim(str_replace(['-','_'], ' ', $moduleTitle)) ?: ('Module '.($index+1));
@@ -983,6 +1020,7 @@ try {
                 $contentPath=createManagedCourseFiles($id,$slug,$title,$uploadedModules);
                 $createdEntry=$contentPath;
             }
+            db()->prepare('INSERT INTO assessment_settings (courseId,questionsPerAttempt,passMark,minutes,intro) VALUES (?,20,80,20,?) ON DUPLICATE KEY UPDATE courseId=VALUES(courseId)')->execute([$id,'']);
         } catch (PDOException $e) {
             if ((int)($e->errorInfo[1] ?? 0)===1062) jsonError('That course slug is already in use.',409);
             throw $e;
@@ -1002,7 +1040,7 @@ try {
     if (preg_match('#^/api/admin/courses/(\d+)/questions$#',$uri,$m)) {
         requireAdmin(); $cid=(int)$m[1]; if(!courseById($cid)) jsonError('Course not found.',404);
         if($method==='GET') { $type=(string)($_GET['type']??''); $all=[]; foreach(['module_quiz','final'] as $kind){if($type!==''&&$type!==$kind)continue;$a=databaseAssessment($cid,$kind);foreach(($a['questions']??[]) as $q){$q['questionType']=$kind;$all[]=$q;}} jsonResponse(['success'=>true,'questions'=>$all]); }
-        requireMethod('POST'); $d=validateAssessmentQuestion(getJsonBody()); $db=db(); $db->beginTransaction(); try{$s=$db->prepare('INSERT INTO assessment_questions (courseId,questionType,moduleId,quizKey,title,questionText,explanation,sortOrder,isActive) VALUES (?,?,?,?,?,?,?,?,?)');$s->execute([$cid,$d['questionType'],$d['moduleId'],$d['quizKey'],$d['title'],$d['questionText'],$d['explanation'],$d['sortOrder'],$d['isActive']]);$id=(int)$db->lastInsertId();$o=$db->prepare('INSERT INTO assessment_options (questionId,optionText,isCorrect,sortOrder) VALUES (?,?,?,?)');foreach($d['options'] as $option)$o->execute([$id,$option['text'],(int)$option['correct'],$option['sortOrder']]);$db->commit();}catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;} audit('assessment_question_created','assessment_question',$id,['courseId'=>$cid,'type'=>$d['questionType']]);jsonResponse(['success'=>true,'id'=>$id],201);
+        requireMethod('POST'); $d=validateAssessmentQuestion(getJsonBody()); if($d['questionType']==='module_quiz'){if(!$d['moduleId'])jsonError('Select a Module ID for a module quiz.',422);$moduleIds=courseAssessment($cid)['moduleIds']??[];if(!in_array($d['moduleId'],$moduleIds,true))jsonError('That Module ID does not exist in this course.',422);} $db=db(); $db->beginTransaction(); try{$s=$db->prepare('INSERT INTO assessment_questions (courseId,questionType,moduleId,quizKey,title,questionText,explanation,sortOrder,isActive) VALUES (?,?,?,?,?,?,?,?,?)');$s->execute([$cid,$d['questionType'],$d['moduleId'],$d['quizKey'],$d['title'],$d['questionText'],$d['explanation'],$d['sortOrder'],$d['isActive']]);$id=(int)$db->lastInsertId();$o=$db->prepare('INSERT INTO assessment_options (questionId,optionText,isCorrect,sortOrder) VALUES (?,?,?,?)');foreach($d['options'] as $option)$o->execute([$id,$option['text'],(int)$option['correct'],$option['sortOrder']]);$verify=$db->prepare('SELECT COUNT(*) total FROM assessment_options WHERE questionId=?');$verify->execute([$id]);if((int)($verify->fetch()['total']??0)!==count($d['options']))throw new RuntimeException('Question options were not fully persisted.');$db->commit();}catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;} audit('assessment_question_created','assessment_question',$id,['courseId'=>$cid,'type'=>$d['questionType']]);jsonResponse(['success'=>true,'id'=>$id,'persisted'=>true,'courseId'=>$cid],201);
     }
     if (preg_match('#^/api/admin/questions/(\d+)$#',$uri,$m)) {
         requireAdmin(); $id=(int)$m[1]; $s=db()->prepare('SELECT id,courseId FROM assessment_questions WHERE id=?');$s->execute([$id]);$existing=$s->fetch();if(!$existing)jsonError('Question not found.',404);
@@ -1017,6 +1055,7 @@ try {
         if(!$course) jsonError('Course not found.',404);
         $d=getJsonBody();
         $status=validateCoursePublicationStatus($d['status']??'');
+        if($status==='published' && count(courseAssessment($cid)['moduleIds']??[])<1) jsonError('A course must contain at least one valid module before publishing.',422);
         db()->prepare('UPDATE courses SET publicationStatus=? WHERE id=?')->execute([$status,$cid]);
         audit('course_status_updated','course',$cid,['from'=>coursePublicationStatus($course),'to'=>$status]);
         jsonResponse(['success'=>true,'id'=>$cid,'status'=>$status]);

@@ -1,3 +1,26 @@
+# Environment / secrets
 .env
+.env.*
+
+# Logs
 /storage/logs/*
-!.gitkeep
+!/storage/logs/.gitkeep
+*.log
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# Windows / OS
+Thumbs.db
+.DS_Store
+
+# Temporary / backup files
+*.bak
+*.tmp
+/data/eac_academy.sql
+*~

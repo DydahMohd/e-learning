@@ -777,7 +777,7 @@ header('Content-Type: text/html; charset=UTF-8');
     document.getElementById('questionType').addEventListener('change', function(){ if(document.getElementById('questionCourse').value) document.getElementById('loadQuestions').click(); });
     document.getElementById('questionForm').addEventListener('submit', async function(event){
         event.preventDefault(); var cid=Number(document.getElementById('questionCourse').value); if(!cid){showToast('Select a course first.','error');return;}
-        try{var id=Number(document.getElementById('questionId').value);var payload=questionPayload();if(id)await api.updateAdminQuestion(id,payload);else await api.createAdminQuestion(cid,payload);showToast(id?'Question updated.':'Question created.','success');resetQuestionForm();await loadQuestionBank();}catch(error){showToast(errorMessage(error,'Could not save question.'),'error');}
+        try{var id=Number(document.getElementById('questionId').value);var payload=questionPayload();if(id)await api.updateAdminQuestion(id,payload);else await api.createAdminQuestion(cid,payload);showToast(id?'Question updated in the database.':'Question saved to the database.','success');resetQuestionForm();await loadQuestionBank();}catch(error){showToast(errorMessage(error,'Could not save question.'),'error');}
     });
     document.getElementById('assessmentSettings').addEventListener('submit', async function(event){
         event.preventDefault();var cid=Number(document.getElementById('questionCourse').value);if(!cid)return;

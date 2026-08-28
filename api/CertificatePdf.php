@@ -228,12 +228,32 @@ function eac_build_certificate_pdf(array $certificate): string
     $issuedAt = eac_certificate_pdf_date((string)($certificate['issuedAt'] ?? date('Y-m-d')));
     $verificationUrl = trim((string)($certificate['verificationUrl'] ?? ''));
     $logo = eac_certificate_pdf_logo('eac-crest.png');
-    // The achievement seal is drawn below as PDF vector artwork so its wording
-    // is always exact and never depends on AI-generated raster lettering.
-    $seal = null;
+    $seal = eac_certificate_pdf_logo('certificate-gold-seal-v2.png');
 
     $content = '';
     $content .= "1 1 1 rg 0 0 841.89 595.28 re f\n";
+
+    // Repeating EAC wordmark following horizontal water-wave curves.
+    $waveRows = [68, 126, 184, 242, 300, 358, 416, 474, 532];
+    foreach ($waveRows as $rowIndex => $waveY) {
+        $startX = $rowIndex % 2 === 0 ? 28 : 88;
+        $column = 0;
+        for ($waveX = $startX; $waveX < 790; $waveX += 205, $column++) {
+            $phase = ($column + $rowIndex) % 4;
+            $rise = [0.0, 7.0, 0.0, -7.0][$phase];
+            $slope = [0.10, 0.0, -0.10, 0.0][$phase];
+            $cosine = $slope === 0.0 ? 1.0 : 0.995;
+            $content .= sprintf(
+                "0.925 0.940 0.955 rg\nBT /F1 7.20 Tf %.3F %.3F %.3F %.3F %.2F %.2F Tm (EAST AFRICAN COMMUNITY) Tj ET\n",
+                $cosine,
+                $slope,
+                -$slope,
+                $cosine,
+                (float)$waveX,
+                (float)($waveY + $rise)
+            );
+        }
+    }
 
     // Formal EAC frame and four-colour edge accents.
     $content .= "0.000 0.520 0.220 RG 7 w 12 12 817.89 571.28 re S\n";
@@ -255,17 +275,18 @@ function eac_build_certificate_pdf(array $certificate): string
         $content .= "q\n";
         $content .= sprintf("%.2F 0 0 %.2F %.2F %.2F cm\n/Im1 Do\nQ\n", $logoWidth, $logoHeight, $logoX, $logoY);
     }
-    // Gold achievement seal centred between the date and signature blocks.
-    $content .= "0.84 0.52 0.00 rg 0.40 0.22 0.00 RG 2 w 421 181 m 445.30 181 465 161.30 465 137 c 465 112.70 445.30 93 421 93 c 396.70 93 377 112.70 377 137 c 377 161.30 396.70 181 421 181 c f S\n";
-    $content .= "0.98 0.73 0.08 rg 0.45 0.25 0.00 RG 1.4 w 421 174 m 441.43 174 458 157.43 458 137 c 458 116.57 441.43 100 421 100 c 400.57 100 384 116.57 384 137 c 384 157.43 400.57 174 421 174 c f S\n";
-    $content .= "0.86 0.54 0.02 rg 0.45 0.25 0.00 RG 1 w 421 166 m 437.01 166 450 153.01 450 137 c 450 120.99 437.01 108 421 108 c 404.99 108 392 120.99 392 137 c 392 153.01 404.99 166 421 166 c f S\n";
-    $content .= "1.00 0.84 0.25 rg 0.42 0.23 0.00 RG 1.2 w 421 160 m 427 144 l 445 144 l 431 134 l 436 117 l 421 127 l 406 117 l 411 134 l 397 144 l 415 144 l h f S\n";
-    $content .= eac_certificate_pdf_centered_text('F2', 6.2, $pageWidth, 166, 'EAST AFRICAN COMMUNITY', [0.16, 0.09, 0.00], 0.52);
-    $content .= eac_certificate_pdf_centered_text('F2', 5.5, $pageWidth, 103, 'EXCELLENCE - HONOUR - ACHIEVEMENT', [0.16, 0.09, 0.00], 0.52);
+    if ($seal) {
+        $sealWidth = 96.0;
+        $sealHeight = $sealWidth * ((float)$seal['height'] / (float)$seal['width']);
+        $sealX = ($pageWidth - $sealWidth) / 2;
+        $sealY = 89.0;
+        $content .= "q\n";
+        $content .= sprintf("%.2F 0 0 %.2F %.2F %.2F cm\n/Im2 Do\nQ\n", $sealWidth, $sealHeight, $sealX, $sealY);
+    }
 
     $blue = [0.02, 0.25, 0.48];
     $content .= eac_certificate_pdf_centered_text('F1', 17, $pageWidth, 472, 'EAST AFRICAN COMMUNITY', $blue, 0.54);
-    $content .= eac_certificate_pdf_centered_text('F3', 32, $pageWidth, 432, 'Certificate of Completion', [0.04, 0.04, 0.04], 0.48);
+    $content .= eac_certificate_pdf_centered_text('F2', 32, $pageWidth, 432, 'Certificate of Completion', [0.04, 0.04, 0.04], 0.48);
     // Four-colour EAC accent rule beneath the title.
     $content .= "0.000 0.520 0.220 RG 2.5 w 230 414 m 350 414 l S\n";
     $content .= "1.000 0.820 0.000 RG 2.5 w 350 414 m 410 414 l S\n";
@@ -274,7 +295,7 @@ function eac_build_certificate_pdf(array $certificate): string
 
     $content .= eac_certificate_pdf_centered_text('F3', 14, $pageWidth, 382, 'This is to certify that', $blue, 0.48);
     $nameSize = strlen(eac_certificate_pdf_latin($fullName)) > 36 ? 28 : (strlen(eac_certificate_pdf_latin($fullName)) > 26 ? 33 : 39);
-    $content .= eac_certificate_pdf_centered_text('F4', $nameSize, $pageWidth, 335, strtoupper($fullName), $blue, 0.45);
+    $content .= eac_certificate_pdf_centered_text('F2', $nameSize, $pageWidth, 335, strtoupper($fullName), $blue, 0.50);
     $content .= eac_certificate_pdf_centered_text('F3', 14, $pageWidth, 296, 'has successfully completed the online course on', $blue, 0.48);
 
     $courseLines = eac_certificate_pdf_wrap($courseName, 21, 650, 0.52);
