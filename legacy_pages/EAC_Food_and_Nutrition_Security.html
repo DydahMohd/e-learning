@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./EAC_Agriculture_Food_and_Nutrition_Security.html"><title>Food and Nutrition Security — EAC Statistics e-Learning</title><style>/* EAC responsive hardening */
+html,body{max-width:100%;overflow-x:hidden}.wrap{width:100%;max-width:1080px}.topbar{max-width:100%;overflow-x:auto}.topbar .tb-brand{flex:0 1 auto}.hero,.hub-head,.assess-head{overflow:hidden}.slide-inner,.test-q,.about,.resources,.reg-card{max-width:100%;min-width:0;overflow-wrap:anywhere}@media(max-width:760px){.wrap{padding-left:14px;padding-right:14px}.hero{padding:36px 14px 44px}.hero .crest{height:82px}.hero h1{font-size:clamp(25px,8vw,38px)}.hero .lede{font-size:15px}.hero .meta{gap:12px;font-size:12px}.hero .meta b{font-size:18px}.welcome-body,.hub-body,.assess-body,.cert-wrap{padding-left:14px;padding-right:14px}.about{padding:20px}.feat-grid{grid-template-columns:1fr}.mod-bar,.assess-bar{align-items:flex-start;gap:10px;padding:14px}.mod-num,.assess-bar .ab-ic{width:44px;height:44px}.mod-info h3,.assess-bar h3{font-size:15px}.mod-go{margin-left:auto}.cta-row,.result-actions,.cert-actions{width:100%}.cta-row .btn,.result-actions .btn,.cert-actions .btn{width:100%;justify-content:center}.reg-body{padding:20px}.test-q{padding:14px}.tp-row{gap:8px}.assess-timer{padding:5px 9px;font-size:12px}}@media(max-width:480px){.topbar{padding:7px 10px;gap:4px}.topbar .tb-brand{min-width:175px}.topbar .tb-link{padding:7px 8px;font-size:12px}.topbar .tb-brand img{width:34px;height:34px}.player-nav{flex-wrap:wrap}.player-nav .btn{min-width:45%;}.test-opt{font-size:13.5px;padding:10px}.result-card{padding:18px}.score-ring{width:88px;height:88px}.reg-actions{flex-direction:column;align-items:stretch}.reg-actions .btn{width:100%;justify-content:center}}</style></head><body><p>Opening the EAC Food and Nutrition Security course… <a href="./EAC_Agriculture_Food_and_Nutrition_Security.html">Continue</a></p><script>location.replace('./EAC_Agriculture_Food_and_Nutrition_Security.html');</script>
+<script>
+/* EAC V16: robust local progress persistence */
+(function () {
+  'use strict';
+  const KEY = 'eac_course_progress_v16_' + location.pathname;
+
+  function readState() {
+    try { return JSON.parse(localStorage.getItem(KEY) || 'null'); }
+    catch (e) { return null; }
+  }
+  function writeState(state) {
+    if (!state) return;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function getState() {
+    const selectors = [
+      '[data-module-index].active',
+      '.module.active',
+      '.module-card.active',
+      '.lesson.active',
+      '[aria-current="true"]'
+    ];
+    let moduleIndex = null;
+    for (const s of selectors) {
+      const el = document.querySelector(s);
+      if (el) {
+        moduleIndex = el.dataset.moduleIndex ?? el.dataset.module ?? el.getAttribute('data-index');
+        if (moduleIndex != null) break;
+      }
+    }
+
+    let slideIndex = null;
+    const slideSelectors = [
+      '.slide.active',
+      '[data-slide].active',
+      '[data-slide-index].active',
+      '.lesson-slide.active'
+    ];
+    for (const s of slideSelectors) {
+      const el = document.querySelector(s);
+      if (el) {
+        slideIndex = el.dataset.slideIndex ?? el.dataset.slide ?? el.getAttribute('data-index');
+        if (slideIndex != null) break;
+      }
+    }
+
+    /* Fall back to common global variables used by course pages. */
+    const g = window;
+    if (moduleIndex == null && Number.isFinite(g.currentModule)) moduleIndex = g.currentModule;
+    if (slideIndex == null && Number.isFinite(g.currentSlide)) slideIndex = g.currentSlide;
+
+    if (moduleIndex == null && slideIndex == null) return null;
+    return {
+      moduleIndex: moduleIndex == null ? null : Number(moduleIndex),
+      slideIndex: slideIndex == null ? null : Number(slideIndex),
+      savedAt: Date.now()
+    };
+  }
+
+  function save() {
+    const s = getState();
+    if (s) writeState(s);
+  }
+
+  function restore() {
+    const s = readState();
+    if (!s) return;
+
+    /* Give the course's own initialization a chance to create its UI. */
+    setTimeout(function () {
+      try {
+        if (typeof window.goToModule === 'function' && s.moduleIndex != null) {
+          window.goToModule(s.moduleIndex);
+        } else if (typeof window.showModule === 'function' && s.moduleIndex != null) {
+          window.showModule(s.moduleIndex);
+        }
+        setTimeout(function () {
+          if (typeof window.goToSlide === 'function' && s.slideIndex != null) {
+            window.goToSlide(s.slideIndex);
+          } else if (typeof window.showSlide === 'function' && s.slideIndex != null) {
+            window.showSlide(s.slideIndex);
+          }
+        }, 100);
+      } catch (e) {}
+    }, 300);
+  }
+
+  document.addEventListener('click', function (e) {
+    const target = e.target.closest(
+      'button, a, [role="button"], .next, .prev, .next-btn, .prev-btn, ' +
+      '.module, .module-card, [data-module], [data-slide], [data-slide-index]'
+    );
+    if (!target) return;
+    setTimeout(save, 50);
+  }, true);
+
+  window.addEventListener('load', function () {
+    restore();
+    setTimeout(save, 500);
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') save();
+  });
+
+  window.addEventListener('pagehide', save);
+  window.addEventListener('beforeunload', save);
+
+  /* Expose a harmless explicit save hook for the existing button/code. */
+  window.eacSaveProgress = save;
+})();
+</script>
+
+</body></html>
