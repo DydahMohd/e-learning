@@ -49,7 +49,7 @@
             <div class="welcome-panel" id="welcomePanel">
                 <div class="welcome-inner">
                     <header class="welcome-hero">
-                        <h2>Welcome to the EAC E-Learning Portal</h2>
+                        <h2>Welcome to the EAC e-Learning Portal</h2>
                         <p>Select a course from the sidebar to begin your learning journey, or browse available courses below.</p>
                     </header>
                     <div class="course-search" role="search">
