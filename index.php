@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAC Statistics e-Learning</title>
-    <meta name="description" content="The official e-learning platform for the East African Community, offering courses on statistics and data analysis.">
+    <meta name="description" content="The official Elearning platform for the East African Community, offering courses on statistics and data analysis.">
     <?php $faviconBasePath = ''; include __DIR__ . '/includes/favicon.php'; ?>
 
     <!-- Font Awesome for icons -->
