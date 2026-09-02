@@ -9,56 +9,9 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_course_progress.sql"
+"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_all_database.sql"
 if errorlevel 1 (
-  echo Upgrade failed. Check that eac_academy already exists and MySQL is running.
-  pause
-  exit /b 1
-)
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_assessment_attempts.sql"
-if errorlevel 1 (
-  echo Assessment session upgrade failed.
-  pause
-  exit /b 1
-)
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_platform_features.sql"
-if errorlevel 1 (
-  echo Platform features upgrade failed.
-  pause
-  exit /b 1
-)
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_course_architecture.sql"
-if errorlevel 1 (
-  echo Course architecture upgrade failed.
-  pause
-  exit /b 1
-)
-
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_security_and_integrity.sql"
-if errorlevel 1 (
-  echo Security and integrity upgrade failed.
-  pause
-  exit /b 1
-)
-
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_admin_course_management.sql"
-if errorlevel 1 (
-  echo Admin course management upgrade failed.
-  pause
-  exit /b 1
-)
-
-"%MYSQL_EXE%" -u root eac_academy < "data\account_retention_and_sessions.sql"
-if errorlevel 1 (
-  echo Account retention and session upgrade failed.
-  echo Make sure the MariaDB Event Scheduler is enabled, or run the SQL manually and use maintenance\cleanup_inactive_accounts.php.
-  pause
-  exit /b 1
-)
-
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_database_assessments.sql"
-if errorlevel 1 (
-  echo Database assessment migration failed.
+  echo Cumulative database upgrade failed. Check that eac_academy already exists and MySQL is running.
   pause
   exit /b 1
 )

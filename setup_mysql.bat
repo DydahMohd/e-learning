@@ -46,28 +46,18 @@ set "HAS_SCHEMA=0"
 for /f %%T in ('"%MYSQL_EXE%" -u root -N -s -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='eac_academy' AND table_name='users';"') do set "HAS_SCHEMA=%%T"
 if "%HAS_SCHEMA%"=="1" goto migrations
 
-echo No existing schema found. Importing the base database...
+echo No existing schema found. Importing the complete database setup...
 :fresh
-call :apply "data\eac_academy.sql" "Base schema import"
+call :apply "data\eac_academy_complete.sql" "Complete database setup"
 if errorlevel 1 exit /b 1
 
+goto done
+
 :migrations
-call :apply "data\upgrade_platform_features.sql" "Platform features migration"
+call :apply "data\upgrade_all_database.sql" "Cumulative database upgrade"
 if errorlevel 1 exit /b 1
-call :apply "data\upgrade_course_progress.sql" "Course progress migration"
-if errorlevel 1 exit /b 1
-call :apply "data\upgrade_assessment_attempts.sql" "Assessment session migration"
-if errorlevel 1 exit /b 1
-call :apply "data\upgrade_course_architecture.sql" "Course architecture migration"
-if errorlevel 1 exit /b 1
-call :apply "data\upgrade_security_and_integrity.sql" "Security and integrity migration"
-if errorlevel 1 exit /b 1
-call :apply "data\upgrade_admin_course_management.sql" "Admin course management migration"
-if errorlevel 1 exit /b 1
-call :apply "data\account_retention_and_sessions.sql" "Account sessions migration"
-if errorlevel 1 exit /b 1
-call :apply "data\upgrade_database_assessments.sql" "Database assessment migration"
-if errorlevel 1 exit /b 1
+
+done:
 
 echo.
 echo Database setup completed successfully.
