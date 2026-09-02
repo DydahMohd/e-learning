@@ -450,7 +450,7 @@ function initFlow(){
   const sx=document.getElementById('regSector'); if(sx) sx.addEventListener('change',()=>{const w=document.getElementById('regSectorOtherWrap'); if(w) w.style.display=sx.value==='Other'?'flex':'none';});
   const submit=document.getElementById('submitTest'); if(submit) submit.addEventListener('click',()=>submitTest(false));
   const png=document.getElementById('certPng'); if(png) png.addEventListener('click',downloadCertPNG);
-  const prn=document.getElementById('certPrint'); if(prn) prn.addEventListener('click',()=>window.print());
+  const prn=document.getElementById('certPrint'); if(prn) prn.addEventListener('click',()=>{ if(window.printOfficialCertificatePdf) { window.printOfficialCertificatePdf(); } else { window.print(); } });
   const ps=document.getElementById('prevSlide'); if(ps) ps.addEventListener('click',prevSlide);
   const ns=document.getElementById('nextSlide'); if(ns) ns.addEventListener('click',nextSlide);
   document.addEventListener('keydown',e=>{ if(!document.getElementById('screen-module').classList.contains('active'))return;

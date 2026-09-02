@@ -32,6 +32,42 @@ function eac_certificate_pdf_text_width(string $value, float $size, float $facto
     return strlen(eac_certificate_pdf_latin($value)) * $size * $factor;
 }
 
+/** Return the rendered width of text in PDF's built-in Times-Bold font. */
+function eac_certificate_pdf_times_bold_width(string $value, float $size): float
+{
+    $widths = [
+        ' '=>250, 'A'=>722, 'B'=>667, 'C'=>722, 'D'=>722, 'E'=>611, 'F'=>556,
+        'G'=>778, 'H'=>778, 'I'=>389, 'J'=>500, 'K'=>778, 'L'=>667, 'M'=>944,
+        'N'=>722, 'O'=>778, 'P'=>611, 'Q'=>778, 'R'=>722, 'S'=>556, 'T'=>667,
+        'U'=>722, 'V'=>722, 'W'=>1000, 'X'=>722, 'Y'=>722, 'Z'=>667,
+        'a'=>500, 'b'=>556, 'c'=>444, 'd'=>556, 'e'=>444, 'f'=>333, 'g'=>500,
+        'h'=>556, 'i'=>278, 'j'=>333, 'k'=>556, 'l'=>278, 'm'=>833, 'n'=>556,
+        'o'=>500, 'p'=>556, 'q'=>556, 'r'=>444, 's'=>389, 't'=>333, 'u'=>556,
+        'v'=>500, 'w'=>722, 'x'=>500, 'y'=>500, 'z'=>444,
+        '-'=>333, "'"=>278, '.'=>250,
+    ];
+    $latin = eac_certificate_pdf_latin($value);
+    $units = 0;
+    for ($index = 0, $length = strlen($latin); $index < $length; $index++) {
+        $units += $widths[$latin[$index]] ?? 500;
+    }
+    return ($units / 1000) * $size;
+}
+
+function eac_certificate_pdf_centered_name(string $value, float $pageWidth, float $y, array $colour): string
+{
+    $name = strtoupper(trim($value) !== '' ? $value : 'Participant');
+    $size = 39.0;
+    $maxWidth = 720.0;
+    $width = eac_certificate_pdf_times_bold_width($name, $size);
+    if ($width > $maxWidth) {
+        $size = max(24.0, $size * ($maxWidth / $width));
+        $width = eac_certificate_pdf_times_bold_width($name, $size);
+    }
+    $x = ($pageWidth - $width) / 2.0;
+    return eac_certificate_pdf_text('F2', $size, $x, $y, $name, $colour);
+}
+
 function eac_certificate_pdf_text(
     string $font,
     float $size,
@@ -62,8 +98,11 @@ function eac_certificate_pdf_centered_text(
     array $colour = [0.10, 0.10, 0.10],
     float $factor = 0.52
 ): string {
-    $x = max(28.0, ($pageWidth - eac_certificate_pdf_text_width($value, $size, $factor)) / 2);
-    return eac_certificate_pdf_text($font, $size, $x, $y, $value, $colour);
+    $safeValue = trim((string)$value) !== '' ? $value : ' ';
+    $textWidth = eac_certificate_pdf_text_width($safeValue, $size, $factor);
+    $x = ($pageWidth - $textWidth) / 2.0;
+    $x = max(28.0, $x);
+    return eac_certificate_pdf_text($font, $size, $x, $y, $safeValue, $colour);
 }
 
 function eac_certificate_pdf_wrap(string $value, float $size, float $maxWidth, float $factor = 0.52): array
@@ -218,6 +257,38 @@ function eac_certificate_pdf_date(string $issuedAt): string
     }
 }
 
+/** Build one continuous curved wordmark row like the SVG preview watermark. */
+function eac_certificate_pdf_wave_wordmark(float $startX, float $endX, float $baseline, int $rowIndex): string
+{
+    $phrase = 'EAST AFRICAN COMMUNITY   ';
+    $fontSize = 6.2;
+    $advance = 3.55;
+    $amplitude = 5.0;
+    $wavelength = 180.0;
+    $phase = ($rowIndex % 2) * M_PI;
+    $colour = $rowIndex % 2 === 0 ? '0.895 0.925 0.950' : '0.900 0.945 0.920';
+    $content = '';
+    $phraseLength = strlen($phrase);
+    $characterIndex = 0;
+
+    for ($x = $startX; $x <= $endX; $x += $advance, $characterIndex++) {
+        $character = $phrase[$characterIndex % $phraseLength];
+        if ($character === ' ') continue;
+        $position = (($x - $startX) / $wavelength) * (2 * M_PI) + $phase;
+        $y = $baseline + ($amplitude * sin($position));
+        $slope = ($amplitude * 2 * M_PI / $wavelength) * cos($position);
+        $angle = atan($slope);
+        $cosine = cos($angle);
+        $sine = sin($angle);
+        $content .= sprintf(
+            "%s rg\nBT /F1 %.2F Tf %.4F %.4F %.4F %.4F %.2F %.2F Tm (%s) Tj ET\n",
+            $colour, $fontSize, $cosine, $sine, -$sine, $cosine, $x, $y,
+            eac_certificate_pdf_escape($character)
+        );
+    }
+    return $content;
+}
+
 function eac_build_certificate_pdf(array $certificate): string
 {
     $pageWidth = 841.89;
@@ -233,26 +304,9 @@ function eac_build_certificate_pdf(array $certificate): string
     $content = '';
     $content .= "1 1 1 rg 0 0 841.89 595.28 re f\n";
 
-    // Repeating EAC wordmark following horizontal water-wave curves.
-    $waveRows = [68, 126, 184, 242, 300, 358, 416, 474, 532];
-    foreach ($waveRows as $rowIndex => $waveY) {
-        $startX = $rowIndex % 2 === 0 ? 28 : 88;
-        $column = 0;
-        for ($waveX = $startX; $waveX < 790; $waveX += 205, $column++) {
-            $phase = ($column + $rowIndex) % 4;
-            $rise = [0.0, 7.0, 0.0, -7.0][$phase];
-            $slope = [0.10, 0.0, -0.10, 0.0][$phase];
-            $cosine = $slope === 0.0 ? 1.0 : 0.995;
-            $content .= sprintf(
-                "0.925 0.940 0.955 rg\nBT /F1 7.20 Tf %.3F %.3F %.3F %.3F %.2F %.2F Tm (EAST AFRICAN COMMUNITY) Tj ET\n",
-                $cosine,
-                $slope,
-                -$slope,
-                $cosine,
-                (float)$waveX,
-                (float)($waveY + $rise)
-            );
-        }
+    // Continuous blue/green wordmark waves matching the browser preview.
+    foreach (range(45, 555, 32) as $rowIndex => $waveY) {
+        $content .= eac_certificate_pdf_wave_wordmark(28.0, $pageWidth - 28.0, (float)$waveY, $rowIndex);
     }
 
     // Formal EAC frame and four-colour edge accents.
@@ -287,15 +341,19 @@ function eac_build_certificate_pdf(array $certificate): string
     $blue = [0.02, 0.25, 0.48];
     $content .= eac_certificate_pdf_centered_text('F1', 17, $pageWidth, 472, 'EAST AFRICAN COMMUNITY', $blue, 0.54);
     $content .= eac_certificate_pdf_centered_text('F2', 32, $pageWidth, 432, 'Certificate of Completion', [0.04, 0.04, 0.04], 0.48);
-    // Four-colour EAC accent rule beneath the title.
-    $content .= "0.000 0.520 0.220 RG 2.5 w 230 414 m 350 414 l S\n";
-    $content .= "1.000 0.820 0.000 RG 2.5 w 350 414 m 410 414 l S\n";
-    $content .= "0.820 0.000 0.090 RG 2.5 w 410 414 m 470 414 l S\n";
-    $content .= "0.000 0.570 0.760 RG 2.5 w 470 414 m 612 414 l S\n";
+    // A precisely centred four-colour EAC accent rule beneath the title.
+    $ruleWidth = eac_certificate_pdf_times_bold_width('Certificate of Completion', 32.0);
+    $ruleStart = ($pageWidth - $ruleWidth) / 2.0;
+    $rulePart = $ruleWidth / 4.0;
+    $ruleColours = ['0.000 0.520 0.220', '1.000 0.820 0.000', '0.820 0.000 0.090', '0.000 0.570 0.760'];
+    foreach ($ruleColours as $ruleIndex => $ruleColour) {
+        $x1 = $ruleStart + ($rulePart * $ruleIndex);
+        $x2 = $x1 + $rulePart;
+        $content .= sprintf("%s RG 2.5 w %.2F 414 m %.2F 414 l S\n", $ruleColour, $x1, $x2);
+    }
 
     $content .= eac_certificate_pdf_centered_text('F3', 14, $pageWidth, 382, 'This is to certify that', $blue, 0.48);
-    $nameSize = strlen(eac_certificate_pdf_latin($fullName)) > 36 ? 28 : (strlen(eac_certificate_pdf_latin($fullName)) > 26 ? 33 : 39);
-    $content .= eac_certificate_pdf_centered_text('F2', $nameSize, $pageWidth, 335, strtoupper($fullName), $blue, 0.50);
+    $content .= eac_certificate_pdf_centered_name($fullName, $pageWidth, 335, $blue);
     $content .= eac_certificate_pdf_centered_text('F3', 14, $pageWidth, 296, 'has successfully completed the online course on', $blue, 0.48);
 
     $courseLines = eac_certificate_pdf_wrap($courseName, 21, 650, 0.52);

@@ -615,13 +615,22 @@ function configureCertificatePreview(){
   if(!svg||svg.dataset.eacStyled==='1') return;
   svg.dataset.eacStyled='1';
   svg.setAttribute('font-family',"'Times New Roman',Times,serif");
+  // Some imported course certificates contain an old, oversized Base64 crest
+  // that browsers fail to decode. Always use the canonical application asset.
+  const crest=svg.querySelector('image');
+  if(crest){
+    const crestUrl=new URL('../images/eac-crest.png',window.location.href).href;
+    crest.setAttribute('href',crestUrl);
+    crest.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',crestUrl);
+    crest.setAttribute('preserveAspectRatio','xMidYMid meet');
+  }
   const ns='http://www.w3.org/2000/svg';
   const defs=document.createElementNS(ns,'defs');
-  defs.innerHTML='<pattern id="eac-wave-watermark" width="500" height="100" patternUnits="userSpaceOnUse">'+
-    '<path id="eac-water-wave-a" d="M-30 28 C70 2 145 54 245 28 S420 2 530 28" fill="none"/>'+
-    '<path id="eac-water-wave-b" d="M-30 78 C70 52 145 104 245 78 S420 52 530 78" fill="none"/>'+
-    '<text font-family="Times New Roman,serif" font-size="13" font-weight="bold" fill="#063f78" opacity=".075"><textPath href="#eac-water-wave-a">EAST AFRICAN COMMUNITY   EAST AFRICAN COMMUNITY</textPath></text>'+
-    '<text font-family="Times New Roman,serif" font-size="13" font-weight="bold" fill="#00843d" opacity=".06"><textPath href="#eac-water-wave-b">EAST AFRICAN COMMUNITY   EAST AFRICAN COMMUNITY</textPath></text></pattern>';
+  defs.innerHTML='<pattern id="eac-wave-watermark" width="360" height="64" patternUnits="userSpaceOnUse">'+
+    '<path id="eac-water-wave-a" d="M-25 17 C45 1 105 33 175 17 S305 1 385 17" fill="none"/>'+
+    '<path id="eac-water-wave-b" d="M-25 49 C45 33 105 65 175 49 S305 33 385 49" fill="none"/>'+
+    '<text font-family="Times New Roman,serif" font-size="11" font-weight="bold" fill="#063f78" opacity=".065"><textPath href="#eac-water-wave-a">EAST AFRICAN COMMUNITY   EAST AFRICAN COMMUNITY</textPath></text>'+
+    '<text font-family="Times New Roman,serif" font-size="11" font-weight="bold" fill="#00843d" opacity=".055"><textPath href="#eac-water-wave-b">EAST AFRICAN COMMUNITY   EAST AFRICAN COMMUNITY</textPath></text></pattern>';
   svg.insertBefore(defs,svg.firstChild);
   const watermark=document.createElementNS(ns,'rect');
   watermark.setAttribute('x','34');watermark.setAttribute('y','34');watermark.setAttribute('width','932');watermark.setAttribute('height','639');watermark.setAttribute('fill','url(#eac-wave-watermark)');watermark.setAttribute('pointer-events','none');
@@ -632,7 +641,30 @@ function configureCertificatePreview(){
   const community=find('EAST AFRICAN COMMUNITY');
   if(community){community.setAttribute('x','500');community.setAttribute('text-anchor','middle');community.setAttribute('font-family',"'Times New Roman',Times,serif");community.setAttribute('fill','#063f78');}
   const title=find('Certificate of Completion');
-  if(title){title.setAttribute('x','500');title.setAttribute('text-anchor','middle');title.setAttribute('font-family',"Georgia,'Times New Roman',serif");title.setAttribute('font-style','normal');title.setAttribute('font-weight','bold');title.setAttribute('font-size','38');}
+  if(title){
+    title.setAttribute('x','500');title.setAttribute('text-anchor','middle');title.setAttribute('font-family',"Georgia,'Times New Roman',serif");title.setAttribute('font-style','normal');title.setAttribute('font-weight','bold');title.setAttribute('font-size','38');
+    const oldRule=title.nextElementSibling;
+    if(oldRule&&oldRule.tagName&&oldRule.tagName.toLowerCase()==='line'){
+      const rule=document.createElementNS(ns,'g');
+      rule.setAttribute('aria-hidden','true');
+      ['#00843d','#ffd100','#ce1126','#00a3dd'].forEach(function(colour){
+        const line=document.createElementNS(ns,'line');
+        line.setAttribute('y1',oldRule.getAttribute('y1')||'268');line.setAttribute('y2',oldRule.getAttribute('y2')||'268');
+        line.setAttribute('stroke',colour);line.setAttribute('stroke-width','4');
+        rule.appendChild(line);
+      });
+      oldRule.replaceWith(rule);
+      requestAnimationFrame(function(){
+        const titleWidth=typeof title.getComputedTextLength==='function'?title.getComputedTextLength():360;
+        const ruleWidth=Math.min(520,Math.max(300,titleWidth));
+        const start=500-(ruleWidth/2),partWidth=ruleWidth/4;
+        [...rule.children].forEach(function(line,index){
+          line.setAttribute('x1',(start+(partWidth*index)).toFixed(1));
+          line.setAttribute('x2',(start+(partWidth*(index+1))).toFixed(1));
+        });
+      });
+    }
+  }
   ['This is to certify that','has successfully completed the online course on'].forEach(text=>{
     const node=find(text);if(node){node.setAttribute('font-family',"Georgia,'Times New Roman',serif");node.setAttribute('font-style','italic');node.setAttribute('fill','#063f78');}
   });
@@ -657,7 +689,22 @@ function updateCertificatePreview(certificate){
   configureCertificatePreview();
   const L=STATE.learner||{};
   const name=[L.first,L.middle,L.surname].filter(Boolean).join(' ').trim()||'Participant';
-  const nm=document.getElementById('cert-name'); if(nm){nm.textContent=name.toUpperCase(); nm.setAttribute('font-size',name.length>30?38:(name.length>20?48:58));}
+  const nm=document.getElementById('cert-name');
+  if(nm){
+    nm.textContent=name.toUpperCase();
+    nm.setAttribute('x','500');
+    nm.setAttribute('text-anchor','middle');
+    nm.setAttribute('font-size',name.length>30?38:(name.length>20?48:58));
+    // Keep long names centred and inside the certificate frame.
+    requestAnimationFrame(function(){
+      if(typeof nm.getComputedTextLength!=='function') return;
+      const width=nm.getComputedTextLength();
+      if(width>860){
+        const current=parseFloat(nm.getAttribute('font-size'))||48;
+        nm.setAttribute('font-size',Math.max(28,current*(860/width)).toFixed(1));
+      }
+    });
+  }
   const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
   set('cert-course',COURSE.title);
   const issued=certificate&&certificate.issuedAt?new Date(String(certificate.issuedAt).replace(' ','T')):new Date();
@@ -683,7 +730,8 @@ function getOfficialCertificatePdf(){
   if(window.__eacOfficialCertificatePdfPromise) return window.__eacOfficialCertificatePdfPromise;
   window.__eacOfficialCertificatePdfPromise=ensureOfficialCertificate().then(function(certificate){
     return fetch(API_ROOT+'/certificates/'+encodeURIComponent(certificate.id)+'/download',{
-      headers:{Accept:'application/pdf',Authorization:'Bearer '+token()}
+      cache:'no-store',
+      headers:{Accept:'application/pdf',Authorization:'Bearer '+token(),'Cache-Control':'no-cache'}
     }).then(function(response){
       if(!response.ok) return response.json().catch(function(){return {};}).then(function(data){throw new Error(data.error||'Could not load certificate.');});
       return response.blob();
@@ -698,21 +746,40 @@ function getOfficialCertificatePdf(){
 function renderOfficialCertificatePdf(){
   const stage=document.querySelector('#screen-certificate .cert-stage');
   if(!stage) return Promise.resolve();
+  if(stage.dataset.eacPdfReady==='1') return Promise.resolve();
+  const liveSvg=stage.querySelector('svg');
+  if(liveSvg){
+    stage.dataset.eacPdfReady='1';
+    return Promise.resolve();
+  }
   stage.classList.add('certificate-pdf-loading');
   return getOfficialCertificatePdf().then(function(result){
     stage.classList.remove('certificate-pdf-loading');
     stage.classList.add('certificate-pdf-stage');
-    stage.innerHTML='<object class="certificate-pdf-preview" type="application/pdf" data="'+result.url+'#toolbar=0&navpanes=0&view=FitH" aria-label="Official EAC certificate PDF"><iframe class="certificate-pdf-preview" src="'+result.url+'#toolbar=0&navpanes=0&view=FitH" title="Official EAC certificate PDF"></iframe></object>';
+    const existing=stage.querySelector('.certificate-pdf-preview');
+    if(!existing){
+      const wrap=document.createElement('div');
+      wrap.className='certificate-pdf-preview-wrap';
+      wrap.innerHTML='<object class="certificate-pdf-preview" type="application/pdf" data="'+result.url+'#toolbar=0&navpanes=0&view=FitH" aria-label="Official EAC certificate PDF"><iframe class="certificate-pdf-preview" src="'+result.url+'#toolbar=0&navpanes=0&view=FitH" title="Official EAC certificate PDF"></iframe></object>';
+      stage.appendChild(wrap);
+    }
+    stage.dataset.eacPdfReady='1';
   }).catch(function(error){stage.classList.remove('certificate-pdf-loading');console.warn('Certificate preview:',error.message);});
 }
 function populateCert(){
   if(!STATE.certId) STATE.certId=genCertId();
+  const svg=document.getElementById('certSVG');
+  if(svg){
+    requestAnimationFrame(function(){ configureCertificatePreview(); });
+    requestAnimationFrame(function(){ configureCertificatePreview(); });
+  }
   updateCertificatePreview(null);
   ensureOfficialCertificate().then(renderOfficialCertificatePdf).catch(function(error){ console.warn('Official certificate:',error.message); });
 }
 function printOfficialCertificatePdf(){
   getOfficialCertificatePdf().then(function(result){window.open(result.url,'_blank','noopener');}).catch(function(error){alert(error.message||'Could not open the certificate.');});
 }
+window.printOfficialCertificatePdf = printOfficialCertificatePdf;
 function downloadOfficialCertificatePdf(){
   const btn=document.getElementById('certPng');
   const original=btn?btn.textContent:'';
