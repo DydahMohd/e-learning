@@ -22,7 +22,14 @@
    API CONFIGURATION
 ========================================================= */
 
-const API_BASE = new URL('api', window.location.href).href.replace(/\/$/, '');
+// Resolve from this script's location, not the current page URL. This keeps
+// API calls inside the application when deployed at /elearning/ or deeper.
+const EAC_APP_BASE = (() => {
+    const script = document.currentScript;
+    if (script?.src) return new URL('../../', script.src).href;
+    return new URL('./', window.location.href).href;
+})();
+const API_BASE = new URL('api', EAC_APP_BASE).href.replace(/\/$/, '');
 
 const API_TIMEOUT = 15000;
 

@@ -15,7 +15,12 @@ window.STATE=STATE;
 // persistence integration below. Keeping a second private copy in the nested
 // integration made Assessment and Certificate see undefined COURSE_ID/API_ROOT.
 const COURSE_ID=Number((window.COURSE&&window.COURSE.id)||0);
-const API_ROOT=new URL('../api',location.href).href.replace(/\/$/,'');
+// Derive the API endpoint from the runtime script so direct and embedded
+// course pages both work when the portal is hosted below a URL subfolder.
+const COURSE_RUNTIME_URL=document.currentScript&&document.currentScript.src
+  ? document.currentScript.src
+  : location.href;
+const API_ROOT=new URL('../../api',COURSE_RUNTIME_URL).href.replace(/\/$/,'');
 function token(){ return localStorage.getItem('authToken')||''; }
 function apiFetch(path,options){
   options=options||{};

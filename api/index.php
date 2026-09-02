@@ -11,10 +11,10 @@ require_once __DIR__ . '/CertificatePdf.php';
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
-// Be tolerant of deployments where the application lives in a subfolder.
-$pos = strpos($uri, '/api');
-if ($pos !== false) {
-    $uri = substr($uri, $pos);
+// Remove any deployment prefix while matching only a real /api path segment.
+// For example, /elearning/api/auth/me becomes /api/auth/me.
+if (preg_match('#/api(?:/|$)#', $uri, $apiPathMatch, PREG_OFFSET_CAPTURE)) {
+    $uri = substr($uri, (int)$apiPathMatch[0][1]);
 }
 $uri = rtrim($uri, '/') ?: '/';
 
@@ -473,7 +473,7 @@ function requireMethod(string $expected): void {
 }
 function audit(string $action, ?string $entityType = null, ?int $entityId = null, ?array $details = null): void {
     try {
-        $auth = verifyToken($_SERVER['HTTP_AUTHORIZATION'] ?? null);
+        $auth = verifyToken(authorizationHeader());
         db()->prepare('INSERT INTO audit_logs (userId,action,entityType,entityId,details) VALUES (?,?,?,?,?)')
             ->execute([$auth['userId'] ?? null, $action, $entityType, $entityId, $details ? json_encode($details, JSON_UNESCAPED_UNICODE) : null]);
     } catch (Throwable $ignored) { /* audit logging must not break the primary action */ }

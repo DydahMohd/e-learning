@@ -1,5 +1,11 @@
 RewriteEngine On
 
+# Preserve bearer authentication when Apache/PHP runs this application from
+# a subfolder (for example /elearning/). Some CGI/FastCGI configurations do
+# not expose the Authorization header to PHP unless it is copied explicitly.
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%1]
+
 # Never expose application secrets, database dumps, logs, backups or development files.
 <FilesMatch "(?i)^(\.|.*\.(sql|db|sqlite|bak|bat|md|env|log))$">
     Require all denied
@@ -25,4 +31,4 @@ RewriteRule ^api(?:/.*)?$ api/index.php [QSA,L]
 DirectoryIndex index.php index.html
 
 # Legacy monolithic course pages are reference-only
-RedirectMatch 403 ^/legacy_courses/
+RedirectMatch 403 /legacy_courses/

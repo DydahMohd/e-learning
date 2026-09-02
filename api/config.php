@@ -311,9 +311,27 @@ function verifyToken(?string $authHeader): ?array
     }
 }
 
+/** Read bearer auth consistently across Apache module, CGI and FastCGI. */
+function authorizationHeader(): ?string
+{
+    foreach (['HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION'] as $key) {
+        $value = $_SERVER[$key] ?? null;
+        if (is_string($value) && trim($value) !== '') return trim($value);
+    }
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        foreach ($headers as $name => $value) {
+            if (strcasecmp((string)$name, 'Authorization') === 0 && is_string($value)) {
+                return trim($value);
+            }
+        }
+    }
+    return null;
+}
+
 function revokeCurrentSession(): void
 {
-    $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $header = authorizationHeader() ?? '';
     if (!is_string($header) || !str_starts_with($header, 'Bearer ')) {
         return;
     }
@@ -346,9 +364,7 @@ function revokeAllUserSessions(int $userId): void
 
 function requireAuth(): array
 {
-    $user = verifyToken(
-        $_SERVER['HTTP_AUTHORIZATION'] ?? null
-    );
+    $user = verifyToken(authorizationHeader());
 
     if (!$user) {
         jsonError(
