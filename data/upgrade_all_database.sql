@@ -1,5 +1,5 @@
 -- Non-destructive upgrade for the EAC Statistics e-Learning Platform.
--- Run after data/eac_academy.sql when upgrading an existing installation.
+-- Run after data/eac_stats_elearning.sql when upgrading an existing installation.
 SET NAMES utf8mb4;
 
 ALTER TABLE users ADD COLUMN IF NOT EXISTS firstName VARCHAR(120) NULL AFTER fullName;

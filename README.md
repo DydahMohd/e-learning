@@ -44,7 +44,7 @@ Password-reset emails open `reset-password.php` with a one-use link that expires
 
 ## Database upgrades
 
-- `data/eac_academy.sql` creates the base schema and demo data.
+- `data/eac_stats_elearning.sql` creates the complete schema plus course and assessment seed content. Runtime user and activity records are excluded from the repository dump.
 - `data/upgrade_course_progress.sql` adds persistent module-level progress.
 - `data/upgrade_assessment_attempts.sql` adds one-use, time-limited final-assessment sessions.
 - `data/upgrade_platform_features.sql` adds notifications, password reset tokens, audit logs and course feedback.
@@ -97,7 +97,7 @@ APP_ORIGIN=https://your-real-frontend-origin.example
 JWT_SECRET=<random secret of at least 32 characters>
 DB_HOST=<database host>
 DB_PORT=3306
-DB_NAME=eac_academy
+DB_NAME=eac_stats_elearning
 DB_USER=<restricted database user>
 DB_PASSWORD=<strong database password>
 DEMO_ACCOUNTS_ENABLED=0

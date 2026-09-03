@@ -18,7 +18,9 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `eac_academy`
+-- Database: `eac_stats_elearning`
+-- Distribution-safe dump: runtime user, session, progress, certificate,
+-- comment, assessment-attempt and audit records are intentionally excluded.
 --
 
 -- --------------------------------------------------------
@@ -40,11 +42,6 @@ CREATE TABLE `achievements` (
 -- Dumping data for table `achievements`
 --
 
-INSERT INTO `achievements` (`id`, `userId`, `badgeType`, `badgeName`, `description`, `unlockedAt`) VALUES
-(1, 1, 'QuizMaster', 'Quiz Master', 'Scored 80% or higher on a quiz', '2026-08-13 13:18:41'),
-(2, 4, 'QuizMaster', 'Quiz Master', 'Scored 80% or higher on a quiz', '2026-08-27 08:07:27'),
-(3, 7, 'QuizMaster', 'Quiz Master', 'Scored 80% or higher on a quiz', '2026-08-28 06:50:23'),
-(4, 2, 'QuizMaster', 'Quiz Master', 'Scored 80% or higher on a quiz', '2026-08-28 10:00:04');
 
 -- --------------------------------------------------------
 
@@ -66,12 +63,6 @@ CREATE TABLE `assessment_attempts` (
 -- Dumping data for table `assessment_attempts`
 --
 
-INSERT INTO `assessment_attempts` (`id`, `userId`, `courseId`, `tokenHash`, `startedAt`, `expiresAt`, `submittedAt`) VALUES
-(1, 4, 2, '8bc989b80e36d264e943e81db9a25ae222a607bcc7a22b8e4b702a95c56e1f99', '2026-08-27 08:05:05', '2026-08-27 11:25:05', '2026-08-27 11:07:27'),
-(3, 8, 2, '39b2b139b7233afb452c9aaef906dea8296f0c30df2f11bb6ee2a942259300c8', '2026-08-28 06:38:45', '2026-08-28 09:58:45', NULL),
-(5, 7, 2, '0abca88d14d03815b56a2a90d73e93e35182bfb30d6b1885d15324b39a90512c', '2026-08-28 06:47:54', '2026-08-28 10:07:54', '2026-08-28 09:50:22'),
-(6, 2, 2, '2551ca67efddbc79392be71077097abe1f1e922d3431c0b9db23fdf4070acbbb', '2026-08-28 09:55:04', '2026-08-28 13:15:04', '2026-08-28 12:57:24'),
-(7, 2, 2, '93a1a2894e91c7e285aab012389770159c0a25cfc33f5679c2c8a077588ed431', '2026-08-28 09:57:59', '2026-08-28 13:17:59', '2026-08-28 13:00:04');
 
 -- --------------------------------------------------------
 
@@ -2367,27 +2358,6 @@ CREATE TABLE `audit_logs` (
 -- Dumping data for table `audit_logs`
 --
 
-INSERT INTO `audit_logs` (`id`, `userId`, `action`, `entityType`, `entityId`, `details`, `createdAt`) VALUES
-(1, 2, 'admin_certificate_downloaded', 'certificate', 2, '{\"userId\":1}', '2026-08-27 05:45:51'),
-(2, 2, 'admin_certificate_downloaded', 'certificate', 2, '{\"userId\":1}', '2026-08-27 05:45:52'),
-(3, 2, 'certificate_downloaded', 'certificate', 4, NULL, '2026-08-28 10:01:08'),
-(4, 2, 'certificate_downloaded', 'certificate', 4, NULL, '2026-08-28 10:14:42'),
-(5, 2, 'certificate_downloaded', 'certificate', 4, NULL, '2026-08-28 10:22:44'),
-(6, 2, 'course_created', 'course', 23, '{\"status\":\"published\",\"managedContent\":true}', '2026-08-28 10:32:41'),
-(7, 2, 'assessment_question_created', 'assessment_question', 487, '{\"courseId\":5,\"type\":\"module_quiz\"}', '2026-08-28 10:52:24'),
-(8, 2, 'assessment_question_updated', 'assessment_question', 487, '{\"courseId\":5}', '2026-08-28 10:58:23'),
-(9, 2, 'assessment_question_updated', 'assessment_question', 487, '{\"courseId\":5}', '2026-08-28 10:59:14'),
-(10, 2, 'assessment_question_updated', 'assessment_question', 475, '{\"courseId\":5}', '2026-08-28 10:59:44'),
-(11, 2, 'assessment_question_updated', 'assessment_question', 487, '{\"courseId\":5}', '2026-08-28 11:00:16'),
-(12, 2, 'course_updated', 'course', 5, '{\"status\":\"published\"}', '2026-08-28 11:04:21'),
-(13, 2, 'assessment_question_created', 'assessment_question', 488, '{\"courseId\":5,\"type\":\"module_quiz\"}', '2026-08-28 11:10:10'),
-(14, 2, 'assessment_question_deleted', 'assessment_question', 487, '{\"courseId\":5}', '2026-08-28 11:10:34'),
-(15, 7, 'certificate_downloaded', 'certificate', 5, NULL, '2026-08-28 11:28:49'),
-(16, 7, 'certificate_downloaded', 'certificate', 5, NULL, '2026-08-28 11:36:14'),
-(17, 7, 'certificate_downloaded', 'certificate', 5, NULL, '2026-08-28 11:36:22'),
-(18, 7, 'certificate_downloaded', 'certificate', 5, NULL, '2026-08-28 12:07:24'),
-(19, 7, 'certificate_downloaded', 'certificate', 5, NULL, '2026-08-28 12:14:51'),
-(20, 7, 'certificate_downloaded', 'certificate', 5, NULL, '2026-08-28 12:23:35');
 
 -- --------------------------------------------------------
 
@@ -2407,12 +2377,6 @@ CREATE TABLE `certificates` (
 -- Dumping data for table `certificates`
 --
 
-INSERT INTO `certificates` (`id`, `userId`, `courseId`, `certificateNumber`, `issuedAt`) VALUES
-(1, 1, 2, 'EAC-1-2-1786627387', '2026-08-13 13:23:07'),
-(2, 1, 3, 'EAC-1-3-1786627603', '2026-08-13 13:26:43'),
-(3, 4, 2, 'EAC-2026-4-2-263357', '2026-08-27 08:07:44'),
-(4, 2, 2, 'EAC-2026-2-2-F4B277', '2026-08-28 10:00:24'),
-(5, 7, 2, 'EAC-2026-7-2-203401', '2026-08-28 11:28:25');
 
 -- --------------------------------------------------------
 
@@ -2434,8 +2398,6 @@ CREATE TABLE `comments` (
 -- Dumping data for table `comments`
 --
 
-INSERT INTO `comments` (`id`, `userId`, `courseId`, `commentText`, `likes`, `parentId`, `createdAt`) VALUES
-(1, 1, 2, 'This course is very useful for understanding Financial Sector Indicators.', 1, NULL, '2026-08-13 13:53:46');
 
 -- --------------------------------------------------------
 
@@ -2454,8 +2416,6 @@ CREATE TABLE `comment_likes` (
 -- Dumping data for table `comment_likes`
 --
 
-INSERT INTO `comment_likes` (`id`, `userId`, `commentId`, `createdAt`) VALUES
-(1, 1, 1, '2026-08-13 13:54:56');
 
 -- --------------------------------------------------------
 
@@ -2531,30 +2491,6 @@ CREATE TABLE `course_progress` (
 -- Dumping data for table `course_progress`
 --
 
-INSERT INTO `course_progress` (`id`, `userId`, `courseId`, `completedModules`, `currentPosition`, `assessmentPassed`, `assessmentScore`, `progress`, `updatedAt`) VALUES
-(1, 1, 4, '[]', NULL, 0, NULL, 0, '2026-08-17 08:49:24'),
-(3, 1, 1, '[]', NULL, 0, NULL, 0, '2026-08-17 08:55:51'),
-(5, 1, 5, '[]', NULL, 0, NULL, 0, '2026-08-17 09:02:13'),
-(7, 1, 2, '[]', NULL, 0, NULL, 0, '2026-08-17 09:02:30'),
-(8, 2, 1, '[]', NULL, 0, NULL, 0, '2026-08-18 07:27:05'),
-(11, 2, 2, '{\"m1\":true,\"m2\":true,\"m3\":true,\"m4\":true,\"m5\":true}', NULL, 1, 90.00, 100, '2026-08-28 10:00:04'),
-(14, 2, 3, '[]', NULL, 0, NULL, 0, '2026-08-18 07:32:09'),
-(15, 4, 1, '[]', NULL, 0, NULL, 11, '2026-08-18 12:18:12'),
-(133, 4, 2, '{\"m1\":true,\"m2\":true,\"m3\":true,\"m4\":true,\"m5\":true}', NULL, 1, 80.00, 100, '2026-08-27 08:07:27'),
-(148, 1, 7, '[]', NULL, 0, NULL, 0, '2026-08-18 20:53:30'),
-(169, 1, 3, '[]', NULL, 0, NULL, 0, '2026-08-19 03:15:41'),
-(173, 1, 6, '[]', NULL, 0, NULL, 0, '2026-08-19 03:34:39'),
-(187, 2, 5, '[]', NULL, 0, NULL, 0, '2026-08-25 08:54:19'),
-(249, 6, 2, '[]', NULL, 0, NULL, 0, '2026-08-25 12:41:18'),
-(275, 6, 5, '[]', NULL, 0, NULL, 0, '2026-08-25 13:02:18'),
-(359, 2, 4, '[]', NULL, 0, NULL, 0, '2026-08-26 06:11:18'),
-(470, 4, 5, '[]', NULL, 0, NULL, 0, '2026-08-27 08:41:16'),
-(473, 7, 2, '{\"m1\":true,\"m2\":true,\"m3\":true,\"m4\":true,\"m5\":true}', NULL, 1, 80.00, 100, '2026-08-28 06:50:23'),
-(525, 8, 2, '{\"m1\":true,\"m2\":true,\"m3\":true,\"m4\":true,\"m5\":true}', NULL, 0, NULL, 99, '2026-08-28 06:38:45'),
-(582, 2, 7, '{\"m1\":true}', '{\"mid\":\"m2\",\"i\":0}', 0, NULL, 20, '2026-08-28 10:28:59'),
-(585, 7, 7, '[]', NULL, 0, NULL, 0, '2026-08-28 10:42:41'),
-(597, 7, 5, '[]', '{\"mid\":\"m1\",\"i\":5}', 0, NULL, 0, '2026-08-28 12:10:52'),
-(740, 7, 23, '[]', NULL, 0, NULL, 0, '2026-08-28 12:09:29');
 
 -- --------------------------------------------------------
 
@@ -2576,32 +2512,6 @@ CREATE TABLE `enrollments` (
 -- Dumping data for table `enrollments`
 --
 
-INSERT INTO `enrollments` (`id`, `userId`, `courseId`, `enrolledAt`, `completedAt`, `progress`, `status`) VALUES
-(1, 1, 1, '2026-08-13 13:03:10', NULL, 0, 'active'),
-(2, 1, 3, '2026-08-13 13:03:10', NULL, 0, 'active'),
-(5, 1, 2, '2026-08-13 13:10:41', NULL, 0, 'active'),
-(6, 1, 7, '2026-08-17 08:05:40', NULL, 0, 'active'),
-(7, 1, 6, '2026-08-17 08:10:51', NULL, 0, 'active'),
-(8, 1, 4, '2026-08-17 08:49:23', NULL, 0, 'active'),
-(9, 1, 5, '2026-08-17 09:02:13', NULL, 0, 'active'),
-(11, 2, 1, '2026-08-18 07:27:04', NULL, 0, 'active'),
-(12, 2, 2, '2026-08-18 07:27:23', '2026-08-28 13:23:07', 100, 'completed'),
-(13, 2, 3, '2026-08-18 07:32:08', NULL, 0, 'active'),
-(14, 4, 1, '2026-08-18 07:57:30', NULL, 11, 'active'),
-(16, 4, 2, '2026-08-18 13:21:18', '2026-08-27 11:40:54', 100, 'completed'),
-(17, 2, 5, '2026-08-25 08:54:15', NULL, 0, 'active'),
-(18, 6, 2, '2026-08-25 12:41:13', NULL, 0, 'active'),
-(19, 6, 5, '2026-08-25 13:02:13', NULL, 0, 'active'),
-(20, 2, 4, '2026-08-26 06:11:17', NULL, 0, 'active'),
-(21, 4, 7, '2026-08-26 07:48:12', NULL, 0, 'active'),
-(22, 4, 5, '2026-08-26 07:48:15', NULL, 0, 'active'),
-(23, 4, 3, '2026-08-26 07:48:16', NULL, 0, 'active'),
-(24, 7, 2, '2026-08-27 12:03:49', '2026-08-28 15:40:57', 100, 'completed'),
-(25, 8, 2, '2026-08-28 06:38:34', NULL, 99, 'active'),
-(26, 2, 7, '2026-08-28 10:28:58', NULL, 20, 'active'),
-(27, 7, 23, '2026-08-28 10:34:09', NULL, 0, 'active'),
-(28, 7, 7, '2026-08-28 10:42:40', NULL, 0, 'active'),
-(29, 7, 5, '2026-08-28 10:45:42', NULL, 0, 'active');
 
 -- --------------------------------------------------------
 
@@ -2622,13 +2532,6 @@ CREATE TABLE `learning_streaks` (
 -- Dumping data for table `learning_streaks`
 --
 
-INSERT INTO `learning_streaks` (`id`, `userId`, `currentStreak`, `maxStreak`, `lastActivityDate`, `totalPoints`) VALUES
-(1, 1, 3, 3, '2026-08-19', 475),
-(2, 2, 1, 2, '2026-08-28', 320),
-(6, 4, 3, 3, '2026-08-27', 160),
-(8, 6, 1, 1, '2026-08-25', 0),
-(10, 7, 2, 2, '2026-08-28', 160),
-(11, 8, 1, 1, '2026-08-28', 0);
 
 -- --------------------------------------------------------
 
@@ -2682,13 +2585,6 @@ CREATE TABLE `quiz_attempts` (
 -- Dumping data for table `quiz_attempts`
 --
 
-INSERT INTO `quiz_attempts` (`id`, `userId`, `courseId`, `quizId`, `score`, `totalQuestions`, `correctAnswers`, `attemptedAt`) VALUES
-(1, 1, 2, 1, 80.00, 10, 8, '2026-08-13 13:14:20'),
-(2, 1, 2, 2, 80.00, 10, 8, '2026-08-13 13:18:41'),
-(3, 4, 2, NULL, 80.00, 20, 16, '2026-08-27 08:07:27'),
-(4, 7, 2, NULL, 80.00, 20, 16, '2026-08-28 06:50:23'),
-(5, 2, 2, NULL, 70.00, 20, 14, '2026-08-28 09:57:24'),
-(6, 2, 2, NULL, 90.00, 20, 18, '2026-08-28 10:00:04');
 
 -- --------------------------------------------------------
 
@@ -2721,13 +2617,6 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `fullName`, `firstName`, `middleName`, `surname`, `sex`, `role`, `organization`, `sector`, `country`, `jobTitle`, `profilePicture`, `bio`, `createdAt`, `updatedAt`, `lastLoginAt`) VALUES
-(1, 'demo@eac.org', '$2y$10$2eEJyu3KKlCmz.Eh0Ojiuu2CKhy1w0LqTq0.6DRm28LZi8JxiENda', 'Demo Student', NULL, NULL, NULL, NULL, 'student', 'EAC Secretariat', NULL, NULL, NULL, NULL, NULL, '2026-08-13 13:03:10', NULL, NULL),
-(2, 'admin@eac.org', '$2y$10$NHJ.8ZqDuH0B0aoRWfblBu0UHpgoglQTDbMcsht1Y8sXEzMDQ7caW', 'Admin User', NULL, NULL, NULL, NULL, 'admin', 'IT Department', NULL, NULL, NULL, NULL, NULL, '2026-08-13 13:03:10', '2026-08-28 12:09:12', '2026-08-28 12:09:12'),
-(4, 'mohamed@gmail.com', '$2y$10$sUf4iNdzG9mCU3esMKoL0utE5BsbPawbL0.wWJQwKHeEoKtyT5LHS', 'MOHAMEDI IBRAHIM BEDUI', 'MOHAMEDI', 'IBRAHIM', 'BEDUI', 'Male', 'student', 'saeshbusinesscompanylimited.', 'Private sector', 'Tanzania', NULL, NULL, NULL, '2026-08-18 07:57:30', '2026-08-27 08:41:34', '2026-08-27 08:41:34'),
-(6, 'petermhina@gmail.com', '$2y$10$bQ39StDsZrLjZJGciA7SjegKa08p.HZxv4ncguKC9Qy9HohZnnbCe', 'peter peter mhina', 'peter', 'peter', 'mhina', 'Male', 'student', 'eac', 'Other government', 'Tanzania', NULL, NULL, NULL, '2026-08-25 12:40:23', '2026-08-25 13:03:30', '2026-08-25 13:03:30'),
-(7, 'hadijamohamed@gmail.com', '$2y$10$EFoyyZMf/Tzl1zSpnlYRn./RCd9AbXIOjccn4i56O0h4gEwwkRCl2', 'Hadija Mohamed Bedui', 'Hadija Mohamed', NULL, 'Bedui', 'Female', 'student', 'EAC', 'EAC organ/institution', 'Tanzania', NULL, NULL, NULL, '2026-08-27 12:03:41', '2026-08-28 12:41:01', '2026-08-28 12:41:01'),
-(8, 'hafidhhafidh@gmail.com', '$2y$10$3icJPb1KFqteeWnl6I04/ejdNlbf5O3fxalZysyZmP001uEAfqeJe', 'hafidh hafidh', 'hafidh', NULL, 'hafidh', 'Male', 'student', 'EAC', 'Private sector', 'Somalia', NULL, NULL, NULL, '2026-08-28 06:38:13', '2026-08-28 06:39:01', '2026-08-28 06:39:01');
 
 -- --------------------------------------------------------
 
@@ -2748,33 +2637,6 @@ CREATE TABLE `user_sessions` (
 -- Dumping data for table `user_sessions`
 --
 
-INSERT INTO `user_sessions` (`id`, `userId`, `tokenHash`, `createdAt`, `lastActivityAt`, `revokedAt`) VALUES
-(1, 2, 'c46cf1ec43a42063253435d7ca0107c78a9e95e44b8988207112fcb1d2b436c6', '2026-08-25 08:54:15', '2026-08-25 11:37:13', '2026-08-25 11:37:42'),
-(2, 4, '959f7d7176ed1d13de351615b1cbc70c88950bd42c6baa08c6d49b4c94cd8d14', '2026-08-25 11:37:57', '2026-08-25 12:37:55', '2026-08-25 12:39:08'),
-(3, 6, 'a57940fcb01e6e0e06726a9da99424f65949888a487630db725f857000cac2e4', '2026-08-25 12:40:23', '2026-08-25 12:40:24', NULL),
-(4, 6, '79e958f8d97b144e4c82874148ba4f55a08c7f813de34a1f9bf9b5e62851b054', '2026-08-25 12:40:45', '2026-08-25 13:02:25', NULL),
-(5, 6, 'b6fba1902e2dc4b8eee0fb30aa46cf4d394c8f7b5c54f57e7d48c7897d135970', '2026-08-25 13:02:44', '2026-08-25 13:02:45', NULL),
-(6, 6, '1206e3da5f64759518ed3689054fff09805a9463bc7438f6a25dd0a03e438abb', '2026-08-25 13:02:52', '2026-08-25 13:03:30', NULL),
-(7, 2, '194d48121b2e385316ad90933234ca852273cdbe9a0a46496220929f2bf9647d', '2026-08-25 17:27:48', '2026-08-26 07:46:41', '2026-08-26 07:46:43'),
-(8, 4, 'aa1263854a8be4bcbcb48ac94c60cf54277420cf48ad84d18e6dfc29f9cf3e6f', '2026-08-26 07:47:36', '2026-08-26 08:42:43', '2026-08-26 08:44:08'),
-(9, 4, 'f463fe58f9f6dd06c71d583140359c9db4069fd6b806b24dd4d39bc7ace8c208', '2026-08-26 09:14:14', '2026-08-26 09:18:22', '2026-08-26 09:18:28'),
-(10, 4, '7a9eba9ed0001fc30cc034fffb57a46be51dacf6e7bdca4c681a7a2f545a09c4', '2026-08-26 09:18:50', '2026-08-26 09:46:51', '2026-08-26 09:46:54'),
-(11, 4, '674b3453cb1c7754ade65ba52984121f9fe83eb19a8a6a0b21d794f482863de4', '2026-08-26 09:47:26', '2026-08-26 09:47:26', '2026-08-26 10:13:07'),
-(12, 4, 'c5b799c12b7516370fcc47197d6d0bcd08afe8eb34f17a4bc99f5c0756146029', '2026-08-26 11:07:55', '2026-08-26 11:07:56', NULL),
-(13, 4, 'd6555e947463f764e0fecac62507d9cf6b2abdf482f7cf0b1b3f74c1053739fe', '2026-08-26 20:19:54', '2026-08-26 20:19:54', NULL),
-(14, 4, 'b1215cf186bea220abb001cda7d12faf8eae7cf7b94075ce3cf36d0ada2f6d95', '2026-08-26 20:19:54', '2026-08-27 03:51:19', NULL),
-(15, 2, '9fd6786e7947d7ea7a623557b9dd6e3012084395ec4720a8d0ff90dddd4f3c26', '2026-08-27 03:54:52', '2026-08-27 03:54:52', '2026-08-27 03:54:53'),
-(16, 2, '2ef65ab81b9f642e8e44d6ac59907b8e8ef0916d3674a3f0de6dfbe1b4fcc448', '2026-08-27 03:57:40', '2026-08-27 03:57:40', NULL),
-(17, 2, '118c01e6fe61705610314c6255e07d876fb01ce7f50af728238d5156b850b2a1', '2026-08-27 04:01:30', '2026-08-27 04:01:30', NULL),
-(18, 2, 'a804069727d8ded3c728f01ff421bdea5b50b275abc5158850e49879a1549475', '2026-08-27 04:02:28', '2026-08-27 06:03:15', '2026-08-27 06:03:15'),
-(19, 4, '848ca933408c58f716a985ffd9d512579e63704d87266867aba9394651a14e74', '2026-08-27 06:03:27', '2026-08-27 08:41:34', '2026-08-27 08:41:34'),
-(20, 2, '8967a5b85d6abfa8b14ae66bfb65f85cf802c2d485afa6e06147827184e0af06', '2026-08-27 06:03:56', '2026-08-28 10:23:15', '2026-08-28 10:23:15'),
-(21, 7, '24e9ef9831327009619c930eba7e863c798dd15fcd6f57129173dd3144b8c785', '2026-08-27 12:03:41', '2026-08-28 06:36:08', '2026-08-28 06:36:19'),
-(22, 8, '183cf55a11dc4be35ef05365ec8d3013204f62c9eb7cc5a85496a10c7c0bf9b0', '2026-08-28 06:38:13', '2026-08-28 06:39:01', '2026-08-28 06:39:03'),
-(23, 7, '9400ff1a9e7ce8cd46aefb20cdcb90ab2bbf17a505187c943627a3874bdf7dbe', '2026-08-28 06:47:54', '2026-08-28 06:56:46', '2026-08-28 06:56:46'),
-(24, 2, 'a94c3d305dd29520da286a41e680fbe5dfa2a0727a2b541e4dc6b1b4b71d5a39', '2026-08-28 10:28:58', '2026-08-28 10:29:11', '2026-08-28 10:29:11'),
-(25, 2, '76c00cafe6eead06fd6aacefa2e26e2ec691276fa4bb9c4f5b6eca8915712011', '2026-08-28 10:29:35', '2026-08-28 12:09:12', NULL),
-(26, 7, '10f9d5014e7c9101654b45a64f055c9ea6f2caa07ad773cc70ddb3782b2bb007', '2026-08-28 10:34:02', '2026-08-28 12:41:01', NULL);
 
 --
 -- Indexes for dumped tables
@@ -3176,3 +3038,313 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Non-destructive upgrade for the EAC Statistics e-Learning Platform.
+-- Run after data/eac_stats_elearning.sql when upgrading an existing installation.
+SET NAMES utf8mb4;
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS firstName VARCHAR(120) NULL AFTER fullName;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS middleName VARCHAR(120) NULL AFTER firstName;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS surname VARCHAR(120) NULL AFTER middleName;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS sex VARCHAR(30) NULL AFTER surname;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS sector VARCHAR(150) NULL AFTER organization;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR(100) NULL AFTER sector;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS jobTitle VARCHAR(180) NULL AFTER country;
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT UNSIGNED NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  type VARCHAR(40) NOT NULL DEFAULT 'info',
+  readAt DATETIME NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_notification_user (userId, readAt, createdAt),
+  CONSTRAINT fk_notification_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS password_resets (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT UNSIGNED NOT NULL,
+  tokenHash CHAR(64) NOT NULL,
+  expiresAt DATETIME NOT NULL,
+  usedAt DATETIME NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_password_reset_token (tokenHash),
+  KEY idx_password_reset_user (userId, expiresAt),
+  CONSTRAINT fk_password_reset_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT UNSIGNED NULL,
+  action VARCHAR(100) NOT NULL,
+  entityType VARCHAR(80) NULL,
+  entityId INT UNSIGNED NULL,
+  details JSON NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_audit_created (createdAt),
+  KEY idx_audit_user (userId),
+  CONSTRAINT fk_audit_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS course_feedback (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT UNSIGNED NOT NULL,
+  courseId INT UNSIGNED NOT NULL,
+  rating TINYINT UNSIGNED NOT NULL,
+  comment TEXT NULL,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_feedback_user_course (userId, courseId),
+  CONSTRAINT fk_feedback_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_feedback_course FOREIGN KEY (courseId) REFERENCES courses(id) ON DELETE CASCADE,
+  CONSTRAINT chk_feedback_rating CHECK (rating BETWEEN 1 AND 5)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS `course_progress` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userId` int(10) UNSIGNED NOT NULL,
+  `courseId` int(10) UNSIGNED NOT NULL,
+  `completedModules` longtext NOT NULL,
+  `currentPosition` longtext DEFAULT NULL,
+  `assessmentPassed` tinyint(1) NOT NULL DEFAULT 0,
+  `assessmentScore` decimal(5,2) DEFAULT NULL,
+  `progress` int(11) NOT NULL DEFAULT 0,
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_course_progress_user_course` (`userId`,`courseId`),
+  KEY `fk_course_progress_course` (`courseId`),
+  CONSTRAINT `fk_course_progress_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_course_progress_course` FOREIGN KEY (`courseId`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- Server-owned assessment sessions.
+-- Each generated final-assessment token is single-use and expires at the
+-- course-configured assessment deadline.
+
+CREATE TABLE IF NOT EXISTS assessment_attempts (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT(10) UNSIGNED NOT NULL,
+  courseId INT(10) UNSIGNED NOT NULL,
+  tokenHash CHAR(64) NOT NULL,
+  startedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expiresAt DATETIME NOT NULL,
+  submittedAt DATETIME NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_assessment_attempt_token (tokenHash),
+  KEY idx_assessment_attempt_user_course (userId, courseId, submittedAt),
+  KEY idx_assessment_attempt_expiry (expiresAt),
+  CONSTRAINT fk_assessment_attempt_user
+    FOREIGN KEY (userId) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_assessment_attempt_course
+    FOREIGN KEY (courseId) REFERENCES courses(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- EAC Statistics e-Learning
+-- Move built-in course launch paths to the shared course architecture.
+UPDATE courses SET contentPath='courses/agriculture.php' WHERE id=1;
+UPDATE courses SET contentPath='courses/fsi.php' WHERE id=2;
+UPDATE courses SET contentPath='courses/gfs.php' WHERE id=3;
+UPDATE courses SET contentPath='courses/psds.php' WHERE id=4;
+UPDATE courses SET contentPath='courses/mfs.php' WHERE id=5;
+UPDATE courses SET contentPath='courses/poverty.php' WHERE id=6;
+UPDATE courses SET contentPath='courses/ess.php' WHERE id=7;
+-- Integrity and security indexes for the EAC Statistics e-Learning platform.
+-- This migration does not delete users, courses, or progress.
+
+SET @db := DATABASE();
+
+-- Remove duplicate enrollment rows while keeping the oldest record.
+DELETE e1 FROM enrollments e1
+JOIN enrollments e2
+  ON e1.userId = e2.userId
+ AND e1.courseId = e2.courseId
+ AND e1.id > e2.id;
+
+-- Add a unique enrollment constraint only if it does not already exist.
+SET @idx_exists := (
+  SELECT COUNT(*)
+  FROM information_schema.statistics
+  WHERE table_schema = @db
+    AND table_name = 'enrollments'
+    AND index_name = 'uq_enrollment_user_course'
+);
+
+SET @sql := IF(
+  @idx_exists = 0,
+  'ALTER TABLE enrollments ADD UNIQUE KEY uq_enrollment_user_course (userId, courseId)',
+  'SELECT 1'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- Useful lookup indexes.
+SET @idx_exists := (
+  SELECT COUNT(*)
+  FROM information_schema.statistics
+  WHERE table_schema = @db
+    AND table_name = 'course_progress'
+    AND index_name = 'idx_course_progress_updated'
+);
+SET @sql := IF(
+  @idx_exists = 0,
+  'ALTER TABLE course_progress ADD KEY idx_course_progress_updated (updatedAt)',
+  'SELECT 1'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+-- EAC Statistics e-Learning
+-- Adds non-destructive administration fields for the course publishing workflow.
+-- Existing courses remain published so learners do not lose access after upgrade.
+
+SET @db := DATABASE();
+
+SET @column_exists := (
+  SELECT COUNT(*)
+  FROM information_schema.columns
+  WHERE table_schema = @db
+    AND table_name = 'courses'
+    AND column_name = 'publicationStatus'
+);
+
+SET @sql := IF(
+  @column_exists = 0,
+  'ALTER TABLE courses ADD COLUMN publicationStatus ENUM(''draft'',''published'',''archived'') NOT NULL DEFAULT ''published'' AFTER studentCount',
+  'SELECT 1'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @index_exists := (
+  SELECT COUNT(*)
+  FROM information_schema.statistics
+  WHERE table_schema = @db
+    AND table_name = 'courses'
+    AND index_name = 'idx_courses_publication_status'
+);
+
+SET @sql := IF(
+  @index_exists = 0,
+  'ALTER TABLE courses ADD KEY idx_courses_publication_status (publicationStatus)',
+  'SELECT 1'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+-- EAC Statistics e-Learning account retention + persistent sessions.
+-- Policy:
+--   * Authenticated sessions do not expire automatically.
+--   * A session ends when the user signs out, the session is revoked,
+--     or the account is deleted by the inactivity policy.
+--   * Accounts with no activity for 31 days are deleted automatically.
+--     "Activity" means a successful authenticated request/login.
+--     A newly registered account with no authenticated use is therefore
+--     eligible for deletion 31 days after creation.
+
+SET @db := DATABASE();
+
+-- Track last authenticated activity.
+SET @exists := (
+    SELECT COUNT(*) FROM information_schema.columns
+    WHERE table_schema=@db AND table_name='users' AND column_name='lastLoginAt'
+);
+SET @sql := IF(
+    @exists=0,
+    'ALTER TABLE users ADD COLUMN lastLoginAt TIMESTAMP NULL DEFAULT NULL AFTER updatedAt',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+
+-- Server-side sessions. No expiresAt column by design.
+CREATE TABLE IF NOT EXISTS user_sessions (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    userId INT(10) UNSIGNED NOT NULL,
+    tokenHash CHAR(64) NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    lastActivityAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    revokedAt TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_user_session_token (tokenHash),
+    KEY idx_user_sessions_user (userId),
+    KEY idx_user_sessions_active (revokedAt),
+    CONSTRAINT fk_user_sessions_user
+        FOREIGN KEY (userId) REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Delete inactive accounts daily.
+-- Never delete administrators/instructors automatically.
+DROP EVENT IF EXISTS eac_cleanup_inactive_student_accounts;
+CREATE EVENT eac_cleanup_inactive_student_accounts
+ON SCHEDULE EVERY 1 DAY
+STARTS (CURRENT_TIMESTAMP + INTERVAL 1 DAY)
+DO
+  DELETE FROM users
+  WHERE role = 'student'
+    AND COALESCE(lastLoginAt, createdAt) < (NOW() - INTERVAL 31 DAY);
+
+-- Remove revoked sessions periodically.
+DROP EVENT IF EXISTS eac_cleanup_revoked_sessions;
+CREATE EVENT eac_cleanup_revoked_sessions
+ON SCHEDULE EVERY 1 DAY
+STARTS (CURRENT_TIMESTAMP + INTERVAL 1 DAY)
+DO
+  DELETE FROM user_sessions
+  WHERE revokedAt IS NOT NULL
+    AND revokedAt < (NOW() - INTERVAL 31 DAY);
+
+-- NOTE: MariaDB/MySQL must have the Event Scheduler enabled for the
+-- automatic daily events above:
+-- SET GLOBAL event_scheduler = ON;
+-- Database-authored module quizzes and final assessments.
+-- Safe to run more than once.
+
+CREATE TABLE IF NOT EXISTS assessment_settings (
+  courseId INT(10) UNSIGNED NOT NULL,
+  questionsPerAttempt SMALLINT UNSIGNED NOT NULL DEFAULT 20,
+  passMark DECIMAL(5,2) NOT NULL DEFAULT 80.00,
+  minutes SMALLINT UNSIGNED NOT NULL DEFAULT 20,
+  intro TEXT NULL,
+  updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (courseId),
+  CONSTRAINT fk_assessment_settings_course FOREIGN KEY (courseId) REFERENCES courses(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS assessment_questions (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  courseId INT(10) UNSIGNED NOT NULL,
+  questionType ENUM('module_quiz','final') NOT NULL,
+  moduleId VARCHAR(100) NULL,
+  quizKey VARCHAR(100) NULL,
+  title VARCHAR(255) NULL,
+  questionText TEXT NOT NULL,
+  explanation TEXT NULL,
+  sortOrder INT NOT NULL DEFAULT 0,
+  isActive TINYINT(1) NOT NULL DEFAULT 1,
+  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_assessment_questions_course_type (courseId, questionType, isActive, sortOrder),
+  KEY idx_assessment_questions_quiz_key (courseId, quizKey),
+  CONSTRAINT fk_assessment_questions_course FOREIGN KEY (courseId) REFERENCES courses(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS assessment_options (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  questionId BIGINT UNSIGNED NOT NULL,
+  optionText TEXT NOT NULL,
+  isCorrect TINYINT(1) NOT NULL DEFAULT 0,
+  sortOrder SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  KEY idx_assessment_options_question (questionId, sortOrder),
+  CONSTRAINT fk_assessment_options_question FOREIGN KEY (questionId) REFERENCES assessment_questions(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

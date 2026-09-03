@@ -9,9 +9,9 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-"%MYSQL_EXE%" -u root eac_academy < "data\upgrade_all_database.sql"
+"%MYSQL_EXE%" -u root eac_stats_elearning < "data\upgrade_all_database.sql"
 if errorlevel 1 (
-  echo Cumulative database upgrade failed. Check that eac_academy already exists and MySQL is running.
+  echo Cumulative database upgrade failed. Check that eac_stats_elearning already exists and MySQL is running.
   pause
   exit /b 1
 )

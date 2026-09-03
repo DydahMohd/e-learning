@@ -66,7 +66,7 @@ define(
 
 define(
     'DB_NAME',
-    getenv('DB_NAME') ?: 'eac_academy'
+    getenv('DB_NAME') ?: 'eac_stats_elearning'
 );
 
 define(

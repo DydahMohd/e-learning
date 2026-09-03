@@ -22,5 +22,4 @@ Thumbs.db
 # Temporary / backup files
 *.bak
 *.tmp
-/data/eac_academy.sql
 *~
