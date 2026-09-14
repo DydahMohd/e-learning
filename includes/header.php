@@ -72,6 +72,9 @@ $headerVariant = $headerVariant ?? 'standard';
             <div class="user-avatar" id="userAvatar" aria-hidden="true">U</div>
             <span id="userName">User</span>
         </div>
+        <a class="btn btn-ghost-white btn-sm hidden" href="<?= htmlspecialchars($basePath) ?>admin.php" data-admin-only id="adminDashboardBtn">
+            <i class="fas fa-shield-halved"></i> Admin Dashboard
+        </a>
         <button type="button" class="btn btn-ghost-white btn-sm" id="authBtn">Sign In</button>
         <a class="btn btn-gold btn-sm" href="<?= htmlspecialchars($basePath) ?>register.php" data-guest-only>Register</a>
         <button type="button" class="btn btn-ghost-white btn-sm hidden" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sign Out</button>

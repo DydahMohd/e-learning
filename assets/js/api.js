@@ -587,7 +587,14 @@ class EACApi {
     getNotifications() { return this.request('/notifications'); }
     markNotificationRead(id) { return this.request(`/notifications/${encodeURIComponent(id)}/read`, {method:'POST'}); }
     submitFeedback(courseId, rating, comment='') { return this.request('/feedback', {method:'POST', body:JSON.stringify({courseId,rating,comment})}); }
-    getAdminAnalytics() { return this.request('/admin/analytics'); }
+    getAdminAnalytics(filters = {}) {
+        const params = new URLSearchParams();
+        Object.entries(filters || {}).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && String(value).trim() !== '') params.set(key, String(value));
+        });
+        const query = params.toString();
+        return this.request('/admin/analytics' + (query ? '?' + query : ''));
+    }
 
 
     /* =====================================================
@@ -1326,7 +1333,7 @@ function updateAuthUI() {
         });
 
     document.querySelectorAll('[data-admin-only]').forEach(element => {
-        element.style.display = user?.role === 'admin' ? '' : 'none';
+        element.classList.toggle('hidden', user?.role !== 'admin');
     });
     document.querySelectorAll('[data-guest-only]').forEach(element => {
         element.style.display = user ? 'none' : '';
