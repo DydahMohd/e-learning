@@ -11,10 +11,10 @@ require_once __DIR__ . '/CertificatePdf.php';
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
-// Remove any deployment prefix while matching only a real /api path segment.
-// For example, /elearning/api/auth/me becomes /api/auth/me.
-if (preg_match('#/api(?:/|$)#', $uri, $apiPathMatch, PREG_OFFSET_CAPTURE)) {
-    $uri = substr($uri, (int)$apiPathMatch[0][1]);
+// Be tolerant of deployments where the application lives in a subfolder.
+$pos = strpos($uri, '/api');
+if ($pos !== false) {
+    $uri = substr($uri, $pos);
 }
 $uri = rtrim($uri, '/') ?: '/';
 
@@ -473,7 +473,7 @@ function requireMethod(string $expected): void {
 }
 function audit(string $action, ?string $entityType = null, ?int $entityId = null, ?array $details = null): void {
     try {
-        $auth = verifyToken(authorizationHeader());
+        $auth = verifyToken($_SERVER['HTTP_AUTHORIZATION'] ?? null);
         db()->prepare('INSERT INTO audit_logs (userId,action,entityType,entityId,details) VALUES (?,?,?,?,?)')
             ->execute([$auth['userId'] ?? null, $action, $entityType, $entityId, $details ? json_encode($details, JSON_UNESCAPED_UNICODE) : null]);
     } catch (Throwable $ignored) { /* audit logging must not break the primary action */ }
@@ -1110,22 +1110,97 @@ try {
     }
     if ($uri === '/api/admin/analytics') {
         requireAdmin();
-        $q=db()->query("SELECT COUNT(*) users FROM users WHERE role='student'")->fetch();
-        $c=db()->query("SELECT COUNT(*) courses, SUM(publicationStatus='draft') draftCourses, SUM(publicationStatus='published') publishedCourses, SUM(publicationStatus='archived') archivedCourses FROM courses")->fetch();
-        $e=db()->query("SELECT COUNT(*) enrollments, SUM(status='completed') completedEnrollments, ROUND(AVG(progress),1) averageProgress FROM enrollments")->fetch();
-        $a=db()->query('SELECT COUNT(*) quizAttempts, ROUND(AVG(score),1) averageQuizScore FROM quiz_attempts')->fetch();
+
+        $courseId = isset($_GET['courseId']) && ctype_digit((string)$_GET['courseId']) ? (int)$_GET['courseId'] : 0;
+        $country = trim((string)($_GET['country'] ?? ''));
+        $sex = trim((string)($_GET['sex'] ?? ''));
+        $jobTitle = trim((string)($_GET['jobTitle'] ?? ''));
+        $organization = trim((string)($_GET['organization'] ?? ''));
+        $dateFrom = trim((string)($_GET['dateFrom'] ?? ''));
+        $dateTo = trim((string)($_GET['dateTo'] ?? ''));
+        if ($dateFrom !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateFrom)) jsonError('Invalid dateFrom.');
+        if ($dateTo !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateTo)) jsonError('Invalid dateTo.');
+
+        $where = ["u.role='student'"];
+        $params = [];
+        if ($courseId > 0) { $where[] = 'e.courseId = ?'; $params[] = $courseId; }
+        if ($country !== '') { $where[] = 'u.country = ?'; $params[] = $country; }
+        if ($sex !== '') { $where[] = 'u.sex = ?'; $params[] = $sex; }
+        if ($jobTitle !== '') { $where[] = 'u.jobTitle = ?'; $params[] = $jobTitle; }
+        if ($organization !== '') { $where[] = 'u.organization = ?'; $params[] = $organization; }
+        if ($dateFrom !== '') { $where[] = 'e.enrolledAt >= ?'; $params[] = $dateFrom . ' 00:00:00'; }
+        if ($dateTo !== '') { $where[] = 'e.enrolledAt < DATE_ADD(?, INTERVAL 1 DAY)'; $params[] = $dateTo . ' 00:00:00'; }
+        $whereSql = implode(' AND ', $where);
+
+        $summarySql = "SELECT COUNT(DISTINCT e.id) enrollments, COUNT(DISTINCT e.userId) registeredLearners, SUM(e.status='completed') completedEnrollments, ROUND(AVG(e.progress),1) averageProgress, ROUND(AVG(CASE WHEN e.completedAt IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,e.enrolledAt,e.completedAt)/60 END),1) averageCompletionHours FROM enrollments e JOIN users u ON u.id=e.userId WHERE $whereSql";
+        $stmt = db()->prepare($summarySql); $stmt->execute($params); $summary = $stmt->fetch() ?: [];
+
+        $certSql = "SELECT COUNT(DISTINCT c.id) certificatesIssued FROM certificates c JOIN enrollments e ON e.userId=c.userId AND e.courseId=c.courseId JOIN users u ON u.id=c.userId WHERE $whereSql";
+        $stmt = db()->prepare($certSql); $stmt->execute($params); $cert = $stmt->fetch() ?: [];
+
+        $scoreSql = "SELECT COUNT(*) assessedLearners, ROUND(AVG(cp.assessmentScore),1) averageScore, SUM(cp.assessmentPassed=1) passedLearners FROM course_progress cp JOIN enrollments e ON e.userId=cp.userId AND e.courseId=cp.courseId JOIN users u ON u.id=cp.userId WHERE cp.assessmentScore IS NOT NULL AND $whereSql";
+        $stmt = db()->prepare($scoreSql); $stmt->execute($params); $score = $stmt->fetch() ?: [];
+
+        $distribution = function(string $field, string $alias='label') use ($whereSql, $params) {
+            $allowed = ['u.country','u.sex','u.jobTitle','u.organization'];
+            if (!in_array($field,$allowed,true)) return [];
+            $sql = "SELECT COALESCE(NULLIF(TRIM($field),''),'Not specified') $alias, COUNT(DISTINCT e.userId) value FROM enrollments e JOIN users u ON u.id=e.userId WHERE $whereSql GROUP BY $field ORDER BY value DESC, $alias ASC LIMIT 20";
+            $st=db()->prepare($sql); $st->execute($params); return $st->fetchAll();
+        };
+
+        $scoreBandsSql = "SELECT CASE WHEN cp.assessmentScore < 50 THEN '0–49' WHEN cp.assessmentScore < 60 THEN '50–59' WHEN cp.assessmentScore < 70 THEN '60–69' WHEN cp.assessmentScore < 80 THEN '70–79' WHEN cp.assessmentScore < 90 THEN '80–89' ELSE '90–100' END label, COUNT(*) value FROM course_progress cp JOIN enrollments e ON e.userId=cp.userId AND e.courseId=cp.courseId JOIN users u ON u.id=cp.userId WHERE cp.assessmentScore IS NOT NULL AND $whereSql GROUP BY label ORDER BY MIN(cp.assessmentScore)";
+        $stmt=db()->prepare($scoreBandsSql); $stmt->execute($params); $scoreBands=$stmt->fetchAll();
+
+        $completionTrendSql = "SELECT DATE_FORMAT(e.completedAt,'%Y-%m') monthKey, DATE_FORMAT(e.completedAt,'%b %Y') label, COUNT(*) value FROM enrollments e JOIN users u ON u.id=e.userId WHERE e.completedAt IS NOT NULL AND $whereSql GROUP BY monthKey,label ORDER BY monthKey ASC";
+        $stmt=db()->prepare($completionTrendSql); $stmt->execute($params); $completionTrend=$stmt->fetchAll();
+
+        $byCourseSql = "SELECT c.id courseId,c.title courseName,c.category,COUNT(e.id) registered,SUM(e.status='completed') completed,ROUND(100*SUM(e.status='completed')/NULLIF(COUNT(e.id),0),1) completionRate,COUNT(DISTINCT cert.id) certificates,ROUND(AVG(cp.assessmentScore),1) averageScore,ROUND(100*SUM(CASE WHEN cp.assessmentScore IS NOT NULL AND cp.assessmentPassed=1 THEN 1 ELSE 0 END)/NULLIF(SUM(cp.assessmentScore IS NOT NULL),0),1) passRate,ROUND(AVG(CASE WHEN e.completedAt IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,e.enrolledAt,e.completedAt)/60 END),1) averageCompletionHours FROM courses c LEFT JOIN enrollments e ON e.courseId=c.id LEFT JOIN users u ON u.id=e.userId AND u.role='student' LEFT JOIN certificates cert ON cert.userId=e.userId AND cert.courseId=e.courseId LEFT JOIN course_progress cp ON cp.userId=e.userId AND cp.courseId=e.courseId";
+        $courseWhere=[]; $courseParams=[];
+        if ($courseId>0){$courseWhere[]='c.id=?';$courseParams[]=$courseId;}
+        if ($country!==''){$courseWhere[]='u.country=?';$courseParams[]=$country;}
+        if ($sex!==''){$courseWhere[]='u.sex=?';$courseParams[]=$sex;}
+        if ($jobTitle!==''){$courseWhere[]='u.jobTitle=?';$courseParams[]=$jobTitle;}
+        if ($organization!==''){$courseWhere[]='u.organization=?';$courseParams[]=$organization;}
+        if ($dateFrom!==''){$courseWhere[]='e.enrolledAt>=?';$courseParams[]=$dateFrom.' 00:00:00';}
+        if ($dateTo!==''){$courseWhere[]='e.enrolledAt<DATE_ADD(?, INTERVAL 1 DAY)';$courseParams[]=$dateTo.' 00:00:00';}
+        if($courseWhere)$byCourseSql.=' WHERE '.implode(' AND ',$courseWhere);
+        $byCourseSql.=' GROUP BY c.id,c.title,c.category ORDER BY c.title';
+        $stmt=db()->prepare($byCourseSql);$stmt->execute($courseParams);$byCourse=$stmt->fetchAll();
+
+        $courses=db()->query("SELECT id,title,category FROM courses ORDER BY title")->fetchAll();
+        $optionRows=function(string $column){$allowed=['country','sex','jobTitle','organization'];if(!in_array($column,$allowed,true))return [];return db()->query("SELECT DISTINCT $column value FROM users WHERE role='student' AND $column IS NOT NULL AND TRIM($column)<>'' ORDER BY $column")->fetchAll();};
+
+        $enrollments=(int)($summary['enrollments']??0);
+        $completed=(int)($summary['completedEnrollments']??0);
+        $assessed=(int)($score['assessedLearners']??0);
+        $passed=(int)($score['passedLearners']??0);
         jsonResponse([
             'success'=>true,
-            'users'=>(int)$q['users'],
-            'courses'=>(int)$c['courses'],
-            'draftCourses'=>(int)($c['draftCourses']??0),
-            'publishedCourses'=>(int)($c['publishedCourses']??0),
-            'archivedCourses'=>(int)($c['archivedCourses']??0),
-            'enrollments'=>(int)($e['enrollments']??0),
-            'completedEnrollments'=>(int)($e['completedEnrollments']??0),
-            'averageProgress'=>(float)($e['averageProgress']??0),
-            'quizAttempts'=>(int)($a['quizAttempts']??0),
-            'averageQuizScore'=>(float)($a['averageQuizScore']??0),
+            'registeredLearners'=>(int)($summary['registeredLearners']??0),
+            'enrollments'=>$enrollments,
+            'completedEnrollments'=>$completed,
+            'completionRate'=>$enrollments>0?round($completed/$enrollments*100,1):0,
+            'certificatesIssued'=>(int)($cert['certificatesIssued']??0),
+            'averageProgress'=>(float)($summary['averageProgress']??0),
+            'assessedLearners'=>$assessed,
+            'passedLearners'=>$passed,
+            'passRate'=>$assessed>0?round($passed/$assessed*100,1):0,
+            'averageScore'=>(float)($score['averageScore']??0),
+            'averageCompletionHours'=>(float)($summary['averageCompletionHours']??0),
+            'scoreBands'=>$scoreBands,
+            'completionTrend'=>$completionTrend,
+            'countryDistribution'=>$distribution('u.country'),
+            'genderDistribution'=>$distribution('u.sex'),
+            'jobRoleDistribution'=>$distribution('u.jobTitle'),
+            'organizationDistribution'=>$distribution('u.organization'),
+            'byCourse'=>$byCourse,
+            'filters'=>[
+                'courses'=>$courses,
+                'countries'=>array_column($optionRows('country'),'value'),
+                'genders'=>array_column($optionRows('sex'),'value'),
+                'jobTitles'=>array_column($optionRows('jobTitle'),'value'),
+                'organizations'=>array_column($optionRows('organization'),'value'),
+            ],
         ]);
     }
 

@@ -165,8 +165,23 @@ header('Content-Type: text/html; charset=UTF-8');
     </section>
 
     <section class="admin-panel admin-wide">
-        <h2><i class="fas fa-chart-line"></i> Platform analytics</h2>
-        <div class="admin-panel-body" id="adminAnalytics">Loading reports&hellip;</div>
+        <h2><i class="fas fa-chart-line"></i> Sector &amp; course analytics</h2>
+        <div class="admin-panel-body">
+            <div class="analytics-filters" id="analyticsFilters">
+                <label>Course / statistical sector<select id="analyticsCourse"><option value="">All courses / sectors</option></select></label>
+                <label>Country<select id="analyticsCountry"><option value="">All countries</option></select></label>
+                <label>Gender<select id="analyticsGender"><option value="">All genders</option></select></label>
+                <label>Job / role<select id="analyticsJobTitle"><option value="">All jobs / roles</option></select></label>
+                <label>Organization<select id="analyticsOrganization"><option value="">All organizations</option></select></label>
+                <label>Registered from<input type="date" id="analyticsDateFrom"></label>
+                <label>Registered to<input type="date" id="analyticsDateTo"></label>
+                <div class="analytics-filter-actions">
+                    <button class="btn btn-primary" type="button" id="applyAnalyticsFilters"><i class="fas fa-filter"></i> Apply filters</button>
+                    <button class="btn btn-outline" type="button" id="resetAnalyticsFilters">Reset</button>
+                </div>
+            </div>
+            <div id="adminAnalytics">Loading reports&hellip;</div>
+        </div>
     </section>
 
     <section class="admin-panel admin-wide">
@@ -539,19 +554,87 @@ header('Content-Type: text/html; charset=UTF-8');
         }
     }
 
+    function analyticsFilterValues() {
+        return {
+            courseId: document.getElementById('analyticsCourse').value,
+            country: document.getElementById('analyticsCountry').value,
+            sex: document.getElementById('analyticsGender').value,
+            jobTitle: document.getElementById('analyticsJobTitle').value,
+            organization: document.getElementById('analyticsOrganization').value,
+            dateFrom: document.getElementById('analyticsDateFrom').value,
+            dateTo: document.getElementById('analyticsDateTo').value
+        };
+    }
+
+    function fillAnalyticsSelect(id, values, allLabel, selected) {
+        var control = document.getElementById(id);
+        if (!control) return;
+        control.innerHTML = '<option value="">' + esc(allLabel) + '</option>' + (values || []).map(function (value) {
+            var idValue = typeof value === 'object' ? value.id : value;
+            var label = typeof value === 'object' ? value.title : value;
+            return '<option value="' + esc(idValue) + '">' + esc(label) + '</option>';
+        }).join('');
+        if (selected !== undefined && selected !== null) control.value = String(selected);
+    }
+
+    function metricCard(label, value, suffix) {
+        return '<div class="stat-card"><div class="label">' + esc(label) + '</div><div class="value">' + esc(value) + (suffix || '') + '</div></div>';
+    }
+
+    function analyticsBars(title, items, suffix) {
+        items = items || [];
+        if (!items.length) return '<section class="analytics-chart-card"><h3>' + esc(title) + '</h3><p class="admin-muted">No data available for the selected filters.</p></section>';
+        var max = Math.max.apply(null, items.map(function (item) { return Number(item.value || 0); }).concat([1]));
+        return '<section class="analytics-chart-card"><h3>' + esc(title) + '</h3><div class="analytics-bars">' + items.map(function (item) {
+            var value = Number(item.value || 0);
+            var width = Math.max(2, Math.round(value / max * 100));
+            return '<div class="analytics-bar-row"><div class="analytics-bar-label" title="' + esc(item.label) + '">' + esc(item.label) + '</div><div class="analytics-bar-track"><span style="width:' + width + '%"></span></div><strong>' + value + (suffix || '') + '</strong></div>';
+        }).join('') + '</div></section>';
+    }
+
+    function courseAnalyticsTable(rows) {
+        if (!rows || !rows.length) return '<p class="admin-muted">No course analytics available for the selected filters.</p>';
+        return '<div class="admin-table-wrap"><table class="admin-table analytics-course-table"><thead><tr>' +
+            '<th>Course / sector</th><th>Registered</th><th>Completed</th><th>Completion rate</th><th>Certificates</th><th>Avg. score</th><th>Pass rate</th><th>Avg. completion time</th>' +
+            '</tr></thead><tbody>' + rows.map(function (row) {
+                var hours = Number(row.averageCompletionHours || 0);
+                return '<tr><td><strong>' + esc(row.courseName) + '</strong><small class="admin-email">' + esc(row.category || 'Statistics') + '</small></td>' +
+                    '<td>' + Number(row.registered || 0) + '</td><td>' + Number(row.completed || 0) + '</td><td>' + Number(row.completionRate || 0) + '%</td>' +
+                    '<td>' + Number(row.certificates || 0) + '</td><td>' + Number(row.averageScore || 0) + '%</td><td>' + Number(row.passRate || 0) + '%</td>' +
+                    '<td>' + (hours ? hours + ' hrs' : '&mdash;') + '</td></tr>';
+            }).join('') + '</tbody></table></div>';
+    }
+
     async function loadAnalytics() {
-        var analytics = await api.getAdminAnalytics();
-        var completionRate = analytics.enrollments ? Math.round(analytics.completedEnrollments / analytics.enrollments * 100) : 0;
+        var current = analyticsFilterValues();
+        var analytics = await api.getAdminAnalytics(current);
+        var filters = analytics.filters || {};
+        fillAnalyticsSelect('analyticsCourse', filters.courses || [], 'All courses / sectors', current.courseId);
+        fillAnalyticsSelect('analyticsCountry', filters.countries || [], 'All countries', current.country);
+        fillAnalyticsSelect('analyticsGender', filters.genders || [], 'All genders', current.sex);
+        fillAnalyticsSelect('analyticsJobTitle', filters.jobTitles || [], 'All jobs / roles', current.jobTitle);
+        fillAnalyticsSelect('analyticsOrganization', filters.organizations || [], 'All organizations', current.organization);
+
+        var completionHours = Number(analytics.averageCompletionHours || 0);
+        var completionTime = completionHours ? completionHours + ' hrs' : '—';
         document.getElementById('adminAnalytics').innerHTML =
-            '<div class="stats-row">' +
-                '<div class="stat-card"><div class="label">Students</div><div class="value">' + Number(analytics.users || 0) + '</div></div>' +
-                '<div class="stat-card"><div class="label">All courses</div><div class="value">' + Number(analytics.courses || 0) + '</div></div>' +
-                '<div class="stat-card"><div class="label">Published</div><div class="value">' + Number(analytics.publishedCourses || 0) + '</div></div>' +
-                '<div class="stat-card"><div class="label">Drafts</div><div class="value">' + Number(analytics.draftCourses || 0) + '</div></div>' +
-                '<div class="stat-card"><div class="label">Archived</div><div class="value">' + Number(analytics.archivedCourses || 0) + '</div></div>' +
-                '<div class="stat-card"><div class="label">Completion rate</div><div class="value">' + completionRate + '%</div></div>' +
-                '<div class="stat-card"><div class="label">Average quiz score</div><div class="value">' + Number(analytics.averageQuizScore || 0) + '%</div></div>' +
-            '</div>';
+            '<div class="stats-row analytics-kpis">' +
+                metricCard('Registered learners', Number(analytics.registeredLearners || 0)) +
+                metricCard('Completion rate', Number(analytics.completionRate || 0), '%') +
+                metricCard('Certificates issued', Number(analytics.certificatesIssued || 0)) +
+                metricCard('Pass rate', Number(analytics.passRate || 0), '%') +
+                metricCard('Average score', Number(analytics.averageScore || 0), '%') +
+                metricCard('Average completion time', completionTime) +
+            '</div>' +
+            '<div class="analytics-grid">' +
+                analyticsBars('Performance / score distribution', analytics.scoreBands || []) +
+                analyticsBars('Country', analytics.countryDistribution || []) +
+                analyticsBars('Gender', analytics.genderDistribution || []) +
+                analyticsBars('Job / role', analytics.jobRoleDistribution || []) +
+                analyticsBars('Organization', analytics.organizationDistribution || []) +
+                analyticsBars('Course completions over time', analytics.completionTrend || []) +
+            '</div>' +
+            '<section class="analytics-course-summary"><h3>Analytics by course / statistical sector</h3>' + courseAnalyticsTable(analytics.byCourse || []) + '</section>';
     }
 
     async function loadLearners(search) {
@@ -745,6 +828,14 @@ header('Content-Type: text/html; charset=UTF-8');
             message.textContent = errorMessage(error, 'Could not save course.');
             message.className = 'admin-message err';
         }
+    });
+
+    document.getElementById('applyAnalyticsFilters').addEventListener('click', function () {
+        loadAnalytics().catch(function (error) { showToast(errorMessage(error, 'Could not load analytics.'), 'error'); });
+    });
+    document.getElementById('resetAnalyticsFilters').addEventListener('click', function () {
+        ['analyticsCourse','analyticsCountry','analyticsGender','analyticsJobTitle','analyticsOrganization','analyticsDateFrom','analyticsDateTo'].forEach(function (id) { document.getElementById(id).value = ''; });
+        loadAnalytics().catch(function (error) { showToast(errorMessage(error, 'Could not load analytics.'), 'error'); });
     });
 
     document.getElementById('courseStatusFilter').addEventListener('change', renderCourses);
