@@ -1022,7 +1022,7 @@ Object.assign(eacTextTranslations, {
     'Search by title, topic or category': {sw:'Tafuta kwa jina, mada au kategoria',fr:'Rechercher par titre, sujet ou catégorie'},
     'Welcome to the EAC Statistics E-Learning Portal': {sw:'Karibu kwenye Tovuti ya EAC ya Kujifunza Takwimu',fr:"Bienvenue sur le portail d'apprentissage des statistiques de l'EAC"},
     'Select a course from the sidebar to begin your learning journey, or browse available courses below.': {sw:'Chagua kozi kwenye menyu kuanza safari yako ya kujifunza, au tazama kozi zilizo hapa chini.',fr:'Sélectionnez un cours dans le menu pour commencer votre parcours, ou parcourez les cours disponibles ci-dessous.'},
-    'View Course': {sw:'Tazama Kozi',fr:'Voir le cours'},
+    'Start the Course': {sw:'Anza Kozi',fr:'Commencer le cours'},
     'Continue Learning': {sw:'Endelea Kujifunza',fr:'Continuer l’apprentissage'},
     'Enroll': {sw:'Jisajili',fr:"S'inscrire"},
     'Enrolled': {sw:'Umejiandikisha',fr:'Inscrit'},
