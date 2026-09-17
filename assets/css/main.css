@@ -960,27 +960,24 @@ a:hover {
 }
 
 
-.course-nav-item:hover {
-
-    background:
-        var(--bg-muted);
-
+/* Use a solid color for pointer, keyboard and selected course states. */
+.course-nav-item:hover,
+.course-nav-item:focus-visible,
+.course-nav-item:active,
+.course-nav-item.active {
+    background: #0875b9;
+    color: #fff;
+    box-shadow: none;
 }
-
 
 .course-nav-item.active {
-
-    background:
-        var(--eac-blue-soft);
-
-    color:
-        var(--eac-blue);
-
-    font-weight:
-        600;
-
+    font-weight: 600;
 }
 
+.course-nav-item:focus-visible {
+    outline: 2px solid #0875b9;
+    outline-offset: 2px;
+}
 
 .course-nav-item i {
 
@@ -3284,3 +3281,16 @@ body.dark-mode .welcome-hero h2,
 .course-card-title { margin: 0; color: #102d46; font-size: 1.15rem; line-height: 1.4; }
 .theme-toggle { width: auto; gap: .45rem; padding: .5rem .65rem; }
 .theme-toggle span { font-size: .8rem; white-space: nowrap; }
+
+/* Keep the labelled theme control inside its own button on phones. */
+@media (max-width: 600px) {
+    .header-actions > * { flex-shrink: 0; }
+    .header-actions .theme-toggle {
+        width: auto;
+        flex: 0 0 auto;
+        min-height: 34px;
+        gap: .35rem;
+        padding: .35rem .5rem;
+    }
+    .header-actions .theme-toggle span { font-size: .72rem; }
+}

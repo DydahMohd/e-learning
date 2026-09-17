@@ -16,7 +16,7 @@
 <div class="feat"><div class="ic">📈</div><h3>Population projections</h3><p>Cohort-component projections, scenarios and uncertainty.</p></div>
 <div class="feat"><div class="ic">🎓</div><h3>Assessment & certificate</h3><p>A final assessment with a 75% pass mark and printable certificate.</p></div>
 </div>
-<div class="start-cta"><div class="cta-row"><button class="btn btn-blue btn-lg" data-screen="hub">Submit</button><a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a></div>
+<div class="start-cta"><div class="cta-row"><button class="btn btn-blue btn-lg" data-screen="hub">Start the course</button><a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a></div>
 <p class="cta-note">Sign in is required when this course is launched from the EAC e-Learning platform. Standalone preview mode remains available for development.</p></div>
 </div></div>
 </section>
