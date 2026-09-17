@@ -965,7 +965,7 @@ a:hover {
 .course-nav-item:focus-visible,
 .course-nav-item:active,
 .course-nav-item.active {
-    background: #0875b9;
+    background: var(--eac-blue);
     color: #fff;
     box-shadow: none;
 }
@@ -975,7 +975,7 @@ a:hover {
 }
 
 .course-nav-item:focus-visible {
-    outline: 2px solid #0875b9;
+    outline: 2px solid var(--eac-blue);
     outline-offset: 2px;
 }
 
