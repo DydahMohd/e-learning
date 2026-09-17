@@ -26,6 +26,9 @@ const API_BASE = new URL('api', window.location.href).href.replace(/\/$/, '');
 
 const API_TIMEOUT = 15000;
 
+// Language selection is temporarily disabled; clear any saved translation preference.
+localStorage.setItem('language', 'en');
+
 
 /* =========================================================
    API CLIENT
@@ -1131,7 +1134,7 @@ Object.assign(eacTextTranslations, {
     'You must agree to the Terms and Conditions to register.': {sw: 'Lazima ukubali Masharti na Vigezo ili kujisajili.', fr: 'Vous devez accepter les Termes et Conditions pour vous inscrire.'}
 });
 function eacTranslateValue(value, language = localStorage.getItem('language') || 'en') {
-    const lang = eacTranslations[language] ? language : 'en';
+    const lang = 'en'; // English only until language selection is re-enabled.
     const clean = String(value ?? '').trim();
     if (!clean) return value;
     for (const [source, translations] of Object.entries(eacTextTranslations)) {
@@ -1145,7 +1148,7 @@ window.eacTranslateValue = eacTranslateValue;
 window.eacT = (value, language) => eacTranslateValue(value, language);
 
 function applyLanguage(language = localStorage.getItem('language') || 'en') {
-    const lang = eacTranslations[language] ? language : 'en';
+    const lang = 'en'; // English only until language selection is re-enabled.
     localStorage.setItem('language', lang);
     document.documentElement.lang = lang;
     document.documentElement.dataset.language = lang;
@@ -1568,6 +1571,7 @@ document.addEventListener(
     'DOMContentLoaded',
     () => {
 
+        /* Language selector temporarily disabled: English only.
         if (!document.querySelector('[data-language]')) {
             const selector = document.createElement('select');
             selector.className = 'language-select language-floating';
@@ -1576,6 +1580,7 @@ document.addEventListener(
             selector.innerHTML = '<option value="en">EN</option><option value="sw">SW</option><option value="fr">FR</option>';
             document.body.appendChild(selector);
         }
+        */
 
         /*
          * Theme

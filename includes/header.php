@@ -63,10 +63,12 @@ $headerVariant = $headerVariant ?? 'standard';
         </a>
     </nav>
     <div class="header-actions">
+        <!-- Language selection temporarily disabled: English only.
         <label class="sr-only" for="languageSelect">Language</label>
         <select id="languageSelect" data-language aria-label="Choose language" class="language-select">
             <option value="en">EN</option><option value="sw">SW</option><option value="fr">FR</option>
         </select>
+        -->
         <button type="button" class="btn-icon theme-toggle" id="themeToggle" aria-label="Switch to dark mode"><i class="fas fa-moon" aria-hidden="true"></i><span>Eye comfort</span></button>
         <div class="user-chip" id="userChip">
             <div class="user-avatar" id="userAvatar" aria-hidden="true">U</div>
