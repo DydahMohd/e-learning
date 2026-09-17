@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>EAC Statistics E-Learning — Population and Demographic Statistics</title>
+<meta name="description" content="EAC Statistics e-Learning course on population and demographic statistics."/>
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --eac-blue:#48A6DB;--eac-blue-d:#2f86bb;--eac-green:#51A84B;--eac-green-d:#3d8a38;
+ --eac-yellow:#FFF153;--eac-red:#DB3B33;--eac-ink:#191919;
+ --bg:#eef3f8;--card:#ffffff;--line:#e1e8f0;--muted:#5d6b7a;--soft:#f5f8fc;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;color:var(--eac-ink);background:var(--bg);line-height:1.6}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;border-radius:10px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:.15s;font-family:inherit;line-height:1}
+.btn-lg{padding:15px 30px;font-size:16px}
+.btn-blue{background:var(--eac-blue);color:#fff}.btn-blue:hover{background:var(--eac-blue-d)}
+.btn-green{background:var(--eac-green);color:#fff}.btn-green:hover{background:var(--eac-green-d)}
+.btn-ghost{background:#fff;color:var(--eac-blue);border-color:var(--line)}.btn-ghost:hover{border-color:var(--eac-blue)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:9px 20px;box-shadow:0 1px 6px rgba(20,40,70,.04)}
+.topbar img{height:38px;width:auto}
+.tb-brand{display:flex;align-items:center;gap:12px;cursor:pointer;border-radius:9px;padding:3px 7px;margin-left:-7px;transition:.15s}
+.tb-brand:hover{background:var(--soft)}
+.topbar .tb-t{font-weight:800;font-size:15px;color:var(--eac-ink)}
+.topbar .tb-s{color:var(--muted);font-size:12.5px;font-weight:600}
+.topbar .tb-sp{flex:1}
+.topbar .tb-link{font-size:13px;font-weight:700;color:var(--eac-blue);background:none;border:none;cursor:pointer;padding:8px 10px;border-radius:8px}
+.topbar .tb-link:hover{background:var(--soft)}
+
+/* welcome */
+.hero{background:linear-gradient(135deg,#0a3a5c,#1572a8 55%,var(--eac-blue));color:#fff;padding:60px 20px 70px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 0,rgba(81,168,75,.35),transparent 45%),radial-gradient(circle at 0 100%,rgba(255,241,83,.18),transparent 40%)}
+.hero>*{position:relative;z-index:1}
+.hero .crest{display:block;height:120px;width:auto;margin:0 auto 20px;padding:8px;background:#fff;border-radius:14px;box-sizing:content-box;filter:drop-shadow(0 6px 16px rgba(0,0,0,.3));mix-blend-mode:normal}
+.hero .kicker{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:7px 16px;border-radius:30px;font-size:13px;font-weight:700;letter-spacing:.3px;margin-bottom:18px}
+.hero h1{font-size:clamp(30px,5vw,50px);font-weight:800;line-height:1.1;margin-bottom:6px}
+.hero h1 .hl{color:var(--eac-yellow)}
+.hero .lede{max-width:760px;margin:16px auto 26px;font-size:17px;opacity:.95}
+.hero .meta{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-top:26px;font-size:14px;opacity:.92}
+.hero .meta b{display:block;font-size:22px;font-weight:800;color:#fff}
+.welcome-body{padding:46px 20px 70px}
+.about{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 30px;box-shadow:0 8px 26px rgba(20,40,70,.06);margin-top:-46px}
+.about h2{font-size:22px;color:var(--eac-ink);margin-bottom:10px}
+.about h2::before{content:"";display:inline-block;width:6px;height:20px;background:var(--eac-green);border-radius:3px;margin-right:10px;vertical-align:-3px}
+.about p{color:#33414f;margin-bottom:8px}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:30px 0}
+.feat{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--eac-blue);border-radius:12px;padding:20px;box-shadow:0 4px 14px rgba(20,40,70,.05)}
+.feat:nth-child(3n+2){border-left-color:var(--eac-green)}
+.feat:nth-child(3n){border-left-color:var(--eac-red)}
+.feat .ic{font-size:26px;margin-bottom:8px}
+.feat h3{font-size:16px;margin-bottom:5px}
+.feat p{font-size:13.5px;color:var(--muted)}
+.start-cta{text-align:center;margin-top:34px}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta-note{font-size:13px;color:var(--muted);margin-top:14px}
+.resources{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;box-shadow:0 4px 14px rgba(20,40,70,.05)}
+.resources h3{font-size:16px;margin-bottom:12px}
+.res-links{display:flex;gap:12px;flex-wrap:wrap}
+.res-link{display:inline-flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:14px;font-weight:700;color:var(--eac-blue);text-decoration:none;transition:.15s}
+.res-link:hover{border-color:var(--eac-blue);background:#eaf4fb}
+.res-link span{font-size:13px;color:var(--muted)}
+
+/* registration */
+.reg-card{max-width:720px;margin:40px auto;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(20,40,70,.08);overflow:hidden}
+.reg-head{background:linear-gradient(120deg,var(--eac-blue),var(--eac-blue-d));color:#fff;padding:24px 30px}
+.reg-head h2{font-size:23px;margin-bottom:4px}.reg-head p{opacity:.92;font-size:14px}
+.reg-body{padding:26px 30px 30px}
+.reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fld{display:flex;flex-direction:column;gap:6px}.fld.full{grid-column:1/-1}
+.fld label{font-size:13px;font-weight:700;color:#374756}.fld .req{color:var(--eac-red)}
+.fld input,.fld select{padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:14.5px;font-family:inherit;background:#fff;transition:.15s}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--eac-blue);box-shadow:0 0 0 3px rgba(72,166,219,.15)}
+.fld input.err,.fld select.err{border-color:var(--eac-red);background:#fef5f5}
+.reg-note{font-size:12.5px;color:var(--muted);margin-top:6px}
+.reg-error{display:none;background:#fef5f5;border:1px solid #f3c9c7;color:#a3271f;padding:11px 14px;border-radius:9px;font-size:13.5px;font-weight:600;margin-top:14px}
+.reg-actions{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* hub */
+.hub-head{background:linear-gradient(120deg,#0a3a5c,var(--eac-blue));color:#fff;padding:34px 20px 30px}
+.hub-head .wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hub-head h2{font-size:clamp(22px,3.4vw,30px);font-weight:800}
+.hub-head p{opacity:.92;font-size:14.5px;margin-top:3px}
+.hub-prog{margin-left:auto;text-align:center;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:12px 20px;min-width:140px}
+.hub-prog b{display:block;font-size:26px;font-weight:800}
+.hub-prog small{font-size:12px;opacity:.9}
+.hub-body{padding:30px 20px 70px}
+.resume-banner{display:none;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(110deg,#eef8f0,#e6f4ec);border:1px solid #cfe8d0;border-left:5px solid var(--eac-green);border-radius:12px;padding:14px 18px;margin-bottom:18px}
+.resume-banner .rb-txt{flex:1;min-width:220px;font-size:14px;color:#2c4a30}
+.resume-banner .rb-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.rb-reset{background:none;border:none;color:var(--muted);font-size:12.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:8px}
+.rb-reset:hover{color:var(--eac-red)}
+.nostore-note{background:#fffaf0;border:1px solid #f0e0b0;color:#7a5b00;border-radius:10px;padding:11px 15px;font-size:13px;margin-bottom:16px}
+.hub-intro{color:#33414f;max-width:820px;margin-bottom:22px}
+.mod-bar{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:14px;box-shadow:0 4px 14px rgba(20,40,70,.05);transition:.16s;cursor:pointer;position:relative;overflow:hidden}
+.mod-bar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--eac-blue)}
+.mod-bar:nth-child(3n+2)::before{background:var(--eac-green)}
+.mod-bar:nth-child(3n)::before{background:var(--eac-yellow)}
+.mod-bar:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(20,40,70,.12);border-color:var(--eac-blue)}
+.mod-num{flex:none;width:54px;height:54px;border-radius:13px;background:linear-gradient(135deg,var(--eac-blue),var(--eac-blue-d));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;line-height:1}
+.mod-num small{font-size:9px;font-weight:700;opacity:.85;text-transform:uppercase}
+.mod-num b{font-size:21px}
+.mod-info{flex:1;min-width:0}
+.mod-info h3{font-size:17px;margin-bottom:3px}
+.mod-info p{font-size:13.3px;color:var(--muted);margin-bottom:6px}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--muted)}
+.mod-tags span{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-weight:600}
+.mod-go{flex:none;display:flex;align-items:center;gap:10px}
+.mod-status{font-size:12px;font-weight:700;color:var(--muted)}
+.mod-status.done{color:var(--eac-green)}
+.mod-bar .chev{font-size:20px;color:var(--eac-blue)}
+.assess-bar{display:flex;align-items:center;gap:18px;background:linear-gradient(120deg,#fff,#fffdf0);border:1.5px solid var(--eac-yellow);border-radius:14px;padding:20px 22px;margin-top:18px;box-shadow:0 6px 18px rgba(20,40,70,.06)}
+.assess-bar .ab-ic{width:54px;height:54px;border-radius:13px;background:linear-gradient(135deg,#e8b800,#caa000);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.assess-bar h3{font-size:17px}.assess-bar p{font-size:13.3px;color:var(--muted)}
+
+/* player */
+#screen-module{background:var(--bg)}
+.player-top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:11px 20px}
+.back-hub{background:none;border:1px solid var(--line);border-radius:9px;padding:9px 14px;font-size:13.5px;font-weight:700;color:var(--eac-blue);cursor:pointer}
+.back-hub:hover{background:var(--soft);border-color:var(--eac-blue)}
+.player-meta{flex:1;min-width:0}
+.player-meta #playerTitle{display:block;font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-meta #slideCount{font-size:12px;color:var(--muted);font-weight:600}
+.player-progress{height:5px;background:#dde6ef}
+#slideBar{height:100%;width:0;background:linear-gradient(90deg,var(--eac-green),var(--eac-blue));transition:width .35s}
+.decks{padding:26px 20px 40px}
+.deck{display:none;max-width:900px;margin:0 auto}
+.slide{display:none;animation:fade .35s ease}
+.slide.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide-inner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px 34px;box-shadow:0 8px 26px rgba(20,40,70,.06);min-height:60vh}
+.slide-head{display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--soft);padding-bottom:14px;margin-bottom:18px}
+.slide-head .sn{flex:none;width:42px;height:42px;border-radius:11px;background:var(--soft);color:var(--eac-blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;border:1px solid var(--line)}
+.slide-head h3{font-size:21px;flex:1}
+.slide-head .st{font-size:12px;color:var(--muted);font-weight:700;background:var(--soft);padding:5px 11px;border-radius:20px;white-space:nowrap}
+.slide-cover{text-align:left}
+.slide-cover .badge{display:inline-block;background:var(--eac-green);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+.slide-cover h2{font-size:27px;font-weight:800;margin-bottom:8px}
+.slide-cover .msub{color:var(--muted);font-size:15.5px;margin-bottom:16px}
+.player-nav{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;padding:12px 20px;box-shadow:0 -2px 10px rgba(20,40,70,.05)}
+ .player-nav .btn{min-width:130px;justify-content:center}.course-footer-inner:after{content:'Contact EAC Secretariat\\A Afrika Mashariki Road / EAC Close, P.O. Box 1096, Arusha, Tanzania\\A Tel: +255 (0)27 216 2100  |  Email: eac@eachq.org';white-space:pre-line;color:#b9d3e1;font-size:.84rem;line-height:1.65;max-width:360px}
+
+/* voiceover placeholder */
+.vo{display:flex;align-items:center;gap:12px;background:linear-gradient(110deg,#f0f7fc,#eaf3fb);border:1px solid #cfe4f3;border-radius:12px;padding:11px 14px;margin:0 0 18px}
+.vo-play{flex:none;width:40px;height:40px;border-radius:50%;border:none;background:var(--eac-blue);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.vo-play:hover:not(:disabled){background:var(--eac-blue-d)}
+.vo-play:disabled{background:#b9cfe0;cursor:not-allowed}
+.vo-meta{flex:1;min-width:0}
+.vo-label{font-weight:800;font-size:13px;color:#1a5a82;display:flex;align-items:center;gap:7px}
+.vo-status{font-size:11.5px;color:#6b8298;font-weight:600}
+.vo-toggle{background:none;border:1px solid #bcd8ea;color:#1a5a82;border-radius:8px;font-size:12px;font-weight:700;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.vo-toggle:hover{background:#fff}
+.vo-script{display:none;flex-basis:100%;margin-top:4px;background:#fff;border:1px dashed #bcd8ea;border-radius:9px;padding:12px 14px;font-size:13.3px;color:#34505f;line-height:1.65}
+.vo-script.show{display:block}
+.vo-script b{color:#1a5a82}
+
+/* content blocks */
+.slide-inner .lead{font-size:16.5px;color:#2b3a47;margin-bottom:16px;font-weight:500}
+.subh{font-size:16px;color:var(--eac-blue-d);margin:18px 0 10px;font-weight:800}
+.def{display:flex;flex-direction:column;gap:3px;background:var(--soft);border-left:3px solid var(--eac-blue);border-radius:0 9px 9px 0;padding:12px 16px;margin:10px 0}
+.def .t{font-weight:800;font-size:14.5px}.def .x{color:#44535f;font-size:14px}
+.callout{border-radius:11px;padding:15px 18px;margin:15px 0;border:1px solid}
+.callout h4{font-size:14.5px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.callout p{font-size:14px}
+.callout.info{background:#eef6fc;border-color:#cfe4f3}.callout.info h4{color:#1a5a82}
+.callout.tip{background:#eef8f0;border-color:#cfe8d0}.callout.tip h4{color:var(--eac-green-d)}
+.callout.warn{background:#fffaf0;border-color:#f0e0b0}.callout.warn h4{color:#9a7000}
+.callout.danger{background:#fef5f5;border-color:#f3c9c7}.callout.danger h4{color:var(--eac-red)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.bcard{background:#fff;border:1px solid var(--line);border-top:3px solid var(--eac-blue);border-radius:11px;padding:14px}
+.bcard:nth-child(3n+2){border-top-color:var(--eac-green)}.bcard:nth-child(3n){border-top-color:var(--eac-red)}
+.bcard .p{font-weight:800;font-size:14px;margin-bottom:5px}.bcard .e{font-size:13px;color:var(--muted)}
+table.cmp{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+table.cmp thead th{background:var(--eac-blue);color:#fff;text-align:left;padding:10px 12px;font-size:13px}
+table.cmp td{border-top:1px solid var(--line);padding:9px 12px;vertical-align:top}
+table.cmp td.rh{font-weight:700;background:var(--soft);color:var(--eac-ink);white-space:nowrap}
+table.cmp tbody tr:nth-child(even){background:#fbfdff}
+.svg-wrap{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin:16px 0;text-align:center}
+.svg-wrap h4{font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:700}
+.svg-wrap svg{max-width:100%;height:auto}
+.obj-grid{display:grid;gap:9px;margin:6px 0}
+.obj,.tk{display:flex;gap:11px;align-items:flex-start;background:var(--soft);border-radius:9px;padding:11px 14px}
+.obj .n,.tk .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--eac-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700}
+.tk .n{background:var(--eac-green)}
+.outcomes{background:#eef8f0;border:1px solid #cfe8d0;border-radius:11px;padding:14px 18px;margin:14px 0}
+.outcomes h4{font-size:14px;color:var(--eac-green-d);margin-bottom:7px}
+.outcomes ul{margin-left:18px}.outcomes li{font-size:14px;margin:3px 0}
+.takeaways h4{font-size:15px;margin-bottom:8px}
+.refs{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted)}
+.teaser{background:linear-gradient(120deg,#0a3a5c,var(--eac-blue));color:#fff;border-radius:13px;padding:18px 22px;margin-top:8px}
+.teaser h3{font-size:16px;margin-bottom:5px}.teaser p{font-size:14px;opacity:.95}
+
+/* quiz */
+.quiz{background:#fff;border:1.5px solid var(--eac-blue);border-radius:13px;padding:18px 20px;margin:18px 0;box-shadow:0 4px 14px rgba(72,166,219,.1)}
+.q-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.q-tag{display:inline-flex;align-items:center;gap:7px;background:var(--eac-blue);color:#fff;font-size:12px;font-weight:700;padding:5px 13px;border-radius:20px}
+.q-timer{margin-left:auto;font-size:13px;font-weight:800;color:var(--eac-blue-d);background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:4px 12px;font-variant-numeric:tabular-nums}
+.q-timer.low{color:var(--eac-red);border-color:#f3c9c7;background:#fef5f5}
+.q-q{font-weight:700;font-size:15.5px;margin-bottom:12px}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:9px;font-size:14.5px;cursor:pointer;transition:.13s;font-family:inherit}
+.opt:hover:not(:disabled){border-color:var(--eac-blue);background:var(--soft)}
+.opt b{color:var(--eac-blue);margin-right:7px}
+.opt.correct{border-color:var(--eac-green);background:#eef8f0}.opt.correct b{color:var(--eac-green-d)}
+.opt.wrong{border-color:var(--eac-red);background:#fef5f5}.opt.wrong b{color:var(--eac-red)}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:10px;padding:12px 15px;border-radius:9px;font-size:14px}
+.fb.show{display:block}.fb.ok{background:#eef8f0;border:1px solid #cfe8d0;color:#256b2a}
+.fb.no{background:#fef5f5;border:1px solid #f3c9c7;color:#9a271f}
+
+/* dragdrop */
+.dd{background:#fff;border:1.5px solid var(--eac-green);border-radius:13px;padding:18px 20px;margin:18px 0;box-shadow:0 4px 14px rgba(81,168,75,.1)}
+.dd-tag{display:inline-flex;align-items:center;gap:7px;background:var(--eac-green);color:#fff;font-size:12px;font-weight:700;padding:5px 13px;border-radius:20px}
+.dd-i{font-size:14px;color:#44535f;margin:9px 0 12px}
+.pool{display:flex;flex-wrap:wrap;gap:9px;min-height:48px;padding:11px;background:var(--soft);border:1.5px dashed var(--line);border-radius:10px;margin-bottom:14px}
+.chip{background:#fff;border:1.5px solid var(--eac-blue);border-radius:9px;padding:8px 13px;font-size:13.5px;font-weight:600;cursor:grab;user-select:none}
+.chip.sel{background:var(--eac-blue);color:#fff;box-shadow:0 3px 10px rgba(72,166,219,.35)}
+.chip.right{border-color:var(--eac-green);background:#eef8f0}.chip.wrong{border-color:var(--eac-red);background:#fef5f5}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px}
+.bin{border:1.5px solid var(--line);border-radius:10px;overflow:hidden}.bin.over{border-color:var(--eac-blue);background:var(--soft)}
+.bin h5{background:var(--soft);padding:8px 11px;font-size:13px;color:var(--eac-ink);border-bottom:1px solid var(--line)}
+.bin .drop{min-height:62px;padding:9px;display:flex;flex-direction:column;gap:7px}
+.dd-actions{display:flex;gap:9px;margin-top:13px}
+.dd-btn{border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.dd-btn.check{background:var(--eac-green);color:#fff}.dd-btn.reset{background:var(--soft);color:#44535f;border:1px solid var(--line)}
+
+/* click-to-reveal */
+.reveal{background:#fff;border:1.5px solid var(--eac-blue);border-radius:13px;padding:18px 20px;margin:18px 0;box-shadow:0 4px 14px rgba(72,166,219,.1)}
+.rv-tag{display:inline-flex;align-items:center;gap:7px;background:var(--eac-blue);color:#fff;font-size:12px;font-weight:700;padding:5px 13px;border-radius:20px}
+.rv-i{font-size:14px;color:#44535f;margin:9px 0 12px}
+.rv-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.rv-chip{background:var(--soft);border:1.5px solid var(--line);border-radius:9px;padding:9px 13px;font-size:13.5px;font-weight:600;color:var(--eac-ink);cursor:pointer;transition:.13s;font-family:inherit;text-align:left}
+.rv-chip:hover{border-color:var(--eac-blue);background:#eaf4fb}
+.rv-chip.active{background:var(--eac-blue);color:#fff;border-color:var(--eac-blue);box-shadow:0 3px 10px rgba(72,166,219,.3)}
+.rv-panel{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-height:64px}
+.rv-hint{color:var(--muted);font-size:13.5px;text-align:center;padding:10px 0}
+.rv-def h5{font-size:15px;color:var(--eac-blue-d);margin-bottom:6px}
+.rv-def p{font-size:14px;color:#33414f;line-height:1.6}
+
+/* assessment */
+.assess-head{background:linear-gradient(120deg,#0a3a5c,var(--eac-blue));color:#fff;padding:32px 20px}
+.assess-head h2{font-size:26px;font-weight:800}.assess-head p{opacity:.93;margin-top:6px;max-width:760px}
+.assess-body{padding:28px 20px 70px}
+.test-q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:14px;box-shadow:0 3px 12px rgba(20,40,70,.05)}
+.test-q .tq{font-weight:700;font-size:15.5px;margin-bottom:12px}
+.test-q .tq .n{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--eac-blue);color:#fff;align-items:center;justify-content:center;font-size:13px;margin-right:9px}
+.test-opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;margin-bottom:8px;font-size:14.5px;cursor:pointer;font-family:inherit;transition:.12s}
+.test-opt:hover{border-color:var(--eac-blue);background:var(--soft)}
+.test-opt.sel{border-color:var(--eac-blue);background:#eaf4fb;font-weight:600}
+.test-progress{position:sticky;top:0;background:rgba(238,243,248,.96);backdrop-filter:blur(4px);padding:12px 0;z-index:20;margin-bottom:8px}
+.tp-row{display:flex;align-items:center;gap:14px}
+.tp-bar{flex:1;height:8px;background:#dde6ef;border-radius:5px;overflow:hidden}.tp-fill{height:100%;width:0;background:linear-gradient(90deg,var(--eac-green),var(--eac-blue));transition:.3s}
+.assess-timer{flex:none;font-size:14px;font-weight:800;color:var(--eac-blue-d);background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:5px 14px;font-variant-numeric:tabular-nums}
+.assess-timer.low{color:#fff;background:var(--eac-red);border-color:var(--eac-red)}
+.tp-txt{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:5px}
+.test-submit{text-align:center;margin-top:20px}
+#testResult{display:none}#testResult.show{display:block}
+.result-card{border-radius:16px;padding:26px;margin-bottom:18px;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.result-card.pass{background:#eef8f0;border:1.5px solid var(--eac-green)}
+.result-card.fail{background:#fffaf0;border:1.5px solid var(--eac-yellow)}
+.score-ring{flex:none;width:108px;height:108px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+.score-ring.pass{background:linear-gradient(135deg,var(--eac-green),var(--eac-green-d))}
+.score-ring.fail{background:linear-gradient(135deg,#e0a800,#b88600)}
+.score-ring b{font-size:28px;font-weight:800}.score-ring small{font-size:12px;opacity:.9}
+.result-text{flex:1;min-width:240px}.result-text h3{font-size:20px;margin-bottom:6px}
+.result-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.review-list{margin:6px 0 0 18px;font-size:14px}
+.ans-review{margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 18px}
+.ans-review summary{cursor:pointer;font-weight:700;color:var(--eac-blue);padding:12px 0}
+.ans-item{border-top:1px solid var(--line);padding:12px 0}
+.ans-item .ai-q{font-weight:700;font-size:14px;margin-bottom:5px}
+.ai-a{font-size:13.5px}.ai-c{font-size:13.5px;color:var(--eac-green-d);font-weight:600;margin-top:2px}
+.ai-e{font-size:13px;color:var(--muted);margin-top:4px;font-style:italic}
+
+/* certificate */
+.cert-wrap{padding:30px 20px 70px;text-align:center}
+.cert-actions{margin:0 auto 22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:760px}
+.cert-stage{max-width:920px;margin:0 auto;box-shadow:0 14px 40px rgba(20,40,70,.16);border-radius:8px;overflow:hidden}
+.cert-stage svg{display:block;width:100%;height:auto}
+
+@media print{
+ .topbar,.cert-actions,.player-nav,.player-top{display:none!important}
+ .screen{display:none!important}#screen-certificate{display:block!important}
+ .cert-stage{box-shadow:none;max-width:100%}
+}
+@media(max-width:720px){
+ .reg-grid{grid-template-columns:1fr}.slide-inner{padding:22px 18px}
+ .hub-prog{margin-left:0;width:100%}.player-nav .btn{min-width:auto;flex:1}
+ .topbar .tb-s{display:none}
+}
+
+.topbar{position:sticky;top:0;z-index:100;background:#fff!important;background-color:#fff!important;opacity:1!important;border-bottom:1px solid #dce5ee;display:flex;align-items:center;gap:6px;padding:8px 20px;box-shadow:0 4px 18px rgba(20,40,70,.12);backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.topbar .tb-brand{display:flex;align-items:center;gap:10px;min-width:260px;padding:4px 8px;margin-left:-8px;cursor:pointer;border-radius:8px}.topbar .tb-brand:hover{background:#f5f8fc}
+.topbar .tb-brand img{width:42px;height:42px;object-fit:contain;flex:none;background:#fff;border-radius:6px;padding:2px;mix-blend-mode:normal}.topbar .tb-t{font-weight:800;font-size:14px;color:#0a3a5c}.topbar .tb-s{color:#6b7785;font-size:12px;font-weight:600}.topbar .tb-sp{flex:1}.topbar .tb-link{border:0;background:transparent;color:#425466;font:700 13px 'Segoe UI',system-ui,sans-serif;padding:9px 12px;border-radius:8px;cursor:pointer;text-decoration:none}.topbar .tb-link:hover{background:#eef5fa;color:#0a5d8f}.topbar .tb-link.active{background:#0a5d8f;color:#fff}.topbar .tb-catalogue{border:1px solid #dce5ee;color:#0a5d8f}.topbar .tb-catalogue:hover{background:#eef5fa}.topbar .tb-link:last-child{white-space:nowrap}
+@media(max-width:760px){.topbar{overflow-x:auto}.topbar .tb-brand{min-width:210px}.topbar .tb-s{display:none}.topbar .tb-link{white-space:nowrap;padding:8px 10px}}
+/* EAC responsive hardening */
+html,body{max-width:100%;overflow-x:hidden}.wrap{width:100%;max-width:1080px}.topbar{max-width:100%;overflow-x:auto}.topbar .tb-brand{flex:0 1 auto}.hero,.hub-head,.assess-head{overflow:hidden}.slide-inner,.test-q,.about,.resources,.reg-card{max-width:100%;min-width:0;overflow-wrap:anywhere}@media(max-width:760px){.wrap{padding-left:14px;padding-right:14px}.hero{padding:36px 14px 44px}.hero .crest{height:82px}.hero h1{font-size:clamp(25px,8vw,38px)}.hero .lede{font-size:15px}.hero .meta{gap:12px;font-size:12px}.hero .meta b{font-size:18px}.welcome-body,.hub-body,.assess-body,.cert-wrap{padding-left:14px;padding-right:14px}.about{padding:20px}.feat-grid{grid-template-columns:1fr}.mod-bar,.assess-bar{align-items:flex-start;gap:10px;padding:14px}.mod-num,.assess-bar .ab-ic{width:44px;height:44px}.mod-info h3,.assess-bar h3{font-size:15px}.mod-go{margin-left:auto}.cta-row,.result-actions,.cert-actions{width:100%}.cta-row .btn,.result-actions .btn,.cert-actions .btn{width:100%;justify-content:center}.reg-body{padding:20px}.test-q{padding:14px}.tp-row{gap:8px}.assess-timer{padding:5px 9px;font-size:12px}}@media(max-width:480px){.topbar{padding:7px 10px;gap:4px}.topbar .tb-brand{min-width:175px}.topbar .tb-link{padding:7px 8px;font-size:12px}.topbar .tb-brand img{width:34px;height:34px}.player-nav{flex-wrap:wrap}.player-nav .btn{min-width:45%;}.test-opt{font-size:13.5px;padding:10px}.result-card{padding:18px}.score-ring{width:88px;height:88px}.reg-actions{flex-direction:column;align-items:stretch}.reg-actions .btn{width:100%;justify-content:center}}
+.course-footer{background:#0a3a5c;color:#dcecf5;padding:30px 24px 18px;margin-top:48px}.course-footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}.course-footer h3{margin:0 0 7px;color:#fff;font-size:1rem}.course-footer p{margin:0;color:#b9d3e1;font-size:.88rem}.course-footer nav{display:flex;flex-direction:column;gap:10px;align-items:flex-start}.course-footer a{color:#fff;text-decoration:none;font-size:.88rem}.course-footer a:hover{color:#fff153;text-decoration:underline}.course-footer-bottom{max-width:1100px;margin:22px auto 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);color:#b9d3e1;font-size:.78rem}
+
+.example{background:#fff;border:1px solid var(--line);border-left:4px solid var(--eac-green);border-radius:11px;padding:15px 18px;margin:15px 0}
+.example h4{font-size:14.5px;margin-bottom:6px;color:var(--eac-green-d)}
+.example p,.example li{font-size:14px}
+.example ul{margin-left:20px}
+.formula{background:#0a3a5c;color:#fff;border-radius:12px;padding:15px 18px;margin:14px 0;text-align:center;font-size:17px;font-weight:800;letter-spacing:.1px}
+.formula small{display:block;font-size:12px;font-weight:500;opacity:.88;margin-top:5px}
+.key{background:#eef8f0;border:1px solid #cfe8d0;border-radius:9px;padding:11px 14px;margin-top:10px;font-size:13.5px;color:#2c4a30;font-weight:650}
+.quiz-inline{background:#fff;border:1.5px solid var(--eac-blue);border-radius:13px;padding:18px 20px;margin:18px 0}
+.quiz-inline .q-title{font-weight:800;font-size:15.5px;margin-bottom:11px}
+.quiz-inline .q-feedback{display:none;margin-top:9px;padding:10px 12px;border-radius:8px;font-size:13.5px}
+.quiz-inline .q-feedback.show{display:block}
+.quiz-inline .q-feedback.ok{background:#eef8f0;border:1px solid #cfe8d0;color:#256b2a}
+.quiz-inline .q-feedback.no{background:#fef5f5;border:1px solid #f3c9c7;color:#9a271f}
+.cert-paper{position:relative;background:#fff;padding:58px 64px;border:14px double #0a3a5c;min-height:650px;text-align:center;overflow:hidden}
+.cert-paper::before{content:"EAST AFRICAN COMMUNITY";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:58px;font-weight:900;color:rgba(10,58,92,.045);transform:rotate(-28deg);white-space:nowrap;pointer-events:none}
+.cert-paper>*{position:relative;z-index:1}
+.cert-logo{width:92px;height:auto;margin-bottom:14px}
+.cert-kicker{font-size:13px;font-weight:800;letter-spacing:2px;color:#0a3a5c;text-transform:uppercase}
+.cert-title{font-family:Georgia,serif;font-size:42px;color:#0a3a5c;margin:9px 0}
+.cert-sub{font-size:16px;color:#5d6b7a}
+.cert-name{font-family:Georgia,serif;font-size:34px;font-weight:700;margin:25px auto 14px;border-bottom:1px solid #93a8b9;max-width:620px;padding-bottom:8px}
+.cert-course{font-size:22px;font-weight:800;color:#191919;margin:12px 0}
+.cert-meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:36px auto 0;max-width:720px}
+.cert-meta-grid div{border-top:1px solid #93a8b9;padding-top:8px;font-size:12px;color:#5d6b7a}
+.cert-meta-grid b{display:block;color:#191919;font-size:14px}
+@media(max-width:720px){.cert-paper{padding:34px 22px}.cert-title{font-size:30px}.cert-name{font-size:26px}.cert-meta-grid{grid-template-columns:1fr}.formula{font-size:15px}}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="tb-brand" id="brandHome" title="Back to course home">
+<img alt="East African Community" src="../images/eac-crest.png"/>
+<div><span class="tb-t">EAC Statistics E-Learning Resources</span> <span class="tb-s">· Population and Demographic Statistics</span></div>
+</div>
+<button class="tb-link tb-catalogue" id="catalogueBtn" type="button">Course Catalogue</button>
+<span class="tb-sp"></span>
+<button class="tb-link" data-screen="welcome">Home</button>
+<button class="tb-link" data-screen="hub">Modules</button>
+<button class="tb-link" data-screen="assessment">Assessment</button>
+<button class="tb-link" id="resourcesBtn" type="button">Resources</button>
+<a class="tb-link" href="mailto:statistics.inquiries@eachq.org" rel="noopener" target="_blank">Contact us ↗</a>
+</div>
+
+<section class="screen active" id="screen-welcome">
+<div class="hero">
+<img alt="EAC emblem" class="crest" src="../images/eac-crest.png"/>
+<span class="kicker">EAC Statistics E-Learning Resources</span>
+<h1>Population and <span class="hl">Demographic Statistics</span></h1>
+<p class="lede">A practical course on measuring population size, age-sex structure, fertility, mortality, migration, urbanization and population projections — with formulas, worked examples, knowledge checks and a final assessment.</p>
+<div class="meta"><div><b>5</b>modules</div><div><b>~5.5 hours</b>of learning</div><div><b>Certificate</b>on completion</div></div>
+</div>
+<div class="welcome-body"><div class="wrap">
+<div class="about"><h2>About this course</h2><p>This course introduces the concepts, measures and data sources used in population and demographic statistics. It is designed for learners who need to compile, interpret or use demographic indicators for planning and statistical analysis across the East African Community.</p></div>
+<div class="feat-grid">
+<div class="feat"><div class="ic">👥</div><h3>Population structure</h3><p>Age, sex, dependency, population pyramids, density and growth.</p></div>
+<div class="feat"><div class="ic">👶</div><h3>Fertility</h3><p>CBR, GFR, ASFR, TFR and reproductive measures.</p></div>
+<div class="feat"><div class="ic">❤️</div><h3>Mortality & survival</h3><p>Death rates, child mortality, life tables and life expectancy.</p></div>
+<div class="feat"><div class="ic">🧭</div><h3>Migration & urbanization</h3><p>Migration concepts, net migration rates and urban population change.</p></div>
+<div class="feat"><div class="ic">📈</div><h3>Population projections</h3><p>Cohort-component projections, scenarios and uncertainty.</p></div>
+<div class="feat"><div class="ic">🎓</div><h3>Assessment & certificate</h3><p>A final assessment with a 75% pass mark and printable certificate.</p></div>
+</div>
+<div class="start-cta"><div class="cta-row"><button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button><a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a></div>
+<p class="cta-note">Sign in is required when this course is launched from the EAC e-Learning platform. Standalone preview mode remains available for development.</p></div>
+</div></div>
+</section>
+
+<section class="screen" id="screen-hub">
+<div class="hub-head"><div class="wrap"><div><h2>Course content</h2><p>Population & Demographic Statistics · work through the modules, then take the final assessment</p></div>
+<div class="hub-prog"><b><span id="hubDone">0</span>/<span id="hubTotal">5</span></b><small>modules completed</small></div></div></div>
+<div class="hub-body"><div class="wrap">
+<div class="resume-banner" id="resumeBanner"></div>
+<p class="hub-intro">Work through the five modules. Each module develops the concepts using definitions, formulas, examples and knowledge checks. Your place is saved in this browser, and a final assessment draws on all five modules.</p>
+<div class="mod-bar" data-mid="m1" data-openmod="m1">
+<div class="mod-num"><small>Module</small><b>1</b></div>
+<div class="mod-info"><h3>Foundations of Population &amp; Demographic Statistics</h3><p>Core demographic concepts, population change, data sources and quality.</p>
+<div class="mod-tags"><span>⏱️ ~55 min</span><span>🎯 5 objectives</span><span>🗂️ 6 slides</span></div></div>
+<div class="mod-go"><span class="mod-status">Start →</span><span class="chev">›</span></div></div><div class="mod-bar" data-mid="m2" data-openmod="m2">
+<div class="mod-num"><small>Module</small><b>2</b></div>
+<div class="mod-info"><h3>Population Size, Structure &amp; Distribution</h3><p>Age-sex composition, dependency, density and population growth.</p>
+<div class="mod-tags"><span>⏱️ ~60 min</span><span>🎯 5 objectives</span><span>🗂️ 6 slides</span></div></div>
+<div class="mod-go"><span class="mod-status">Start →</span><span class="chev">›</span></div></div><div class="mod-bar" data-mid="m3" data-openmod="m3">
+<div class="mod-num"><small>Module</small><b>3</b></div>
+<div class="mod-info"><h3>Fertility &amp; Reproduction</h3><p>Birth measures, age-specific fertility, TFR and reproductive indicators.</p>
+<div class="mod-tags"><span>⏱️ ~65 min</span><span>🎯 5 objectives</span><span>🗂️ 7 slides</span></div></div>
+<div class="mod-go"><span class="mod-status">Start →</span><span class="chev">›</span></div></div><div class="mod-bar" data-mid="m4" data-openmod="m4">
+<div class="mod-num"><small>Module</small><b>4</b></div>
+<div class="mod-info"><h3>Mortality &amp; Survival</h3><p>Death rates, infant and child mortality, life tables and life expectancy.</p>
+<div class="mod-tags"><span>⏱️ ~65 min</span><span>🎯 5 objectives</span><span>🗂️ 7 slides</span></div></div>
+<div class="mod-go"><span class="mod-status">Start →</span><span class="chev">›</span></div></div><div class="mod-bar" data-mid="m5" data-openmod="m5">
+<div class="mod-num"><small>Module</small><b>5</b></div>
+<div class="mod-info"><h3>Migration, Urbanization &amp; Population Projections</h3><p>Migration measures, urban change and cohort-component projections.</p>
+<div class="mod-tags"><span>⏱️ ~75 min</span><span>🎯 6 objectives</span><span>🗂️ 8 slides</span></div></div>
+<div class="mod-go"><span class="mod-status">Start →</span><span class="chev">›</span></div></div>
+<div class="assess-bar"><div class="ab-ic">🎓</div><div class="mod-info" style="flex:1"><h3>Final Assessment</h3><p>20 questions selected from the course bank. Pass mark: 75%.</p></div><button class="btn btn-blue" data-screen="assessment">Start assessment →</button></div>
+<div class="resources" id="courseResources"><h3>📚 EAC statistics resources</h3><div class="res-links">
+<a class="res-link" href="https://eac.opendataforafrica.org/" rel="noopener" target="_blank">EAC Open Data Portal <span>↗</span></a>
+<a class="res-link" href="https://eac.opendataforafrica.org/xlrnoff/eac-statistics-guidelines" rel="noopener" target="_blank">EAC Statistics Guidelines <span>↗</span></a>
+</div></div>
+</div></div>
+</section>
+
+<section class="screen" id="screen-module">
+<div class="player-top"><button class="back-hub" data-screen="hub">← All modules</button><div class="player-meta"><span id="playerTitle"></span><span id="slideCount"></span></div></div>
+<div class="player-progress"><div id="slideBar"></div></div>
+<div class="decks"><div class="deck" data-mid="m1" data-n="6" id="deck-m1"><div class="slide active" data-i="0">
+<div class="slide-inner slide-cover"><span class="badge">Module 1 of 5</span>
+<h2>Foundations of Population &amp; Demographic Statistics</h2><p class="msub">Core demographic concepts, population change, data sources and quality.</p>
+
+<p class="lead">Demographic statistics describe the size, composition, distribution and change of human populations. They support planning for education, health, labour markets, housing, social protection and regional development across the East African Community.</p>
+<h4 class="subh">In this module you will:</h4>
+<div class="obj-grid">
+<div class="obj"><div class="n">1</div><div>Define population, demography and demographic statistics.</div></div>
+<div class="obj"><div class="n">2</div><div>Explain the demographic balancing equation.</div></div>
+<div class="obj"><div class="n">3</div><div>Distinguish stocks, flows, rates, ratios and proportions.</div></div>
+<div class="obj"><div class="n">4</div><div>Identify major demographic data sources.</div></div>
+<div class="obj"><div class="n">5</div><div>Apply basic data-quality principles.</div></div>
+</div>
+<div class="outcomes"><h4>✅ By the end you will be able to:</h4><ul><li>Explain how births, deaths and migration change a population.</li><li>Select appropriate sources for common demographic indicators.</li><li>Recognise common quality problems such as undercoverage, age misstatement and delayed registration.</li></ul></div>
+</div></div>
+<div class="slide " data-i="1">
+<div class="slide-inner"><div class="slide-head"><div class="sn">2</div><h3>What is demography?</h3><span class="st">Learning slide</span></div>
+
+<p class="lead">Demography is the statistical study of human populations. It examines how many people there are, who they are, where they live and how populations change over time.</p>
+<div class="cards">
+<div class="bcard"><div class="p">Population size</div><div class="e">The number of people in a defined geographic area at a specified reference time.</div></div>
+<div class="bcard"><div class="p">Population structure</div><div class="e">Composition by age, sex and other characteristics.</div></div>
+<div class="bcard"><div class="p">Population distribution</div><div class="e">How people are spatially distributed across regions, districts, urban and rural areas.</div></div>
+<div class="bcard"><div class="p">Population dynamics</div><div class="e">Change caused by fertility, mortality and migration.</div></div>
+</div>
+<div class="callout info"><h4>Why demographic statistics matter</h4><p>Population statistics provide denominators for many indicators. For example, health, education and labour statistics often require reliable population estimates by age and sex.</p></div>
+</div></div>
+<div class="slide " data-i="2">
+<div class="slide-inner"><div class="slide-head"><div class="sn">3</div><h3>The demographic balancing equation</h3><span class="st">Learning slide</span></div>
+
+<p>The population at the end of a period is determined by the opening population plus births and immigration, less deaths and emigration.</p>
+<div class="formula">P₂ = P₁ + B − D + I − E<small>P₁ = opening population; B = births; D = deaths; I = immigrants; E = emigrants; P₂ = closing population</small></div>
+<div class="example"><h4>🧮 Hypothetical EAC example</h4><p>A district begins the year with 800,000 people. During the year there are 24,000 births, 6,000 deaths, 9,000 immigrants and 5,000 emigrants.</p><div class="formula">800,000 + 24,000 − 6,000 + 9,000 − 5,000 = 822,000</div><div class="key">The district ends the year with an estimated population of 822,000.</div></div>
+<div class="quiz-inline" data-answer="2" data-explain="Population change is driven directly by births, deaths, immigration and emigration.">
+<div class="q-title">Knowledge check: Which set contains the direct components of population change?</div>
+<button class="opt">Economic growth, inflation and employment</button>
+<button class="opt">School enrolment, households and rainfall</button>
+<button class="opt">Births, deaths, immigration and emigration</button>
+<button class="opt">Exports, imports, taxes and grants</button>
+<div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="3">
+<div class="slide-inner"><div class="slide-head"><div class="sn">4</div><h3>Stocks, flows, ratios and rates</h3><span class="st">Learning slide</span></div>
+
+<table class="cmp"><thead><tr><th>Measure</th><th>Meaning</th><th>Example</th></tr></thead><tbody>
+<tr><td class="rh">Stock</td><td>A quantity measured at a point in time.</td><td>Population on census night.</td></tr>
+<tr><td class="rh">Flow</td><td>Events occurring during a period.</td><td>Births registered during a year.</td></tr>
+<tr><td class="rh">Proportion</td><td>A part divided by the whole; numerator is included in denominator.</td><td>Share of population aged 0–14.</td></tr>
+<tr><td class="rh">Ratio</td><td>One quantity divided by another distinct quantity.</td><td>Sex ratio: males per 100 females.</td></tr>
+<tr><td class="rh">Rate</td><td>Frequency of events relative to population exposed to the event, usually over time.</td><td>Crude birth rate per 1,000 population.</td></tr>
+</tbody></table>
+<div class="callout tip"><h4>Correct denominator matters</h4><p>A demographic rate should use the population actually exposed to the event whenever possible. Age-specific rates therefore provide more analytical detail than crude rates.</p></div>
+</div></div>
+<div class="slide " data-i="4">
+<div class="slide-inner"><div class="slide-head"><div class="sn">5</div><h3>Major demographic data sources</h3><span class="st">Learning slide</span></div>
+
+<div class="cards">
+<div class="bcard"><div class="p">🏠 Population & housing census</div><div class="e">Near-complete enumeration at a specified reference time; provides small-area population structure and distribution.</div></div>
+<div class="bcard"><div class="p">🧾 CRVS</div><div class="e">Civil registration and vital statistics record births, deaths and other vital events continuously.</div></div>
+<div class="bcard"><div class="p">📋 Household surveys</div><div class="e">Sample-based sources that can collect fertility, mortality, migration and socioeconomic characteristics.</div></div>
+<div class="bcard"><div class="p">🏛️ Administrative systems</div><div class="e">School, health, immigration, social security and other operational records can complement demographic sources.</div></div>
+<div class="bcard"><div class="p">🪪 Population registers</div><div class="e">Continuous systems that maintain information on resident populations where such registers exist.</div></div>
+</div>
+<table class="cmp"><thead><tr><th>Need</th><th>Often suitable source</th></tr></thead><tbody>
+<tr><td class="rh">Small-area population count</td><td>Census</td></tr>
+<tr><td class="rh">Continuous births and deaths</td><td>CRVS</td></tr>
+<tr><td class="rh">Detailed fertility history</td><td>Household survey</td></tr>
+<tr><td class="rh">Border movements</td><td>Immigration/administrative records, complemented by surveys or census</td></tr>
+</tbody></table>
+</div></div>
+<div class="slide " data-i="5">
+<div class="slide-inner"><div class="slide-head"><div class="sn">6</div><h3>Data quality and metadata</h3><span class="st">Learning slide</span></div>
+
+<p>High-quality demographic statistics require transparent concepts, consistent classifications and well-documented methods.</p>
+<table class="cmp"><thead><tr><th>Quality dimension</th><th>Questions to ask</th></tr></thead><tbody>
+<tr><td class="rh">Coverage</td><td>Were all intended people or events captured? Is there undercount or duplication?</td></tr>
+<tr><td class="rh">Accuracy</td><td>Are ages, dates, sex and locations correctly reported and coded?</td></tr>
+<tr><td class="rh">Timeliness</td><td>How quickly are results available after the reference period?</td></tr>
+<tr><td class="rh">Coherence</td><td>Are census, survey, CRVS and administrative estimates reasonably consistent?</td></tr>
+<tr><td class="rh">Comparability</td><td>Are concepts and methods stable across places and time?</td></tr>
+<tr><td class="rh">Accessibility</td><td>Can users find data, metadata and explanations?</td></tr>
+</tbody></table>
+<div class="callout warn"><h4>Common demographic data issues</h4><p>Age heaping, under-registration of births or deaths, household omissions, double counting, misclassification of residence and inconsistent geographic boundaries can distort indicators.</p></div>
+<div class="quiz-inline" data-answer="1" data-explain="A census is designed to provide population counts and characteristics for small geographic areas at a specific reference time.">
+<div class="q-title">Knowledge check: Which source is usually strongest for detailed small-area population counts?</div>
+<button class="opt">A small sample survey</button><button class="opt">Population and housing census</button><button class="opt">Price index</button><button class="opt">Trade statistics</button><div class="q-feedback"></div></div>
+</div></div></div><div class="deck" data-mid="m2" data-n="6" id="deck-m2"><div class="slide active" data-i="0">
+<div class="slide-inner slide-cover"><span class="badge">Module 2 of 5</span>
+<h2>Population Size, Structure &amp; Distribution</h2><p class="msub">Age-sex composition, dependency, density and population growth.</p>
+
+<p class="lead">Population structure turns a total headcount into an analytical profile. Age, sex and location reveal demand for schools, jobs, health services, housing and social protection.</p>
+<div class="obj-grid"><div class="obj"><div class="n">1</div><div>Measure population composition by age and sex.</div></div><div class="obj"><div class="n">2</div><div>Calculate sex ratio and dependency ratio.</div></div><div class="obj"><div class="n">3</div><div>Interpret population pyramids.</div></div><div class="obj"><div class="n">4</div><div>Calculate population density and growth.</div></div><div class="obj"><div class="n">5</div><div>Explain the demographic dividend concept.</div></div></div>
+</div></div>
+<div class="slide " data-i="1">
+<div class="slide-inner"><div class="slide-head"><div class="sn">2</div><h3>Age and sex structure</h3><span class="st">Learning slide</span></div>
+
+<p>Age and sex are two of the most important demographic variables. Standard age groups often include single years, five-year groups, or broad functional groups such as 0–14, 15–64 and 65+.</p>
+<div class="formula">Sex Ratio = (Number of males ÷ Number of females) × 100<small>Often expressed as males per 100 females.</small></div>
+<div class="example"><h4>🧮 Example</h4><p>If a population has 510,000 males and 500,000 females:</p><div class="formula">(510,000 ÷ 500,000) × 100 = 102</div><div class="key">There are 102 males for every 100 females.</div></div>
+</div></div>
+<div class="slide " data-i="2">
+<div class="slide-inner"><div class="slide-head"><div class="sn">3</div><h3>Dependency ratios</h3><span class="st">Learning slide</span></div>
+
+<p>A dependency ratio compares populations commonly considered economically dependent with the working-age population. It is a structural indicator, not a direct measure of actual employment or dependency.</p>
+<div class="formula">Total Dependency Ratio = ((P₀₋₁₄ + P₆₅₊) ÷ P₁₅₋₆₄) × 100</div>
+<div class="cards"><div class="bcard"><div class="p">Child dependency ratio</div><div class="e">Population aged 0–14 relative to working-age population.</div></div><div class="bcard"><div class="p">Old-age dependency ratio</div><div class="e">Population aged 65+ relative to working-age population.</div></div></div>
+<div class="example"><h4>🧮 Example</h4><p>A population has 420,000 people aged 0–14, 530,000 aged 15–64 and 50,000 aged 65+.</p><div class="formula">((420,000 + 50,000) ÷ 530,000) × 100 ≈ 88.7</div><div class="key">There are about 89 people in the dependent-age groups per 100 people aged 15–64.</div></div>
+</div></div>
+<div class="slide " data-i="3">
+<div class="slide-inner"><div class="slide-head"><div class="sn">4</div><h3>Population pyramids</h3><span class="st">Learning slide</span></div>
+
+<p>A population pyramid plots age groups vertically and population counts or percentages horizontally, typically showing males and females on opposite sides.</p>
+<div class="cards"><div class="bcard"><div class="p">Expansive shape</div><div class="e">Broad base and narrower upper ages; often associated with relatively high fertility and a young population.</div></div><div class="bcard"><div class="p">More stationary shape</div><div class="e">Similar widths across many age groups; suggests slower change in age structure.</div></div><div class="bcard"><div class="p">Constrictive shape</div><div class="e">Narrower younger cohorts relative to middle ages; often associated with lower fertility and population ageing.</div></div></div>
+<div class="callout info"><h4>Look for irregularities</h4><p>Bulges, indentations and sex imbalances may reflect past fertility changes, mortality shocks, migration, conflict, boundary changes or data-quality problems.</p></div>
+<div class="quiz-inline" data-answer="0" data-explain="A broad base indicates large younger cohorts, commonly associated with relatively high fertility."><div class="q-title">Knowledge check: What does a very broad base on a population pyramid usually suggest?</div><button class="opt">Large younger cohorts and relatively high fertility</button><button class="opt">No migration at all</button><button class="opt">Zero mortality</button><button class="opt">Equal population at every age</button><div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="4">
+<div class="slide-inner"><div class="slide-head"><div class="sn">5</div><h3>Population density and distribution</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">Population Density = Population ÷ Land Area (km²)</div>
+<p>Density is useful for comparing settlement concentration, but national or regional averages can hide major local differences.</p>
+<div class="example"><h4>🧮 Hypothetical example</h4><p>A region has 2,400,000 residents and a land area of 30,000 km².</p><div class="formula">2,400,000 ÷ 30,000 = 80 persons/km²</div></div>
+<div class="callout tip"><h4>Distribution is more than density</h4><p>Maps, urban-rural classifications and subnational tabulations help identify where people are concentrated and how access to services varies spatially.</p></div>
+</div></div>
+<div class="slide " data-i="5">
+<div class="slide-inner"><div class="slide-head"><div class="sn">6</div><h3>Population growth and the demographic dividend</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">Growth Rate (%) ≈ ((P₂ − P₁) ÷ P₁) × 100<small>For a simple one-period calculation. Compound annual growth is preferable across multiple years.</small></div>
+<p>The <strong>demographic dividend</strong> refers to potential economic benefits when the working-age share of the population rises relative to dependent ages. It is not automatic: outcomes depend on health, education, skills, employment, productivity and institutions.</p>
+<div class="callout warn"><h4>Interpret carefully</h4><p>A lower dependency ratio does not itself guarantee higher economic growth. It creates a potential opportunity that requires supportive policies and labour-market absorption.</p></div>
+<div class="quiz-inline" data-answer="3" data-explain="The demographic dividend is a potential benefit associated with age-structure change, but it depends on policies and economic conditions."><div class="q-title">Knowledge check: Which statement about the demographic dividend is correct?</div><button class="opt">It is guaranteed whenever fertility falls.</button><button class="opt">It means everyone aged 15–64 is employed.</button><button class="opt">It measures only migration.</button><button class="opt">It is a potential benefit that depends on supportive investments and jobs.</button><div class="q-feedback"></div></div>
+</div></div></div><div class="deck" data-mid="m3" data-n="7" id="deck-m3"><div class="slide active" data-i="0">
+<div class="slide-inner slide-cover"><span class="badge">Module 3 of 5</span>
+<h2>Fertility &amp; Reproduction</h2><p class="msub">Birth measures, age-specific fertility, TFR and reproductive indicators.</p>
+
+<p class="lead">Fertility statistics measure the actual occurrence of live births in a population. They are central to understanding population growth and future age structure.</p>
+<div class="obj-grid"><div class="obj"><div class="n">1</div><div>Distinguish fertility from fecundity.</div></div><div class="obj"><div class="n">2</div><div>Calculate crude and general fertility rates.</div></div><div class="obj"><div class="n">3</div><div>Interpret age-specific fertility rates.</div></div><div class="obj"><div class="n">4</div><div>Explain total fertility rate.</div></div><div class="obj"><div class="n">5</div><div>Identify fertility data sources and quality issues.</div></div></div>
+</div></div>
+<div class="slide " data-i="1">
+<div class="slide-inner"><div class="slide-head"><div class="sn">2</div><h3>Fertility concepts</h3><span class="st">Learning slide</span></div>
+
+<div class="def"><div class="t">Fertility</div><div class="x">Actual childbearing performance, commonly measured through live births.</div></div>
+<div class="def"><div class="t">Fecundity</div><div class="x">Biological capacity to reproduce. Fecundity and observed fertility are not the same.</div></div>
+<p>Fertility is influenced by demographic, social, economic, cultural and behavioural factors, including age at union, contraceptive use, breastfeeding, education and desired family size.</p>
+</div></div>
+<div class="slide " data-i="2">
+<div class="slide-inner"><div class="slide-head"><div class="sn">3</div><h3>Crude birth rate and general fertility rate</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">CBR = (Live Births ÷ Mid-year Population) × 1,000</div>
+<div class="formula">GFR = (Live Births ÷ Women aged 15–49) × 1,000</div>
+<div class="example"><h4>🧮 Example</h4><p>A population of 1,000,000 records 28,000 live births. There are 250,000 women aged 15–49.</p><ul><li>CBR = 28,000 ÷ 1,000,000 × 1,000 = <strong>28 per 1,000 population</strong>.</li><li>GFR = 28,000 ÷ 250,000 × 1,000 = <strong>112 per 1,000 women aged 15–49</strong>.</li></ul></div>
+<div class="callout info"><h4>Why “crude”?</h4><p>The crude birth rate uses the total population in its denominator, including people not exposed to childbearing. It is easy to compute but strongly affected by age-sex structure.</p></div>
+</div></div>
+<div class="slide " data-i="3">
+<div class="slide-inner"><div class="slide-head"><div class="sn">4</div><h3>Age-specific fertility rates (ASFR)</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">ASFRₓ = (Births to women in age group x ÷ Women in age group x) × 1,000</div>
+<p>ASFRs show the age pattern of childbearing and allow comparisons that are less distorted by differences in age structure.</p>
+<table class="cmp"><thead><tr><th>Age group</th><th>Interpretation</th></tr></thead><tbody><tr><td class="rh">15–19</td><td>Adolescent fertility.</td></tr><tr><td class="rh">20–24 to 30–34</td><td>Often contain the largest concentration of births, depending on the population.</td></tr><tr><td class="rh">35–49</td><td>Later-age fertility.</td></tr></tbody></table>
+<div class="quiz-inline" data-answer="2" data-explain="ASFR uses women in a specific age group as the population exposed to births in that age group."><div class="q-title">Knowledge check: Which denominator is used for an ASFR for women aged 20–24?</div><button class="opt">Total national population</button><button class="opt">All women aged 15–49</button><button class="opt">Women aged 20–24</button><button class="opt">All households</button><div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="4">
+<div class="slide-inner"><div class="slide-head"><div class="sn">5</div><h3>Total fertility rate (TFR)</h3><span class="st">Learning slide</span></div>
+
+<p>The total fertility rate summarises age-specific fertility rates into the average number of children a woman would have if she experienced the current age-specific fertility schedule throughout her reproductive years, subject to the assumptions of the period measure.</p>
+<div class="formula">TFR = 5 × ΣASFR ÷ 1,000<small>When ASFRs are expressed per 1,000 women in five-year age groups.</small></div>
+<div class="callout tip"><h4>TFR is a synthetic cohort measure</h4><p>It describes the fertility schedule of a particular period. It is not the observed completed family size of an actual group of women unless the schedule remains unchanged.</p></div>
+</div></div>
+<div class="slide " data-i="5">
+<div class="slide-inner"><div class="slide-head"><div class="sn">6</div><h3>Other reproductive indicators</h3><span class="st">Learning slide</span></div>
+
+<div class="cards"><div class="bcard"><div class="p">Gross reproduction rate</div><div class="e">Average number of daughters a woman would bear under current fertility rates, ignoring female mortality.</div></div><div class="bcard"><div class="p">Net reproduction rate</div><div class="e">Average number of daughters a newborn girl would bear over her lifetime under current fertility and female mortality schedules.</div></div><div class="bcard"><div class="p">Mean age at childbearing</div><div class="e">Average age of mothers at childbirth, weighted by age-specific fertility.</div></div></div>
+<div class="callout info"><h4>Replacement-level fertility</h4><p>Replacement level refers to the fertility required for one generation to replace itself in the long run in the absence of migration. The exact level depends on mortality conditions and the sex ratio at birth; it should not be treated as a universal fixed constant for every population.</p></div>
+</div></div>
+<div class="slide " data-i="6">
+<div class="slide-inner"><div class="slide-head"><div class="sn">7</div><h3>Fertility data sources and quality</h3><span class="st">Learning slide</span></div>
+
+<table class="cmp"><thead><tr><th>Source</th><th>Strength</th><th>Typical limitation</th></tr></thead><tbody><tr><td class="rh">CRVS</td><td>Continuous registration of births where complete.</td><td>Under-registration or delayed registration may bias rates.</td></tr><tr><td class="rh">Census</td><td>Large coverage; can collect recent births and children ever born.</td><td>Recall and reporting errors; limited detail.</td></tr><tr><td class="rh">Household survey</td><td>Detailed birth histories and covariates.</td><td>Sampling error and retrospective recall error.</td></tr></tbody></table>
+<div class="quiz-inline" data-answer="1" data-explain="TFR is constructed from age-specific fertility rates and summarizes the current age pattern of fertility."><div class="q-title">Knowledge check: Which measure is built directly from age-specific fertility rates?</div><button class="opt">Population density</button><button class="opt">Total fertility rate</button><button class="opt">Sex ratio</button><button class="opt">Net migration rate</button><div class="q-feedback"></div></div>
+</div></div></div><div class="deck" data-mid="m4" data-n="7" id="deck-m4"><div class="slide active" data-i="0">
+<div class="slide-inner slide-cover"><span class="badge">Module 4 of 5</span>
+<h2>Mortality &amp; Survival</h2><p class="msub">Death rates, infant and child mortality, life tables and life expectancy.</p>
+
+<p class="lead">Mortality statistics measure the occurrence of deaths and survival in populations. They are fundamental for health planning, actuarial analysis and population projections.</p>
+<div class="obj-grid"><div class="obj"><div class="n">1</div><div>Calculate crude and age-specific death rates.</div></div><div class="obj"><div class="n">2</div><div>Interpret infant and under-five mortality measures.</div></div><div class="obj"><div class="n">3</div><div>Explain direct and indirect standardization.</div></div><div class="obj"><div class="n">4</div><div>Understand life-table functions.</div></div><div class="obj"><div class="n">5</div><div>Explain life expectancy.</div></div></div>
+</div></div>
+<div class="slide " data-i="1">
+<div class="slide-inner"><div class="slide-head"><div class="sn">2</div><h3>Crude and specific death rates</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">CDR = (Deaths during year ÷ Mid-year Population) × 1,000</div>
+<div class="formula">Age-specific Death Rate = (Deaths at age x ÷ Population at age x) × k</div>
+<div class="example"><h4>🧮 Example</h4><p>If 7,500 deaths occur in a mid-year population of 1,250,000:</p><div class="formula">(7,500 ÷ 1,250,000) × 1,000 = 6.0 deaths per 1,000 population</div></div>
+<div class="callout warn"><h4>Crude rates can mislead comparisons</h4><p>Two populations can have different crude death rates simply because one population is older. Age-standardized rates are often preferable for comparing mortality levels.</p></div>
+</div></div>
+<div class="slide " data-i="2">
+<div class="slide-inner"><div class="slide-head"><div class="sn">3</div><h3>Infant and child mortality</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">IMR = (Deaths under age 1 ÷ Live births) × 1,000</div>
+<div class="cards"><div class="bcard"><div class="p">Neonatal mortality</div><div class="e">Deaths in the first 28 completed days of life relative to live births.</div></div><div class="bcard"><div class="p">Post-neonatal mortality</div><div class="e">Deaths after the neonatal period but before age one.</div></div><div class="bcard"><div class="p">Under-five mortality</div><div class="e">Probability of dying before age five, usually expressed per 1,000 live births.</div></div></div>
+<div class="callout info"><h4>Rate vs probability</h4><p>Some child mortality indicators are formally probabilities derived from life-table or survey methods, even though they are often informally called “rates.”</p></div>
+</div></div>
+<div class="slide " data-i="3">
+<div class="slide-inner"><div class="slide-head"><div class="sn">4</div><h3>Mortality standardization</h3><span class="st">Learning slide</span></div>
+
+<p>Standardization removes the effect of differing age structures so mortality levels can be compared more fairly.</p>
+<div class="cards"><div class="bcard"><div class="p">Direct standardization</div><div class="e">Applies observed age-specific rates to a common standard population.</div></div><div class="bcard"><div class="p">Indirect standardization</div><div class="e">Applies standard age-specific rates to the study population; often summarized using a standardized mortality ratio.</div></div></div>
+<div class="quiz-inline" data-answer="0" data-explain="Age standardization helps separate true mortality differences from differences caused by age composition."><div class="q-title">Knowledge check: Why is age standardization useful when comparing mortality?</div><button class="opt">It reduces distortion from different age structures.</button><button class="opt">It guarantees complete death registration.</button><button class="opt">It converts deaths into births.</button><button class="opt">It measures migration.</button><div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="4">
+<div class="slide-inner"><div class="slide-head"><div class="sn">5</div><h3>Life tables</h3><span class="st">Learning slide</span></div>
+
+<p>A life table describes the mortality experience of a hypothetical cohort subjected to a set of age-specific mortality rates.</p>
+<table class="cmp"><thead><tr><th>Symbol</th><th>Meaning</th></tr></thead><tbody><tr><td class="rh">lₓ</td><td>Number of survivors to exact age x from the life-table radix.</td></tr><tr><td class="rh">dₓ</td><td>Deaths between exact ages x and x+n.</td></tr><tr><td class="rh">qₓ</td><td>Probability of dying between x and x+n.</td></tr><tr><td class="rh">Lₓ</td><td>Person-years lived between x and x+n.</td></tr><tr><td class="rh">Tₓ</td><td>Total person-years remaining after age x.</td></tr><tr><td class="rh">eₓ</td><td>Expectation of life at age x.</td></tr></tbody></table>
+</div></div>
+<div class="slide " data-i="5">
+<div class="slide-inner"><div class="slide-head"><div class="sn">6</div><h3>Life expectancy</h3><span class="st">Learning slide</span></div>
+
+<div class="def"><div class="t">Life expectancy at birth</div><div class="x">The average number of years a newborn would live if the current age-specific mortality rates remained in effect throughout life.</div></div>
+<p>Life expectancy is a period summary of current mortality conditions. It is not a prediction of exactly how long any individual newborn will live.</p>
+<div class="formula">eₓ = Tₓ ÷ lₓ<small>Life-table relationship between remaining person-years and survivors at exact age x.</small></div>
+<div class="quiz-inline" data-answer="2" data-explain="Life expectancy summarizes the mortality schedule; it is not an individual prediction."><div class="q-title">Knowledge check: What does life expectancy at birth summarize?</div><button class="opt">Future GDP growth</button><button class="opt">Total migration over a decade</button><button class="opt">Current age-specific mortality conditions</button><button class="opt">Only infant deaths</button><div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="6">
+<div class="slide-inner"><div class="slide-head"><div class="sn">7</div><h3>Mortality data sources and quality</h3><span class="st">Learning slide</span></div>
+
+<div class="cards"><div class="bcard"><div class="p">CRVS</div><div class="e">Preferred continuous source for deaths and causes of death where registration is complete and medically certified.</div></div><div class="bcard"><div class="p">Census and surveys</div><div class="e">Can estimate adult and child mortality where CRVS is incomplete, using household deaths, birth histories or survival questions.</div></div><div class="bcard"><div class="p">Health systems</div><div class="e">Facility records support cause-specific analysis but may not represent all deaths in the population.</div></div></div>
+<div class="callout warn"><h4>Completeness is critical</h4><p>If deaths are under-registered, crude and age-specific mortality rates can be biased downward. Analysts should assess completeness before interpretation.</p></div>
+</div></div></div><div class="deck" data-mid="m5" data-n="8" id="deck-m5"><div class="slide active" data-i="0">
+<div class="slide-inner slide-cover"><span class="badge">Module 5 of 5</span>
+<h2>Migration, Urbanization &amp; Population Projections</h2><p class="msub">Migration measures, urban change and cohort-component projections.</p>
+
+<p class="lead">Migration can rapidly reshape local populations, labour markets and service demand. Population projections then combine fertility, mortality and migration assumptions to estimate future population size and structure.</p>
+<div class="obj-grid"><div class="obj"><div class="n">1</div><div>Define internal and international migration.</div></div><div class="obj"><div class="n">2</div><div>Calculate net migration and migration rates.</div></div><div class="obj"><div class="n">3</div><div>Explain urbanization measures.</div></div><div class="obj"><div class="n">4</div><div>Distinguish estimates from projections.</div></div><div class="obj"><div class="n">5</div><div>Explain the cohort-component method.</div></div><div class="obj"><div class="n">6</div><div>Interpret projection scenarios and uncertainty.</div></div></div>
+</div></div>
+<div class="slide " data-i="1">
+<div class="slide-inner"><div class="slide-head"><div class="sn">2</div><h3>Migration concepts</h3><span class="st">Learning slide</span></div>
+
+<div class="def"><div class="t">Migration</div><div class="x">A change in usual residence from one geographic area to another, defined using a specified spatial boundary and time criterion.</div></div>
+<div class="cards"><div class="bcard"><div class="p">Internal migration</div><div class="e">Movement between areas within the same country.</div></div><div class="bcard"><div class="p">International migration</div><div class="e">Movement involving a change of country of usual residence.</div></div><div class="bcard"><div class="p">In-migration / immigration</div><div class="e">Movement into the area being studied.</div></div><div class="bcard"><div class="p">Out-migration / emigration</div><div class="e">Movement out of the area being studied.</div></div></div>
+<p>Definitions of “usual residence” and duration should be documented because they affect who is classified as a migrant.</p>
+</div></div>
+<div class="slide " data-i="2">
+<div class="slide-inner"><div class="slide-head"><div class="sn">3</div><h3>Migration measures</h3><span class="st">Learning slide</span></div>
+
+<div class="formula">Net Migration = In-migrants − Out-migrants</div>
+<div class="formula">Net Migration Rate = (Net Migration ÷ Mid-year Population) × 1,000</div>
+<div class="example"><h4>🧮 Example</h4><p>A region records 18,000 in-migrants and 11,000 out-migrants in a population of 700,000.</p><ul><li>Net migration = 18,000 − 11,000 = <strong>7,000</strong>.</li><li>Net migration rate = 7,000 ÷ 700,000 × 1,000 = <strong>10 per 1,000</strong>.</li></ul></div>
+<div class="quiz-inline" data-answer="1" data-explain="Net migration is inflows minus outflows."><div class="q-title">Knowledge check: If immigration is 30,000 and emigration is 38,000, net migration equals:</div><button class="opt">+68,000</button><button class="opt">−8,000</button><button class="opt">+8,000</button><button class="opt">0</button><div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="3">
+<div class="slide-inner"><div class="slide-head"><div class="sn">4</div><h3>Urbanization</h3><span class="st">Learning slide</span></div>
+
+<div class="def"><div class="t">Urbanization</div><div class="x">Increase over time in the proportion of a population living in areas classified as urban.</div></div>
+<div class="formula">Urban Share (%) = (Urban Population ÷ Total Population) × 100</div>
+<p>Urban population growth can result from natural increase within urban areas, rural-to-urban migration, international migration, and reclassification or expansion of urban boundaries.</p>
+<div class="callout warn"><h4>Comparability issue</h4><p>Urban definitions differ across countries and can change over time. Regional comparisons should always review national definitions and boundary changes.</p></div>
+</div></div>
+<div class="slide " data-i="4">
+<div class="slide-inner"><div class="slide-head"><div class="sn">5</div><h3>Population estimates vs projections</h3><span class="st">Learning slide</span></div>
+
+<table class="cmp"><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td class="rh">Population estimate</td><td>An assessment of population size or structure for a past or current date, using available evidence.</td></tr><tr><td class="rh">Population projection</td><td>A conditional calculation of future population based on specified assumptions about fertility, mortality and migration.</td></tr><tr><td class="rh">Forecast</td><td>A projection presented as the analyst's judgement of a likely future path.</td></tr></tbody></table>
+<div class="callout info"><h4>Projections are conditional</h4><p>A projection is not a certainty. Its results depend on the base population, model and assumptions.</p></div>
+</div></div>
+<div class="slide " data-i="5">
+<div class="slide-inner"><div class="slide-head"><div class="sn">6</div><h3>The cohort-component method</h3><span class="st">Learning slide</span></div>
+
+<p>The cohort-component method advances each age-sex cohort over time, applying mortality, adding births and incorporating migration.</p>
+<div class="cards"><div class="bcard"><div class="p">1 · Base population</div><div class="e">Start with a population by age and sex for a defined date.</div></div><div class="bcard"><div class="p">2 · Survival</div><div class="e">Apply survival probabilities to move cohorts into older ages.</div></div><div class="bcard"><div class="p">3 · Births</div><div class="e">Apply fertility assumptions to women of reproductive age and distribute births by sex.</div></div><div class="bcard"><div class="p">4 · Migration</div><div class="e">Add or subtract migrants by age and sex.</div></div><div class="bcard"><div class="p">5 · Repeat</div><div class="e">Continue for each projection interval.</div></div></div>
+<div class="formula">Future population = Surviving population + Births + Net migration<small>Applied by age and sex in a cohort-component framework.</small></div>
+</div></div>
+<div class="slide " data-i="6">
+<div class="slide-inner"><div class="slide-head"><div class="sn">7</div><h3>Projection scenarios and uncertainty</h3><span class="st">Learning slide</span></div>
+
+<p>Projection exercises commonly use multiple scenarios to show how alternative assumptions affect results.</p>
+<div class="cards"><div class="bcard"><div class="p">Low scenario</div><div class="e">A defined combination of assumptions producing relatively lower population growth.</div></div><div class="bcard"><div class="p">Medium scenario</div><div class="e">A central or reference set of assumptions.</div></div><div class="bcard"><div class="p">High scenario</div><div class="e">A defined combination producing relatively higher growth.</div></div></div>
+<div class="callout tip"><h4>Uncertainty grows with horizon</h4><p>Near-term projections are strongly influenced by the existing age structure. Longer-term results become increasingly sensitive to fertility, mortality and migration assumptions.</p></div>
+<div class="quiz-inline" data-answer="3" data-explain="The cohort-component method explicitly projects age-sex cohorts using fertility, mortality and migration."><div class="q-title">Knowledge check: Which method explicitly applies fertility, mortality and migration to age-sex cohorts?</div><button class="opt">Consumer price index</button><button class="opt">Input-output table</button><button class="opt">Simple trade balance</button><button class="opt">Cohort-component method</button><div class="q-feedback"></div></div>
+</div></div>
+<div class="slide " data-i="7">
+<div class="slide-inner"><div class="slide-head"><div class="sn">8</div><h3>Summary &amp; key takeaways</h3><span class="st">Learning slide</span></div>
+
+<div class="takeaways"><h4>🎯 Course-level takeaways</h4>
+<div class="tk"><div class="n">1</div><div>Population change is determined by births, deaths, immigration and emigration.</div></div>
+<div class="tk"><div class="n">2</div><div>Age-sex structure affects crude demographic rates and determines many planning needs.</div></div>
+<div class="tk"><div class="n">3</div><div>Fertility is best understood through age-specific measures and summary indicators such as TFR.</div></div>
+<div class="tk"><div class="n">4</div><div>Mortality analysis uses age-specific rates, child mortality measures and life tables; comparisons often require standardization.</div></div>
+<div class="tk"><div class="n">5</div><div>Migration and urbanization can reshape populations quickly, while projections show conditional future paths.</div></div>
+<div class="tk"><div class="n">6</div><div>Good demographic analysis depends on strong census, CRVS, survey and administrative data, supported by clear metadata and quality assessment.</div></div>
+</div>
+<div class="teaser"><h3>🎓 Ready for the final assessment?</h3><p>The final assessment draws questions from all five modules. A score of 75% or higher earns the course certificate.</p></div>
+</div></div></div></div>
+<div class="player-nav"><button class="btn btn-ghost" id="prevSlide">← Previous</button><button class="btn btn-blue" id="nextSlide">Next →</button></div>
+</section>
+
+<section class="screen" id="screen-assessment">
+<div class="assess-head"><div class="wrap"><h2>Final Assessment</h2><p>Answer 20 questions covering all five modules. You need 75% or higher to pass and unlock the certificate.</p></div></div>
+<div class="assess-body"><div class="wrap">
+<div class="test-progress"><div class="tp-row"><div class="tp-bar"><div class="tp-fill" id="testFill"></div></div><div class="assess-timer" id="assessTimer">20:00</div></div><div class="tp-txt" id="testProgressText">0 of 20 answered</div></div>
+<div id="testQuestions"></div>
+<div class="test-submit"><button class="btn btn-blue btn-lg" id="submitAssessment">Submit assessment</button></div>
+<div id="testResult"></div>
+</div></div>
+</section>
+
+<section class="screen" id="screen-certificate">
+<div class="cert-wrap">
+<div class="cert-actions"><button class="btn btn-ghost" data-screen="hub">← Back to modules</button><button class="btn btn-green" onclick="window.print()">Print / Save PDF</button></div>
+<div class="cert-stage"><div class="cert-paper">
+<img class="cert-logo" src="../images/eac-crest.png" alt="East African Community"/>
+<div class="cert-kicker">East African Community · Statistics e-Learning</div>
+<div class="cert-title">Certificate of Completion</div>
+<div class="cert-sub">This certifies that</div>
+<div class="cert-name" id="certName">Learner</div>
+<div class="cert-sub">has successfully completed the course</div>
+<div class="cert-course">Population and Demographic Statistics</div>
+<p class="cert-sub">and achieved the required standard in the final assessment.</p>
+<div class="cert-meta-grid"><div><b id="certScore">—</b>Assessment score</div><div><b id="certDate">—</b>Date completed</div><div><b id="certId">—</b>Certificate ID</div></div>
+</div></div></div>
+</section>
+
+<footer class="course-footer"><div class="course-footer-inner"><div><h3>EAC Statistics e-Learning</h3><p>Learning for better statistics across the East African Community.</p></div><nav><a href="../index.php">Courses</a><a href="../dashboard.php">Dashboard</a><a href="../forum.php">Forum</a></nav></div><div class="course-footer-bottom">© 2026 East African Community · EAC Statistics e-Learning Platform</div></footer>
+
+<script>
+(function(){
+'use strict';
+
+const COURSE={title:'Population and Demographic Statistics',short:'Population & Demography',code:'PDS',year:2026,passMark:75,assessmentCount:20,minutes:20};
+const MODNAME={"m1": "Module 1 — Foundations of Population & Demographic Statistics", "m2": "Module 2 — Population Size, Structure & Distribution", "m3": "Module 3 — Fertility & Reproduction", "m4": "Module 4 — Mortality & Survival", "m5": "Module 5 — Migration, Urbanization & Population Projections"};
+const BANK=[{"q": "Which four components directly change population size?", "correct": "Births, deaths, immigration and emigration", "opts": ["Inflation, exports, births and employment", "Births, deaths, immigration and emigration", "Taxes, grants, mortality and GDP", "Schooling, rainfall, births and trade"]}, {"q": "Which is a stock measure?", "correct": "Population on census night", "opts": ["Births during a year", "Deaths during a year", "Population on census night", "Migrants entering during a month"]}, {"q": "Which source is usually strongest for small-area population counts?", "correct": "Population and housing census", "opts": ["Small sample survey", "Population and housing census", "Consumer price survey", "Customs declaration"]}, {"q": "What does CRVS primarily provide when complete?", "correct": "Continuous records of vital events", "opts": ["Only trade flows", "Continuous records of vital events", "Only five-year population projections", "National accounts"]}, {"q": "What is a sex ratio of 105 commonly interpreted as?", "correct": "105 males per 100 females", "opts": ["105 females per 100 males", "105 males per 100 females", "105 children per 100 adults", "105 births per 1,000 women"]}, {"q": "Which ages are commonly used as working-age in a simple dependency ratio?", "correct": "15–64", "opts": ["0–14", "15–64", "65–79", "10–19"]}, {"q": "What does a broad base of a population pyramid often indicate?", "correct": "Large younger cohorts and relatively high fertility", "opts": ["No mortality", "Large younger cohorts and relatively high fertility", "No migration", "An equal number at every age"]}, {"q": "Population density is calculated as:", "correct": "Population divided by land area", "opts": ["Land area divided by births", "Population divided by land area", "Deaths divided by population", "Urban population divided by births"]}, {"q": "The demographic dividend is best described as:", "correct": "A potential economic benefit from favourable age structure, conditional on policies and jobs", "opts": ["A guaranteed gain whenever fertility falls", "A measure of infant mortality", "A migration tax", "A potential economic benefit from favourable age structure, conditional on policies and jobs"]}, {"q": "Fertility refers to:", "correct": "Actual childbearing performance", "opts": ["Biological capacity only", "Actual childbearing performance", "Mortality after birth", "Net migration"]}, {"q": "The crude birth rate denominator is:", "correct": "Mid-year total population", "opts": ["Women aged 15–49 only", "Live births", "Mid-year total population", "Households"]}, {"q": "The general fertility rate denominator is:", "correct": "Women aged 15–49", "opts": ["Total population", "Women aged 15–49", "Children under 5", "All males"]}, {"q": "ASFR for ages 20–24 uses which denominator?", "correct": "Women aged 20–24", "opts": ["All women", "Women aged 20–24", "Total population", "Live births"]}, {"q": "TFR is constructed primarily from:", "correct": "Age-specific fertility rates", "opts": ["Population density", "Age-specific fertility rates", "Sex ratios", "Migration stocks"]}, {"q": "Which statement about TFR is correct?", "correct": "It summarizes the current age-specific fertility schedule", "opts": ["It is the observed completed fertility of every woman", "It summarizes the current age-specific fertility schedule", "It measures mortality", "It always equals replacement level"]}, {"q": "The crude death rate is deaths divided by:", "correct": "Mid-year population", "opts": ["Live births", "Women aged 15–49", "Mid-year population", "Land area"]}, {"q": "Why can crude death rates mislead comparisons?", "correct": "Populations may have different age structures", "opts": ["They never use deaths", "Populations may have different age structures", "They are always percentages", "They measure fertility"]}, {"q": "The infant mortality measure concerns deaths before:", "correct": "Age one", "opts": ["Age five", "Age one", "Age fifteen", "Age sixty-five"]}, {"q": "Direct age standardization applies:", "correct": "Observed age-specific rates to a common standard population", "opts": ["A common fertility rate to every country", "Observed age-specific rates to a common standard population", "Migration rates to births", "GDP growth to population"]}, {"q": "Life expectancy at birth is:", "correct": "A summary of current age-specific mortality conditions", "opts": ["An exact prediction for each newborn", "A summary of current age-specific mortality conditions", "A fertility rate", "A migration count"]}, {"q": "In a life table, lₓ represents:", "correct": "Survivors to exact age x", "opts": ["Births at age x", "Survivors to exact age x", "Migrants at age x", "Population density"]}, {"q": "Net migration equals:", "correct": "In-migrants minus out-migrants", "opts": ["In-migrants plus out-migrants", "In-migrants minus out-migrants", "Deaths minus births", "Births minus deaths"]}, {"q": "Urbanization refers to:", "correct": "An increase in the share of population living in urban areas", "opts": ["Any rise in total population", "An increase in the share of population living in urban areas", "Only rural fertility decline", "Only international migration"]}, {"q": "A population projection is:", "correct": "A conditional calculation based on demographic assumptions", "opts": ["A guaranteed future count", "A conditional calculation based on demographic assumptions", "A past census count", "A price forecast"]}, {"q": "The cohort-component method explicitly uses:", "correct": "Fertility, mortality and migration", "opts": ["Exports, imports and inflation", "Fertility, mortality and migration", "Only migration", "Only births"]}, {"q": "Why are multiple projection scenarios useful?", "correct": "They show sensitivity to alternative assumptions", "opts": ["They eliminate uncertainty", "They show sensitivity to alternative assumptions", "They guarantee accuracy", "They avoid needing a base population"]}, {"q": "Which quality issue can distort age distributions?", "correct": "Age heaping", "opts": ["FOB valuation", "Age heaping", "Tariff coding", "Exchange rates"]}, {"q": "Which statement about migration definitions is correct?", "correct": "Usual residence and time criteria should be documented", "opts": ["All border crossings are automatically migration", "Usual residence and time criteria should be documented", "Migration never affects local planning", "Internal migration crosses an international border"]}, {"q": "A dependency ratio is best interpreted as:", "correct": "An age-structure indicator, not a direct employment measure", "opts": ["The unemployment rate", "An age-structure indicator, not a direct employment measure", "A fertility probability", "A migration balance"]}, {"q": "Which component is added in the demographic balancing equation?", "correct": "Immigration", "opts": ["Deaths", "Emigration", "Immigration", "None of the above"]}];
+const KEY='eac_pds_progress_v1';
+const STATE={completed:{},pos:null,passed:false,testScore:null,certId:null,learner:null};
+const CUR={mid:null,i:0,n:0};
+let assessment={questions:[],answers:{},seconds:COURSE.minutes*60,timer:null,started:false};
+
+function saveState(){
+  try{
+    STATE.localSavedAt=Date.now();
+    localStorage.setItem(KEY,JSON.stringify(STATE));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const d=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(d) Object.assign(STATE,d);
+  }catch(e){}
+}
+function getUser(){
+  try{return JSON.parse(localStorage.getItem('user')||'null')}catch(e){return null}
+}
+function syncLearner(){
+  const u=getUser();
+  if(u){
+    STATE.learner={name:u.fullName||u.name||u.email||'Learner',email:u.email||''};
+  }
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('screen-'+id);
+  if(!el)return;
+  el.classList.add('active');
+  document.querySelectorAll('.topbar .tb-link[data-screen]').forEach(b=>{
+    const target=b.dataset.screen;
+    const active=(id==='module'&&target==='hub')||(id==='certificate'&&target==='assessment')||target===id;
+    b.classList.toggle('active',active);
+  });
+  if(id==='hub')updateHub();
+  if(id==='assessment')startAssessment();
+  if(id==='certificate')populateCertificate();
+  window.scrollTo(0,0);
+}
+window.showScreen=showScreen;
+
+function openModule(mid,slideIndex=0){
+  document.querySelectorAll('.deck').forEach(d=>d.style.display='none');
+  const deck=document.getElementById('deck-'+mid);
+  if(!deck)return;
+  deck.style.display='block';
+  CUR.mid=mid;CUR.n=parseInt(deck.dataset.n,10)||1;CUR.i=0;
+  document.getElementById('playerTitle').textContent=MODNAME[mid]||'Module';
+  showScreen('module');
+  gotoSlide(slideIndex);
+}
+function gotoSlide(i){
+  const deck=document.getElementById('deck-'+CUR.mid);if(!deck)return;
+  i=Math.max(0,Math.min(CUR.n-1,i));CUR.i=i;
+  deck.querySelectorAll('.slide').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.i,10)===i));
+  document.getElementById('slideCount').textContent=(i+1)+' / '+CUR.n;
+  document.getElementById('slideBar').style.width=((i+1)/CUR.n*100)+'%';
+  document.getElementById('prevSlide').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextSlide').textContent=i===CUR.n-1?'Finish module ✓':'Next →';
+  STATE.pos={mid:CUR.mid,i:i};saveState();window.scrollTo(0,0);
+}
+function nextSlide(){
+  if(CUR.i>=CUR.n-1){
+    STATE.completed[CUR.mid]=true;saveState();showScreen('hub');
+  }else gotoSlide(CUR.i+1);
+}
+function prevSlide(){gotoSlide(CUR.i-1)}
+function updateHub(){
+  const done=Object.keys(STATE.completed||{}).filter(k=>STATE.completed[k]).length;
+  document.getElementById('hubDone').textContent=done;
+  document.querySelectorAll('.mod-bar').forEach(bar=>{
+    const st=bar.querySelector('.mod-status');
+    if(STATE.completed[bar.dataset.mid]){st.textContent='Completed ✓';st.classList.add('done')}else{st.textContent='Start →';st.classList.remove('done')}
+  });
+  const banner=document.getElementById('resumeBanner');
+  if(STATE.pos && STATE.pos.mid){
+    banner.style.display='flex';
+    banner.innerHTML='<div class="rb-txt"><strong>Continue learning:</strong> '+(MODNAME[STATE.pos.mid]||'Course')+', slide '+(Number(STATE.pos.i)+1)+'</div><div class="rb-actions"><button class="btn btn-green" id="resumeBtn">Continue →</button><button class="rb-reset" id="resetBtn">Reset progress</button></div>';
+    document.getElementById('resumeBtn').onclick=()=>openModule(STATE.pos.mid,Number(STATE.pos.i)||0);
+    document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset saved course progress on this browser?')){localStorage.removeItem(KEY);location.reload();}};
+  }else banner.style.display='none';
+}
+function shuffle(a){
+  const arr=[...a];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;
+}
+function startAssessment(){
+  if(assessment.started)return;
+  assessment.started=true;assessment.answers={};assessment.seconds=COURSE.minutes*60;
+  assessment.questions=shuffle(BANK).slice(0,COURSE.assessmentCount).map(q=>({...q,opts:shuffle(q.opts)}));
+  const box=document.getElementById('testQuestions');
+  box.innerHTML=assessment.questions.map((q,qi)=>'<div class="test-q"><div class="tq"><span class="n">'+(qi+1)+'</span>'+q.q+'</div>'+q.opts.map((o,oi)=>'<button class="test-opt" data-q="'+qi+'" data-o="'+oi+'">'+o+'</button>').join('')+'</div>').join('');
+  box.querySelectorAll('.test-opt').forEach(btn=>btn.addEventListener('click',()=>{
+    const qi=Number(btn.dataset.q),oi=Number(btn.dataset.o);
+    box.querySelectorAll('.test-opt[data-q="'+qi+'"]').forEach(x=>x.classList.remove('sel'));
+    btn.classList.add('sel');assessment.answers[qi]=oi;updateAssessmentProgress();
+  }));
+  updateAssessmentProgress();startTimer();
+}
+function updateAssessmentProgress(){
+  const n=Object.keys(assessment.answers).length,total=assessment.questions.length||COURSE.assessmentCount;
+  document.getElementById('testProgressText').textContent=n+' of '+total+' answered';
+  document.getElementById('testFill').style.width=(n/total*100)+'%';
+}
+function startTimer(){
+  clearInterval(assessment.timer);drawTimer();
+  assessment.timer=setInterval(()=>{assessment.seconds--;drawTimer();if(assessment.seconds<=0){clearInterval(assessment.timer);submitAssessment(true);}},1000);
+}
+function drawTimer(){
+  const m=Math.floor(assessment.seconds/60),s=assessment.seconds%60,el=document.getElementById('assessTimer');
+  el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  el.classList.toggle('low',assessment.seconds<=120);
+}
+function submitAssessment(auto=false){
+  if(!assessment.started)return;
+  const answered=Object.keys(assessment.answers).length;
+  if(!auto && answered<assessment.questions.length && !confirm('You have unanswered questions. Submit anyway?'))return;
+  clearInterval(assessment.timer);
+  let correct=0;
+  assessment.questions.forEach((q,qi)=>{
+    const oi=assessment.answers[qi];
+    if(oi!==undefined && q.opts[oi]===q.correct)correct++;
+  });
+  const score=Math.round(correct/assessment.questions.length*100);
+  STATE.testScore=score;STATE.passed=score>=COURSE.passMark;
+  if(STATE.passed && !STATE.certId) STATE.certId='PDS-'+new Date().getFullYear()+'-'+Math.random().toString(36).slice(2,8).toUpperCase();
+  saveState();
+  const result=document.getElementById('testResult');result.className='show';
+  if(STATE.passed){
+    result.innerHTML='<div class="result-card pass"><div class="score-ring pass"><b>'+score+'%</b><small>score</small></div><div class="result-text"><h3>Assessment passed</h3><p>You answered '+correct+' of '+assessment.questions.length+' questions correctly. Your certificate is now available.</p><div class="result-actions"><button class="btn btn-green" id="viewCert">View certificate →</button><button class="btn btn-ghost" id="retake">Retake assessment</button></div></div></div>';
+    document.getElementById('viewCert').onclick=()=>showScreen('certificate');
+  }else{
+    result.innerHTML='<div class="result-card fail"><div class="score-ring fail"><b>'+score+'%</b><small>score</small></div><div class="result-text"><h3>Not yet passed</h3><p>You answered '+correct+' of '+assessment.questions.length+' correctly. Review the modules and try again. Pass mark: '+COURSE.passMark+'%.</p><div class="result-actions"><button class="btn btn-blue" id="backModules">Review modules</button><button class="btn btn-ghost" id="retake">Retake assessment</button></div></div></div>';
+    document.getElementById('backModules').onclick=()=>showScreen('hub');
+  }
+  document.getElementById('retake').onclick=()=>{assessment.started=false;document.getElementById('testResult').className='';document.getElementById('testResult').innerHTML='';startAssessment();window.scrollTo(0,0);};
+  window.scrollTo(0,document.body.scrollHeight);
+}
+function populateCertificate(){
+  if(!STATE.passed){showScreen('assessment');return;}
+  syncLearner();
+  const u=STATE.learner;
+  document.getElementById('certName').textContent=(u&&u.name)||'Learner';
+  document.getElementById('certScore').textContent=(STATE.testScore||0)+'%';
+  document.getElementById('certDate').textContent=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('certId').textContent=STATE.certId||'PDS-CERT';
+}
+function bindKnowledgeChecks(){
+  document.querySelectorAll('.quiz-inline').forEach(q=>{
+    const ans=Number(q.dataset.answer),fb=q.querySelector('.q-feedback'),opts=[...q.querySelectorAll('.opt')];
+    opts.forEach((b,i)=>b.addEventListener('click',()=>{
+      if(opts.some(x=>x.disabled))return;
+      opts.forEach(x=>x.disabled=true);
+      if(i===ans){b.classList.add('correct');fb.className='q-feedback show ok';fb.textContent='Correct. '+(q.dataset.explain||'');}
+      else{b.classList.add('wrong');opts[ans].classList.add('correct');fb.className='q-feedback show no';fb.textContent='Not quite. '+(q.dataset.explain||'');}
+    }));
+  });
+}
+function bindNavigation(){
+  document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();showScreen(b.dataset.screen)}));
+  document.querySelectorAll('[data-openmod]').forEach(b=>b.addEventListener('click',()=>openModule(b.dataset.openmod)));
+  document.getElementById('prevSlide').addEventListener('click',prevSlide);
+  document.getElementById('nextSlide').addEventListener('click',nextSlide);
+  document.getElementById('submitAssessment').addEventListener('click',()=>submitAssessment(false));
+  document.getElementById('brandHome').addEventListener('click',()=>showScreen('welcome'));
+  document.getElementById('catalogueBtn').addEventListener('click',()=>{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'eacCatalogue'},'*');else location.href='../index.php';});
+  document.getElementById('resourcesBtn').addEventListener('click',()=>{showScreen('hub');setTimeout(()=>document.getElementById('courseResources').scrollIntoView({behavior:'smooth'}),80);});
+  document.addEventListener('keydown',e=>{if(!document.getElementById('screen-module').classList.contains('active'))return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+}
+loadState();syncLearner();bindNavigation();bindKnowledgeChecks();updateHub();
+
+/* Optional platform hook: parent page may synchronize authentication after iframe load. */
+window.eacSyncAuth=function(){syncLearner();saveState();updateHub();};
+window.eacCourseMeta=COURSE;
+})();
+</script>
+</body>
+</html>

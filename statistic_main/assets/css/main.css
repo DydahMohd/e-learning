@@ -1,0 +1,3286 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+/* =========================================================
+   SHARED SITE FOOTER — EAC STATISTICS E-LEARNING
+========================================================= */
+
+.site-footer {
+    width: 100%;
+    margin-top: 48px;
+    padding: 0;
+    background: #0a3f63;
+    color: #dcecf5;
+    box-sizing: border-box;
+}
+
+.site-footer-inner {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 34px 44px 28px;
+    display: grid;
+    grid-template-columns: 1.25fr 1.25fr 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    box-sizing: border-box;
+}
+
+.footer-column {
+    min-width: 0;
+}
+
+.site-footer h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.site-footer p {
+    margin: 0;
+    color: #c5dce9;
+    font-size: .88rem;
+    line-height: 1.55;
+}
+
+.site-footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   COLUMN 1 — POSTAL ADDRESS + SOCIAL LINKS
+--------------------------------------------------------- */
+
+.footer-eac p {
+    line-height: 1.55;
+}
+
+.footer-social-title {
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+}
+
+.footer-social-links {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.footer-social-links a {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 15px;
+    text-decoration: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.footer-social-links a:hover {
+    text-decoration: none;
+    opacity: .75;
+    transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------
+   COLUMN 2 — PLATFORM SLOGAN
+--------------------------------------------------------- */
+
+.footer-platform h3 {
+    margin-bottom: 14px;
+}
+
+/* ---------------------------------------------------------
+   COLUMN 3 — CONTACT US
+--------------------------------------------------------- */
+
+.footer-contact p {
+    display: flex;
+    align-items: baseline;
+    gap: .4rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.footer-contact p:last-child {
+    margin-bottom: 0;
+}
+
+.footer-contact strong {
+    flex: 0 0 auto;
+    margin: 0;
+    color: #fff;
+    font-weight: 700;
+}
+
+.footer-contact a {
+    color: #c5dce9;
+}
+
+.footer-contact a:hover {
+    color: #fff;
+}
+
+/* ---------------------------------------------------------
+   COLUMN 4 — AFRICAN DEVELOPMENT BANK LOGO LINK
+--------------------------------------------------------- */
+
+.footer-afdb {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.afdb-logo-link {
+    display: block;
+    width: 185px;
+    height: 51px;
+    background-image: url(https://eac.opendataforafrica.org/theme/img/logo_afbd.png);
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: contain;
+    text-decoration: none !important;
+    flex: 0 0 auto;
+}
+
+.afdb-logo-link:hover {
+    opacity: .9;
+}
+
+/* ---------------------------------------------------------
+   COPYRIGHT — BOTTOM CENTER
+--------------------------------------------------------- */
+
+.site-footer-bottom {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    border-top: 1px solid rgba(255, 255, 255, .20);
+    color: #c5dce9;
+    font-size: .78rem;
+    line-height: 1.5;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* The catalogue owns the shared header and footer; course frames contain content only. */
+body.course-view-active {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body.course-view-active > .site-footer {
+    display: block;
+}
+
+/* ---------------------------------------------------------
+   FOOTER — TABLET
+--------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+
+    .site-footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px 40px;
+        padding: 30px 36px 26px;
+    }
+
+}
+
+/* ---------------------------------------------------------
+   FOOTER — MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+    .site-footer-inner {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        padding: 28px 24px 24px;
+    }
+
+    .footer-afdb {
+        justify-content: flex-start;
+    }
+
+    .site-footer-bottom {
+        padding: 12px 20px;
+        font-size: .75rem;
+    }
+
+}
+
+/* =========================================================
+   EAC STATISTICS E-LEARNING — INSTITUTIONAL DESIGN SYSTEM
+========================================================= */
+
+
+/* =========================================================
+   DESIGN TOKENS
+========================================================= */
+
+:root {
+
+    --eac-navy: #0c2340;
+    --eac-navy-dark: #081a30;
+
+    --eac-blue: #48A6DB;
+    --eac-blue-light: #48A6DB;
+    --eac-blue-soft: #eaf1f9;
+
+    --eac-gold: #c9a227;
+    --eac-gold-light: #e8c547;
+    --eac-gold-soft: #fbf5df;
+
+    --eac-green: #2d6a4f;
+    --eac-red: #b91c1c;
+
+    --bg-page: #f5f7fa;
+    --bg-surface: #ffffff;
+    --bg-muted: #eef2f7;
+
+    --text-primary: #1a2332;
+    --text-secondary: #5a6578;
+    --text-muted: #8b95a5;
+
+    --border: #d8dee8;
+    --border-light: #e7ebf1;
+
+    --shadow-sm:
+        0 1px 3px rgba(12, 35, 64, 0.06);
+
+    --shadow-md:
+        0 4px 16px rgba(12, 35, 64, 0.08);
+
+    --shadow-lg:
+        0 8px 32px rgba(12, 35, 64, 0.12);
+
+    --radius: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    --header-h: 64px;
+    --sidebar-w: 280px;
+
+    --transition: 0.2s ease;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark-mode {
+
+    --bg-page: #0f1419;
+    --bg-surface: #1a2332;
+    --bg-muted: #243044;
+
+    --text-primary: #e8edf4;
+    --text-secondary: #a8b4c4;
+    --text-muted: #6b7a8f;
+
+    --border: #344055;
+    --border-light: #2a3445;
+
+    --eac-blue-soft: #182b46;
+    --eac-gold-soft: #332c16;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family:
+        'Source Sans 3',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        sans-serif;
+
+    background: var(--bg-page);
+    color: var(--text-primary);
+
+    line-height: 1.6;
+
+    min-height: 100vh;
+
+}
+
+
+body.modal-open {
+
+    overflow: hidden;
+
+}
+
+
+button,
+input,
+select,
+textarea {
+
+    font: inherit;
+
+}
+
+
+button {
+
+    cursor: pointer;
+
+}
+
+
+img {
+
+    max-width: 100%;
+    display: block;
+
+}
+
+
+a {
+
+    color: var(--eac-blue-light);
+    text-decoration: none;
+
+}
+
+
+a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: var(--header-h);
+
+    background-image: url("https://eac.opendataforafrica.org/theme/img/headbg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    border-bottom:
+        3px solid var(--eac-gold);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 1.5rem;
+
+    z-index: 1000;
+
+    box-shadow: var(--shadow-md);
+
+}
+
+
+.header-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.875rem;
+
+    color: #fff;
+
+    text-decoration: none;
+
+}
+
+
+.header-brand:hover {
+
+    text-decoration: none;
+
+}
+
+
+/* EAC logo */
+
+.brand-mark {
+
+    width: 44px;
+    height: 44px;
+
+    background: #fff;
+
+    border-radius: 6px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(255,255,255,0.25);
+
+}
+
+
+.brand-mark img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+}
+
+
+/* Optional brand text */
+
+.brand-text h1 {
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    color: #fff;
+
+    line-height: 1.2;
+
+}
+
+
+.brand-text span {
+
+    display: block;
+
+    font-size: 0.7rem;
+
+    color: rgba(255,255,255,0.75);
+
+}
+
+
+/* =========================================================
+   HEADER NAVIGATION
+========================================================= */
+
+.header-nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.35rem;
+
+}
+
+
+.nav-link {
+
+    color:
+        rgba(255,255,255,0.85);
+
+    padding:
+        0.5rem 0.875rem;
+
+    border-radius:
+        var(--radius);
+
+    font-size:
+        0.875rem;
+
+    font-weight:
+        500;
+
+    text-decoration:
+        none;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+
+}
+
+
+.nav-link:hover,
+.nav-link.active {
+
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #fff;
+
+    text-decoration: none;
+
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+}
+
+
+.btn-icon {
+
+    width: 38px;
+    height: 38px;
+
+    border:
+        1px solid rgba(255,255,255,0.2);
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #fff;
+
+    border-radius:
+        var(--radius);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background var(--transition);
+
+}
+
+
+.btn-icon:hover {
+
+    background:
+        rgba(255,255,255,0.18);
+
+}
+
+
+/* =========================================================
+   USER CHIP
+========================================================= */
+
+.user-chip {
+
+    display: none;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    padding:
+        0.375rem 0.75rem;
+
+    background:
+        rgba(255,255,255,0.1);
+
+    border-radius:
+        20px;
+
+    color: #fff;
+
+    font-size:
+        0.875rem;
+
+}
+
+
+.user-chip.visible {
+
+    display: flex;
+
+}
+
+
+.user-avatar {
+
+    width: 28px;
+    height: 28px;
+
+    background:
+        var(--eac-gold);
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+
+    font-size: 0.75rem;
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    padding:
+        0.625rem 1.25rem;
+
+    font-family: inherit;
+
+    font-size:
+        0.875rem;
+
+    font-weight:
+        600;
+
+    border-radius:
+        var(--radius);
+
+    border:
+        1px solid transparent;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+
+}
+
+
+.btn:hover {
+
+    text-decoration: none;
+
+}
+
+
+.btn:active {
+
+    transform: translateY(1px);
+
+}
+
+
+.btn-primary {
+
+    background:
+        var(--eac-blue);
+
+    color: #fff;
+
+}
+
+
+.btn-primary:hover {
+
+    background:
+        var(--eac-blue-light);
+
+    color: #fff;
+
+}
+
+
+.btn-gold {
+
+    background:
+        var(--eac-gold);
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+.btn-gold:hover {
+
+    background:
+        var(--eac-gold-light);
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+.btn-outline {
+
+    background:
+        transparent;
+
+    border:
+        1px solid var(--border);
+
+    color:
+        var(--text-primary);
+
+}
+
+
+.btn-outline:hover {
+
+    border-color:
+        var(--eac-blue);
+
+    color:
+        var(--eac-blue);
+
+    background:
+        var(--eac-blue-soft);
+
+}
+
+
+.btn-ghost-white {
+
+    background:
+        transparent;
+
+    border:
+        1px solid rgba(255,255,255,0.35);
+
+    color: #fff;
+
+}
+
+
+.btn-ghost-white:hover {
+
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #fff;
+
+}
+
+
+.btn-sm {
+
+    padding:
+        0.375rem 0.875rem;
+
+    font-size:
+        0.8125rem;
+
+}
+
+
+/* =========================================================
+   MAIN APP LAYOUT
+========================================================= */
+
+.app-layout {
+
+    display: flex;
+
+    margin-top:
+        var(--header-h);
+
+    height:
+        calc(100vh - var(--header-h));
+
+}
+
+
+.sidebar {
+
+    width:
+        var(--sidebar-w);
+
+    min-width:
+        200px;
+
+    background:
+        var(--bg-surface);
+
+    border-right:
+        1px solid var(--border);
+
+    overflow-y:
+        auto;
+
+    flex-shrink:
+        0;
+
+    transition:
+        transform var(--transition),
+        width var(--transition);
+
+}
+
+
+.sidebar-section {
+
+    padding:
+        1.25rem 1rem 0.5rem;
+
+}
+
+
+.sidebar-section h3 {
+
+    font-size:
+        0.6875rem;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.08em;
+
+    color:
+        var(--text-muted);
+
+    margin-bottom:
+        0.75rem;
+
+    padding:
+        0 0.5rem;
+
+}
+
+
+/* =========================================================
+   COURSE SIDEBAR
+========================================================= */
+
+.course-nav-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.75rem;
+
+    padding:
+        0.75rem;
+
+    border-radius:
+        var(--radius);
+
+    color:
+        var(--text-primary);
+
+    cursor: pointer;
+
+    border:
+        none;
+
+    background:
+        transparent;
+
+    width: 100%;
+
+    text-align: left;
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.875rem;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+
+}
+
+
+.course-nav-item:hover {
+
+    background:
+        var(--bg-muted);
+
+}
+
+
+.course-nav-item.active {
+
+    background:
+        var(--eac-blue-soft);
+
+    color:
+        var(--eac-blue);
+
+    font-weight:
+        600;
+
+}
+
+
+.course-nav-item i {
+
+    width:
+        20px;
+
+    color:
+        var(--eac-blue);
+
+    flex-shrink:
+        0;
+
+}
+
+
+.sidebar-empty {
+
+    padding:
+        0.75rem;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        0.8125rem;
+
+}
+
+
+/* =========================================================
+   SIDEBAR RESIZER
+========================================================= */
+
+.sidebar-resizer {
+
+    width:
+        4px;
+
+    cursor:
+        col-resize;
+
+    background:
+        var(--border);
+
+    flex-shrink:
+        0;
+
+    transition:
+        background var(--transition);
+
+}
+
+
+.sidebar-resizer:hover {
+
+    background:
+        var(--eac-blue);
+
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main-content {
+
+    flex:
+        1;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    overflow:
+        hidden;
+
+    min-width:
+        0;
+
+}
+
+
+/* =========================================================
+   CONTENT TOOLBAR
+========================================================= */
+
+.content-toolbar {
+
+    min-height:
+        58px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        1rem;
+
+    padding:
+        0.75rem 1.25rem;
+
+    background:
+        var(--bg-surface);
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.content-toolbar h2 {
+
+    font-size:
+        1rem;
+
+    font-weight:
+        600;
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+/* =========================================================
+   COURSE PROGRESS
+========================================================= */
+
+.progress-track {
+
+    width:
+        200px;
+
+    max-width:
+        25vw;
+
+    height:
+        7px;
+
+    background:
+        var(--bg-muted);
+
+    border-radius:
+        4px;
+
+    overflow:
+        hidden;
+
+}
+
+
+.progress-fill {
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--eac-blue),
+            var(--eac-gold)
+        );
+
+    width:
+        0%;
+
+    transition:
+        width 0.4s ease;
+
+}
+
+
+/* =========================================================
+   COURSE FRAME
+========================================================= */
+
+.content-frame-wrap {
+
+    flex:
+        1;
+
+    background:
+        var(--bg-muted);
+
+    min-height:
+        0;
+
+}
+
+
+.content-frame-wrap iframe {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    border:
+        none;
+
+    display:
+        block;
+
+    background:
+        #fff;
+
+}
+
+
+/* =========================================================
+   WELCOME PAGE
+========================================================= */
+
+.welcome-panel {
+
+    flex:
+        1;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        center;
+
+    padding:
+        3rem 2rem;
+
+    overflow-y:
+        auto;
+
+}
+
+
+.welcome-inner {
+
+    max-width:
+        1100px;
+
+    width:
+        100%;
+
+}
+
+
+.welcome-hero {
+
+    text-align:
+        center;
+
+    margin-bottom:
+        2.5rem;
+
+}
+
+
+.welcome-hero h2 {
+
+    font-size:
+        1.9rem;
+
+    font-weight:
+        700;
+
+    color:
+        var(--eac-navy);
+
+    margin-bottom:
+        0.75rem;
+
+}
+
+
+body.dark-mode .welcome-hero h2 {
+
+    color:
+        var(--text-primary);
+
+}
+
+
+.welcome-hero p {
+
+    font-size:
+        1.0625rem;
+
+    color:
+        var(--text-secondary);
+
+    max-width:
+        700px;
+
+    margin:
+        0 auto;
+
+}
+
+
+/* =========================================================
+   COURSE GRID
+========================================================= */
+
+.course-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(280px, 1fr)
+        );
+
+    gap:
+        1.25rem;
+
+}
+
+
+/* =========================================================
+   COURSE CARD
+========================================================= */
+
+.course-card {
+
+    background:
+        var(--bg-surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    overflow:
+        hidden;
+
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.course-card:hover {
+
+    box-shadow:
+        var(--shadow-md);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.course-card-header {
+
+    padding:
+        1.25rem;
+
+    min-height:
+        76px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--eac-navy),
+            var(--eac-blue)
+        );
+
+    color:
+        #fff;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.course-card-header > i {
+
+    font-size:
+        1.5rem;
+
+}
+
+
+.difficulty-tag {
+
+    font-size:
+        0.6875rem;
+
+    font-weight:
+        600;
+
+    text-transform:
+        uppercase;
+
+    padding:
+        0.25rem 0.5rem;
+
+    background:
+        rgba(255,255,255,0.2);
+
+    border-radius:
+        4px;
+
+}
+
+
+.course-card-body {
+
+    padding:
+        1.25rem;
+
+}
+
+
+.course-card-body h3 {
+
+    font-size:
+        1rem;
+
+    font-weight:
+        600;
+
+    margin-bottom:
+        0.5rem;
+
+}
+
+
+.course-card-body p {
+
+    font-size:
+        0.8125rem;
+
+    color:
+        var(--text-secondary);
+
+    margin-bottom:
+        1rem;
+
+}
+
+
+.course-meta {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        0.75rem 1rem;
+
+    font-size:
+        0.75rem;
+
+    color:
+        var(--text-muted);
+
+    margin-bottom:
+        1rem;
+
+}
+
+
+.course-meta span {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        0.3rem;
+
+}
+
+
+.course-card-actions {
+
+    display:
+        flex;
+
+    gap:
+        0.5rem;
+
+}
+
+
+.course-card-actions .btn {
+
+    flex:
+        1;
+
+}
+
+
+/* =========================================================
+   MINI COURSE PROGRESS
+========================================================= */
+
+.course-progress-mini {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        0.5rem;
+
+    margin-bottom:
+        1rem;
+
+}
+
+
+.course-progress-mini .progress-bar-inline {
+
+    flex:
+        1;
+
+}
+
+
+.course-progress-mini > span {
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        600;
+
+    color:
+        var(--text-secondary);
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal-overlay {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    background:
+        rgba(12,35,64,0.65);
+
+    display:
+        none;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    z-index:
+        2000;
+
+    padding:
+        1rem;
+
+    backdrop-filter:
+        blur(4px);
+
+}
+
+
+.modal-overlay.show {
+
+    display:
+        flex;
+
+}
+
+
+.modal {
+
+    background:
+        var(--bg-surface);
+
+    color:
+        var(--text-primary);
+
+    border-radius:
+        var(--radius-lg);
+
+    width:
+        100%;
+
+    max-width:
+        420px;
+
+    max-height:
+        calc(100vh - 2rem);
+
+    overflow-y:
+        auto;
+
+    box-shadow:
+        var(--shadow-lg);
+
+}
+
+
+.modal-header {
+
+    padding:
+        1.5rem 1.5rem 0;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+}
+
+
+.modal-header h3 {
+
+    font-size:
+        1.25rem;
+
+    font-weight:
+        700;
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+body.dark-mode .modal-header h3 {
+
+    color:
+        var(--text-primary);
+
+}
+
+
+.modal-close {
+
+    background:
+        none;
+
+    border:
+        none;
+
+    font-size:
+        1.5rem;
+
+    color:
+        var(--text-muted);
+
+    cursor:
+        pointer;
+
+    width:
+        32px;
+
+    height:
+        32px;
+
+}
+
+
+.modal-close:hover {
+
+    color:
+        var(--text-primary);
+
+}
+
+
+.modal-body {
+
+    padding:
+        1.5rem;
+
+}
+
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.form-group {
+
+    margin-bottom:
+        1rem;
+
+}
+
+
+.form-group label {
+
+    display:
+        block;
+
+    font-size:
+        0.8125rem;
+
+    font-weight:
+        600;
+
+    margin-bottom:
+        0.375rem;
+
+    color:
+        var(--text-secondary);
+
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width:
+        100%;
+
+    padding:
+        0.625rem 0.875rem;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.875rem;
+
+    background:
+        var(--bg-surface);
+
+    color:
+        var(--text-primary);
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--eac-blue);
+
+    box-shadow:
+        0 0 0 3px rgba(26,68,128,0.1);
+
+}
+
+
+.form-error {
+
+    color:
+        var(--eac-red);
+
+    font-size:
+        0.8125rem;
+
+    margin-top:
+        0.5rem;
+
+    display:
+        none;
+
+}
+
+
+.form-footer {
+
+    text-align:
+        center;
+
+    margin-top:
+        1rem;
+
+    font-size:
+        0.8125rem;
+
+    color:
+        var(--text-secondary);
+
+}
+
+
+.modal-body .btn {
+
+    width:
+        100%;
+
+    margin-top:
+        0.5rem;
+
+}
+
+
+.demo-hint {
+
+    margin-top:
+        1rem;
+
+    padding:
+        0.75rem;
+
+    background:
+        var(--bg-muted);
+
+    border-radius:
+        var(--radius);
+
+    font-size:
+        0.8125rem;
+
+    text-align:
+        center;
+
+    color:
+        var(--text-secondary);
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container {
+
+    position:
+        fixed;
+
+    bottom:
+        1.5rem;
+
+    right:
+        1.5rem;
+
+    z-index:
+        3000;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        0.5rem;
+
+    max-width:
+        min(420px, calc(100vw - 2rem));
+
+}
+
+
+.toast {
+
+    padding:
+        0.875rem 1.25rem;
+
+    background:
+        var(--eac-navy);
+
+    color:
+        #fff;
+
+    border-radius:
+        var(--radius);
+
+    font-size:
+        0.875rem;
+
+    border-left:
+        4px solid var(--eac-gold);
+
+    box-shadow:
+        var(--shadow-md);
+
+}
+
+
+.toast.error {
+
+    border-left-color:
+        var(--eac-red);
+
+}
+
+
+.toast.success {
+
+    border-left-color:
+        var(--eac-green);
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.page-container {
+
+    margin-top:
+        var(--header-h);
+
+    padding:
+        2rem 1.5rem;
+
+    max-width:
+        1200px;
+
+    margin-left:
+        auto;
+
+    margin-right:
+        auto;
+
+}
+
+
+.page-header {
+
+    margin-bottom:
+        2rem;
+
+}
+
+
+.page-header h1 {
+
+    font-size:
+        1.75rem;
+
+    font-weight:
+        700;
+
+    color:
+        var(--eac-navy);
+
+    margin-bottom:
+        0.5rem;
+
+}
+
+
+body.dark-mode .page-header h1 {
+
+    color:
+        var(--text-primary);
+
+}
+
+
+/* =========================================================
+   DASHBOARD STATS
+========================================================= */
+
+.stats-row {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(180px, 1fr)
+        );
+
+    gap:
+        1rem;
+
+    margin-bottom:
+        2rem;
+
+}
+
+
+.stat-card {
+
+    background:
+        var(--bg-surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    padding:
+        1.25rem;
+
+    border-top:
+        3px solid var(--eac-gold);
+
+    box-shadow:
+        var(--shadow-sm);
+
+}
+
+
+.stat-card .label {
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        600;
+
+    text-transform:
+        uppercase;
+
+    color:
+        var(--text-muted);
+
+    margin-bottom:
+        0.5rem;
+
+}
+
+
+.stat-card .value {
+
+    font-size:
+        2rem;
+
+    font-weight:
+        700;
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+body.dark-mode .stat-card .value {
+
+    color: #f7fbff !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,.28);
+
+}
+
+body.dark-mode .stat-card .label {
+    color: #b9c7d8 !important;
+}
+
+body.dark-mode .stat-card-icon {
+    color: #e8c547 !important;
+    background: rgba(232,197,71,.12) !important;
+}
+
+
+/* =========================================================
+   DASHBOARD PANELS
+========================================================= */
+
+.panel {
+
+    background:
+        var(--bg-surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    padding:
+        1.5rem;
+
+    margin-bottom:
+        1.5rem;
+
+}
+
+
+.panel h2 {
+
+    font-size:
+        1.125rem;
+
+    font-weight:
+        600;
+
+    margin-bottom:
+        1rem;
+
+    padding-bottom:
+        0.75rem;
+
+    border-bottom:
+        2px solid var(--eac-gold);
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+body.dark-mode .panel h2 {
+
+    color:
+        var(--text-primary);
+
+}
+
+
+/* =========================================================
+   ENROLLED COURSE LIST
+========================================================= */
+
+.list-item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        1rem;
+
+    padding:
+        1rem;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    margin-bottom:
+        0.75rem;
+
+    background:
+        var(--bg-page);
+
+}
+
+
+.list-item-info {
+
+    min-width:
+        0;
+
+}
+
+
+.list-item-info h4 {
+
+    font-size:
+        0.9375rem;
+
+    font-weight:
+        600;
+
+    margin-bottom:
+        0.25rem;
+
+}
+
+
+.list-item-info span {
+
+    font-size:
+        0.8125rem;
+
+    color:
+        var(--text-secondary);
+
+}
+
+
+/* =========================================================
+   INLINE PROGRESS
+========================================================= */
+
+.progress-bar-inline {
+
+    width:
+        120px;
+
+    height:
+        6px;
+
+    background:
+        var(--bg-muted);
+
+    border-radius:
+        3px;
+
+    overflow:
+        hidden;
+
+}
+
+
+.progress-bar-inline div {
+
+    height:
+        100%;
+
+    background:
+        var(--eac-blue);
+
+    transition:
+        width 0.3s ease;
+
+}
+
+
+/* =========================================================
+   CERTIFICATES
+========================================================= */
+
+.cert-card {
+
+    border:
+        2px solid var(--eac-gold);
+
+    border-radius:
+        var(--radius-lg);
+
+    padding:
+        1.5rem;
+
+    text-align:
+        center;
+
+    background:
+        var(--bg-muted);
+
+    margin-bottom:
+        1rem;
+
+}
+
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+.leaderboard-table {
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+}
+
+
+.leaderboard-table th,
+.leaderboard-table td {
+
+    padding:
+        0.875rem 1rem;
+
+    text-align:
+        left;
+
+    border-bottom:
+        1px solid var(--border);
+
+    font-size:
+        0.875rem;
+
+}
+
+
+.leaderboard-table th {
+
+    font-size:
+        0.75rem;
+
+    text-transform:
+        uppercase;
+
+    color:
+        var(--text-muted);
+
+}
+
+
+.rank-badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    border-radius:
+        50%;
+
+    font-weight:
+        700;
+
+    font-size:
+        0.8125rem;
+
+    background:
+        var(--bg-muted);
+
+}
+
+
+.rank-1 {
+
+    background:
+        var(--eac-gold);
+
+    color:
+        var(--eac-navy);
+
+}
+
+
+.rank-2 {
+
+    background:
+        #c0c0c0;
+
+    color:
+        #333;
+
+}
+
+
+.rank-3 {
+
+    background:
+        #cd7f32;
+
+    color:
+        #fff;
+
+}
+
+
+.rank-change {
+
+    margin-left:
+        0.5rem;
+
+    font-size:
+        1.1rem;
+
+    font-weight:
+        600;
+
+}
+
+
+.rank-change.up {
+
+    color:
+        var(--eac-green);
+
+}
+
+
+.rank-change.down {
+
+    color:
+        var(--eac-red);
+
+}
+
+
+/* =========================================================
+   FORUM
+========================================================= */
+
+.forum-layout {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        240px 1fr;
+
+    gap:
+        1.5rem;
+
+}
+
+
+.forum-topics button {
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    text-align:
+        left;
+
+    padding:
+        0.75rem 1rem;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    background:
+        var(--bg-page);
+
+    margin-bottom:
+        0.5rem;
+
+    cursor:
+        pointer;
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.875rem;
+
+    color:
+        var(--text-primary);
+
+}
+
+
+.forum-topics button.active {
+
+    border-color:
+        var(--eac-blue);
+
+    background:
+        var(--eac-blue-soft);
+
+    color:
+        var(--eac-blue);
+
+    font-weight:
+        600;
+
+}
+
+
+.comment-card {
+
+    padding:
+        1rem;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    margin-bottom:
+        0.75rem;
+
+    background:
+        var(--bg-page);
+
+}
+
+
+.comment-header {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        0.5rem;
+
+    font-size:
+        0.8125rem;
+
+}
+
+
+.comment-author {
+
+    font-weight:
+        600;
+
+    color:
+        var(--eac-blue);
+
+}
+
+
+.comment-date {
+
+    color:
+        var(--text-muted);
+
+}
+
+
+.comment-actions {
+
+    margin-top:
+        0.75rem;
+
+    display:
+        flex;
+
+    gap:
+        1rem;
+
+    font-size:
+        0.8125rem;
+
+}
+
+
+.comment-actions button {
+
+    background:
+        none;
+
+    border:
+        none;
+
+    color:
+        var(--text-secondary);
+
+    cursor:
+        pointer;
+
+    font-family:
+        inherit;
+
+}
+
+
+/* =========================================================
+   MOBILE NAVIGATION
+========================================================= */
+
+.menu-toggle {
+
+    display:
+        none;
+
+}
+
+
+.mobile-overlay {
+
+    display:
+        none;
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    background:
+        rgba(0,0,0,0.45);
+
+    z-index:
+        999;
+
+}
+
+
+.mobile-overlay.show {
+
+    display:
+        block;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .menu-toggle {
+
+        display:
+            flex;
+
+    }
+
+
+    .header-nav {
+
+        display:
+            none;
+
+    }
+
+
+    .sidebar {
+
+        position:
+            fixed;
+
+        top:
+            var(--header-h);
+
+        left:
+            0;
+
+        bottom:
+            0;
+
+        z-index:
+            1000;
+
+        width:
+            var(--sidebar-w);
+
+        transform:
+            translateX(-100%);
+
+        box-shadow:
+            var(--shadow-lg);
+
+    }
+
+
+    .sidebar.open {
+
+        transform:
+            translateX(0);
+
+    }
+
+
+    .sidebar-resizer {
+
+        display:
+            none;
+
+    }
+
+
+    .content-toolbar {
+
+        gap:
+            0.75rem;
+
+    }
+
+
+    .progress-track {
+
+        max-width:
+            150px;
+
+    }
+
+
+    .forum-layout {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    :root {
+
+        --header-h:
+            60px;
+
+    }
+
+
+    .site-header {
+
+        padding:
+            0 0.75rem;
+
+    }
+
+
+    .brand-mark {
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+    }
+
+
+    .header-actions {
+
+        gap:
+            0.3rem;
+
+    }
+
+
+    .user-chip {
+
+        padding:
+            0.25rem 0.5rem;
+
+    }
+
+
+    .user-chip span {
+
+        display:
+            none;
+
+    }
+
+
+    .btn-ghost-white {
+
+        padding:
+            0.375rem 0.625rem;
+
+    }
+
+
+    .app-layout {
+
+        height:
+            calc(100vh - var(--header-h));
+
+    }
+
+
+    .welcome-panel {
+
+        padding:
+            2rem 1rem;
+
+    }
+
+
+    .welcome-hero h2 {
+
+        font-size:
+            1.5rem;
+
+    }
+
+
+    .welcome-hero p {
+
+        font-size:
+            0.9375rem;
+
+    }
+
+
+    .course-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .content-toolbar {
+
+        padding:
+            0.625rem 0.75rem;
+
+    }
+
+
+    .content-toolbar h2 {
+
+        font-size:
+            0.875rem;
+
+    }
+
+
+    .progress-track {
+
+        width:
+            100px;
+
+    }
+
+
+    .content-toolbar .btn {
+
+        padding:
+            0.3rem 0.5rem;
+
+        font-size:
+            0.75rem;
+
+    }
+
+
+    .stats-row {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .page-container {
+
+        padding:
+            1.25rem 0.75rem;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size:
+            1.4rem;
+
+    }
+
+
+    .panel {
+
+        padding:
+            1rem;
+
+    }
+
+
+    .list-item {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .list-item > div:last-child {
+
+        width:
+            100%;
+
+        justify-content:
+            space-between;
+
+    }
+
+
+    .progress-bar-inline {
+
+        width:
+            100px;
+
+    }
+
+
+    .leaderboard-table {
+
+        min-width:
+            500px;
+
+    }
+
+
+    .panel {
+
+        overflow-x:
+            auto;
+
+    }
+
+
+    .toast-container {
+
+        right:
+            0.75rem;
+
+        left:
+            0.75rem;
+
+        bottom:
+            0.75rem;
+
+        max-width:
+            none;
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+
+    outline:
+        3px solid rgba(46,108,181,0.35);
+
+    outline-offset:
+        2px;
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        scroll-behavior:
+            auto !important;
+
+        transition:
+            none !important;
+
+    }
+
+}
+/* =========================================================
+   PROFESSIONAL COURSE MARKS
+   Replaces decorative course icons with restrained academic
+   code marks that work consistently without an icon library.
+========================================================= */
+.course-code {
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    color: #fff;
+    background: rgba(255,255,255,.12);
+}
+
+.course-nav-code {
+    width: 34px;
+    height: 28px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: var(--eac-blue, #123f68);
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+}
+
+.modal-overlay[hidden] { display: none !important; }
+body.modal-open { overflow: hidden; }
+
+/* Final institutional polish */
+.brand-mark{width:44px;height:44px;background:#fff;border-radius:8px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.35)}
+.brand-mark img{width:38px;height:38px;object-fit:contain}
+.course-card{transition:transform .18s ease,box-shadow .18s ease}
+.course-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.course-code{font-weight:800;letter-spacing:.06em}
+
+.language-select{padding:.35rem .45rem;border:1px solid rgba(255,255,255,.35);border-radius:6px;background:rgba(255,255,255,.12);color:#fff;font-weight:700}
+.language-select option{color:#111;background:#fff}
+.language-floating{position:fixed;top:1rem;right:1rem;z-index:1000;background:#123f68}
+.course-search{display:flex;align-items:center;gap:.75rem;margin:1rem 0 1.25rem;padding:.75rem 1rem;border:1px solid var(--border-color,#e5e7eb);border-radius:10px;background:var(--card-bg,#fff)}
+.course-search label{white-space:nowrap;color:var(--text-secondary,#6b7280);font-size:.85rem;font-weight:700}
+.course-search input{width:100%;border:0;outline:0;background:transparent;color:var(--text-primary,#111827);font-size:.95rem}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+body.dark-mode .course-search{background:var(--card-bg,#172b42)}
+.course-row-actions{display:flex;gap:6px;align-items:center;margin-left:auto}.btn-danger{background:#b42318;color:#fff;border:1px solid #b42318}.btn-danger:hover{background:#8f1c14;border-color:#8f1c14}
+
+
+/* =========================================================
+   RESPONSIVE HARDENING — phones & tablets
+========================================================= */
+.site-header{min-width:0;overflow:hidden}
+.header-brand,.header-nav,.header-actions{min-width:0}
+.header-nav{overflow-x:auto;scrollbar-width:none}.header-nav::-webkit-scrollbar{display:none}
+.header-actions{overflow-x:auto;scrollbar-width:none;white-space:nowrap}.header-actions::-webkit-scrollbar{display:none}
+.main-content{min-width:0;overflow:hidden}
+.content-frame-wrap{min-width:0;overflow:hidden}
+.content-frame-wrap iframe{min-height:100%;height:100%;width:100%;display:block}
+.page-container,.forum-page{width:100%;min-width:0}
+.panel,.forum-panel{min-width:0}
+.table-responsive,.panel table,.leaderboard-table{max-width:100%;overflow-x:auto}
+
+@media (max-width: 900px){
+  .site-header{padding:0 .75rem;gap:.5rem}
+  .header-nav{display:flex;flex:1;justify-content:center}
+  .header-nav .nav-link{white-space:nowrap;padding:.45rem .65rem;font-size:.78rem}
+  .header-actions{flex:0 1 auto;gap:.3rem}
+  .brand-text{display:none}
+  .app-layout{min-height:calc(100vh - var(--header-h))}
+  .page-container{padding-left:1rem;padding-right:1rem}
+  .forum-page{padding-left:1rem;padding-right:1rem}
+}
+
+@media (max-width: 600px){
+  :root{--header-h:58px}
+  .site-header{padding:0 .55rem}
+  .brand-mark{width:36px;height:36px;flex:0 0 36px}
+  .header-brand{gap:.35rem}
+  .header-nav{display:none}
+  .header-actions{margin-left:auto;max-width:calc(100vw - 92px)}
+  .header-actions .language-select{font-size:.72rem;padding:.28rem .35rem}
+  .header-actions .btn-icon{width:34px;height:34px;flex:0 0 34px}
+  .header-actions .btn-sm{padding:.3rem .5rem;font-size:.72rem}
+  .header-actions .btn-gold{display:none}
+  .user-chip{display:none!important}
+  .welcome-panel{padding:1rem .65rem}
+  .welcome-inner{width:100%}
+  .course-search{flex-direction:column;align-items:stretch;gap:.45rem;padding:.65rem}
+  .course-grid{grid-template-columns:1fr;gap:.85rem}
+  .course-card{width:100%;min-width:0}
+  .course-card-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:.5rem}
+  .course-card-actions .btn{width:100%;min-width:0}
+  .content-toolbar{flex-wrap:wrap;align-items:center}
+  .content-toolbar h2{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .content-toolbar .progress-track{flex:1;min-width:90px;width:auto;max-width:none}
+  .content-frame-wrap{height:calc(100vh - var(--header-h) - 62px);min-height:520px}
+  .page-container{padding:.9rem .7rem 1.5rem}
+  .page-header{margin-bottom:1rem}
+  .page-header h1{font-size:1.3rem}
+  .stats-row{grid-template-columns:1fr 1fr;gap:.65rem}
+  .stat-card{padding:.85rem}
+  .stat-card .value{font-size:1.45rem}
+  .forum-page{padding:76px .7rem 1.5rem}
+  .forum-grid{grid-template-columns:1fr;gap:.75rem}
+  .forum-panel{border-radius:10px}
+  .topic-list{max-height:240px;overflow-y:auto}
+  .composer-actions{flex-direction:column;align-items:stretch}
+  .composer-actions .btn{width:100%}
+  .comment-card.reply{margin-left:10px}
+  .list-item{width:100%;overflow:hidden}
+  .list-item > div{max-width:100%}
+}
+
+@media (min-width: 601px) and (max-width: 900px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .forum-grid{grid-template-columns:220px 1fr}
+  .course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* =========================================================
+   COURSE READER: COLLAPSIBLE SIDEBAR + ONE PAGE SCROLLBAR
+========================================================= */
+
+.sidebar{overflow:visible}
+.sidebar-section{height:100%;overflow-y:auto;overscroll-behavior:contain}
+
+.sidebar-toggle{
+  position:absolute;
+  top:12px;
+  right:-18px;
+  z-index:30;
+  width:36px;
+  height:36px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:var(--bg-surface);
+  color:var(--eac-blue);
+  box-shadow:0 3px 10px rgba(16,55,86,.16);
+  cursor:pointer;
+  transition:background var(--transition),color var(--transition),transform var(--transition);
+}
+
+.sidebar-toggle:hover{
+  background:var(--eac-blue);
+  color:#fff;
+  transform:scale(1.05);
+}
+
+.sidebar-toggle:focus-visible{
+  outline:3px solid rgba(72,166,219,.38);
+  outline-offset:2px;
+}
+
+@media (min-width:901px){
+  .sidebar{position:relative;z-index:20}
+  .sidebar.sidebar-collapsed{width:0!important;min-width:0;border-right-width:0;overflow:visible}
+  .sidebar.sidebar-collapsed .sidebar-section{opacity:0;visibility:hidden;pointer-events:none}
+  .sidebar.sidebar-collapsed + .sidebar-resizer{display:none}
+  .sidebar.sidebar-collapsed .sidebar-toggle{right:-42px}
+
+  body.course-view-active .sidebar{
+    position:sticky;
+    top:var(--header-h);
+    align-self:flex-start;
+    height:calc(100vh - var(--header-h));
+  }
+}
+
+@media (max-width:900px){
+  .sidebar-toggle{top:10px;right:12px}
+}
+
+/* The parent page owns vertical scrolling while an embedded course is open. */
+body.course-view-active .app-layout{
+  height:auto;
+  min-height:calc(100vh - var(--header-h));
+}
+
+body.course-view-active .main-content,
+body.course-view-active .content-frame-wrap{
+  overflow:visible;
+}
+
+body.course-view-active .content-frame-wrap{
+  flex:0 0 auto;
+  height:auto;
+  min-height:0;
+}
+
+body.course-view-active .content-frame-wrap iframe{
+  height:720px;
+  min-height:0;
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   HEADER COURSE DROPDOWN
+========================================================= */
+
+/* Shared authentication header (login, administrator login, registration and
+   password reset). Keep this in the global stylesheet because every auth page
+   renders the same includes/header.php variant. */
+.eac-login-topbar{
+  min-height:74px;background:#fff;border-bottom:1px solid #d9e4ec;
+  display:flex;align-items:center;padding:10px clamp(18px,5vw,72px);gap:14px;
+  box-shadow:0 2px 9px rgba(0,40,79,.06);position:relative;z-index:1000
+}
+.eac-login-brand-link{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.eac-login-topbar img{width:48px!important;height:48px!important;max-width:48px;object-fit:contain;flex:0 0 48px}
+.eac-login-brand{display:flex;flex-direction:column;line-height:1.2}
+.eac-login-brand strong{font-size:1rem;color:#0c4778}
+.eac-login-brand span{font-size:.74rem;color:#637687;font-weight:700;letter-spacing:.04em}
+.eac-login-topbar .spacer{flex:1}
+.eac-login-back{display:inline-flex;align-items:center;gap:5px;color:#0c4778;font-weight:700;text-decoration:none;font-size:.9rem;white-space:nowrap}
+.eac-login-back:hover{text-decoration:underline}
+
+@media(max-width:620px){
+  .eac-login-topbar{padding:9px 14px;gap:9px;flex-wrap:wrap}
+  .eac-login-brand-link{margin-right:auto}
+  .eac-login-topbar .spacer{display:none}
+  .eac-login-back{font-size:.78rem}
+}
+
+.nav-dropdown{position:relative;display:flex;align-items:center}
+.nav-dropdown-toggle{font-family:inherit;border:0;cursor:pointer;background:transparent;color:rgba(255,255,255,0.85)}
+.nav-dropdown-chevron{font-size:.68rem;margin-left:.18rem;transition:transform var(--transition)}
+.nav-dropdown.open .nav-dropdown-chevron{transform:rotate(180deg)}
+.nav-dropdown-menu{
+    position:absolute;top:calc(100% + 10px);left:0;z-index:1200;
+    min-width:220px;padding:.45rem;background:var(--bg-surface);
+    border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);
+    opacity:0;visibility:hidden;transform:translateY(-6px);pointer-events:none;
+    transition:opacity var(--transition),transform var(--transition),visibility var(--transition)
+}
+.nav-dropdown.open .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu{
+    opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto
+}
+.nav-dropdown-item{
+    width:100%;display:flex;align-items:center;gap:.65rem;padding:.65rem .75rem;
+    border:0;border-radius:7px;background:transparent;color:var(--text-primary);
+    font:600 .84rem 'Source Sans 3','Segoe UI',sans-serif;text-align:left;text-decoration:none;cursor:pointer
+}
+.nav-dropdown-item i{width:18px;color:var(--eac-blue);text-align:center}
+.nav-dropdown-item:hover:not(:disabled),.nav-dropdown-item:focus-visible:not(:disabled){background:var(--eac-blue-soft);color:var(--eac-blue);outline:none;text-decoration:none}
+.nav-dropdown-item:disabled{opacity:.42;cursor:not-allowed}
+body.course-view-active #courseNavToggle{background:transparent;color:rgba(255,255,255,.85)}
+body.course-view-active #platformHomeLink{background:transparent}
+
+/* Desktop dropdowns must be allowed to extend below the fixed header. The
+   responsive hardening rules above use overflow clipping/scrolling, which
+   otherwise hides this absolutely positioned menu after the toggle opens. */
+@media(min-width:901px){
+  .site-header{overflow:visible}
+  .header-nav{overflow:visible}
+  .nav-dropdown-menu{z-index:1300}
+}
+
+@media(max-width:900px){
+  .nav-dropdown-menu{left:auto;right:0}
+}
+
+/* EAC brand colour and descriptive catalogue headings. */
+.welcome-hero {
+    background: var(--eac-blue);
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+}
+.welcome-hero h2,
+body.dark-mode .welcome-hero h2,
+.welcome-hero p { color: #102d46; }
+.course-card-header { background: var(--eac-blue); align-items: center; }
+.course-card-title { margin: 0; color: #102d46; font-size: 1.15rem; line-height: 1.4; }
+.theme-toggle { width: auto; gap: .45rem; padding: .5rem .65rem; }
+.theme-toggle span { font-size: .8rem; white-space: nowrap; }
