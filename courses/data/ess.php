@@ -12,7 +12,7 @@
 <div class="feat-grid"><div class="feat"><div class="ic">🧭</div><h3>Conceptual framework</h3><p>The external accounts, the BPM7 manual, the accounting rules, and the units and sectors behind every entry.</p></div><div class="feat"><div class="ic">💱</div><h3>The current account</h3><p>Goods, services, earned income and transfer income — with the 17 services, the GATS modes and double-entry recording.</p></div><div class="feat"><div class="ic">🏛️</div><h3>Capital &amp; financial accounts</h3><p>Capital transfers and nonproduced assets; the five functional categories, instruments, sectors and maturity.</p></div><div class="feat"><div class="ic">📊</div><h3>The IIP</h3><p>The stock counterpart of the BOP — net creditor or debtor, the integrated IIP, and how to read the balances.</p></div><div class="feat"><div class="ic">📈</div><h3>Worked examples &amp; checks</h3><p>Knowledge checks and drag-and-drop activities in every module reinforce each concept as you go.</p></div><div class="feat"><div class="ic">🎓</div><h3>Assessment &amp; certificate</h3><p>A shuffled final assessment from a 36-question bank, with a downloadable certificate on success.</p></div></div>
 <div class="start-cta">
 <div class="cta-row">
-<button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button>
+<button class="btn btn-blue btn-lg" data-screen="hub">Submit</button>
 <a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a>
 </div>
 <p class="cta-note">Sign in is required to access course modules, assessments, progress tracking and certificates.</p>
@@ -812,7 +812,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();

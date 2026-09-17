@@ -630,7 +630,7 @@ try {
         $sql='SELECT id,slug,title,description,category,difficulty,duration,contentPath,icon,rating,studentCount,publicationStatus,createdAt FROM courses WHERE publicationStatus=\'published\''; $p=[];
         if($search!==''){ $sql.=' AND (title LIKE ? OR description LIKE ? OR category LIKE ?)'; $term='%'.$search.'%'; $p=[$term,$term,$term]; }
         if($category!==''){ $sql.=' AND category=?'; $p[]=$category; } if($difficulty!==''){ $sql.=' AND difficulty=?'; $p[]=$difficulty; }
-        $sql.=" ORDER BY CASE slug WHEN 'fsi' THEN 1 WHEN 'mfs' THEN 2 WHEN 'gfs' THEN 3 WHEN 'psds' THEN 4 WHEN 'fns' THEN 5 WHEN 'poverty' THEN 6 WHEN 'ess' THEN 7 ELSE 99 END, title ASC"; $s=db()->prepare($sql); $s->execute($p); $rows=$s->fetchAll();
+        $sql.=" ORDER BY title ASC"; $s=db()->prepare($sql); $s->execute($p); $rows=$s->fetchAll();
         jsonResponse(['success'=>true,'courses'=>array_map('normaliseCourse',$rows)]);
     }
 

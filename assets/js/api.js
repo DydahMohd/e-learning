@@ -944,8 +944,8 @@ function applyDarkMode() {
 
         button.innerHTML =
             dark
-                ? '<i class="fas fa-sun"></i>'
-                : '<i class="fas fa-moon"></i>';
+                ? '<i class="fas fa-sun" aria-hidden="true"></i><span>Eye comfort</span>'
+                : '<i class="fas fa-moon" aria-hidden="true"></i><span>Eye comfort</span>';
 
 
         button.setAttribute(
@@ -1077,6 +1077,8 @@ Object.assign(eacTextTranslations, {
     'Country': {sw:'Nchi',fr:'Pays'},
     'Role / job title': {sw:'Wadhifa / cheo cha kazi',fr:'Fonction / intitulé du poste'},
     'Select…': {sw:'Chagua…',fr:'Sélectionnez…'},
+    'Submit': {sw:'Wasilisha',fr:'Envoyer'},
+    'Eye comfort': {sw:'Faraja ya macho',fr:'Confort visuel'},
     'Start the course →': {sw:'Anza kozi →',fr:'Commencer le cours →'},
     'Administrator?': {sw:'Msimamizi?',fr:'Administrateur ?'},
     'Sign in to administration': {sw:'Ingia kwenye usimamizi',fr:'Se connecter à l’administration'},

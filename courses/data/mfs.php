@@ -12,7 +12,7 @@
 <div class="feat-grid"><div class="feat"><div class="ic">🏦</div><h3>Foundations of MFS</h3><p>What MFS is, the five institutional sectors, residency, and the split between depository and other financial corporations.</p></div><div class="feat"><div class="ic">⚖️</div><h3>The monetary framework</h3><p>Money holding, issuing and neutral sectors, the headline measures, and the building blocks — NFA, NDA, credit, capital and other items net.</p></div><div class="feat"><div class="ic">📋</div><h3>Depository surveys &amp; broad money</h3><p>The Central Bank and ODC surveys, the consolidated Depository Corporations Survey, and broad money from M1 to M6.</p></div><div class="feat"><div class="ic">🏛️</div><h3>OFC &amp; Financial Corporations surveys</h3><p>Adding the non-deposit-takers and consolidating the whole financial sector, with full aggregates tables.</p></div><div class="feat"><div class="ic">📈</div><h3>Other MFS indicators</h3><p>The family of interest rates and an interactive breakdown of lending by economic activity.</p></div><div class="feat"><div class="ic">🎓</div><h3>Assessment &amp; certificate</h3><p>A shuffled final assessment drawn from a question bank, with a downloadable certificate on success.</p></div></div>
 <div class="start-cta">
 <div class="cta-row">
-<button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button>
+<button class="btn btn-blue btn-lg" data-screen="hub">Submit</button>
 <a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a>
 </div>
 <p class="cta-note">Sign in is required to access course modules, assessments, progress tracking and certificates.</p>
@@ -436,7 +436,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();

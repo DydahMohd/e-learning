@@ -12,7 +12,7 @@
 <div class="feat-grid"><div class="feat"><div class="ic">📐</div><h3>Foundations of PSDS</h3><p>What PSDS is, the meaning of a debt instrument, the purpose of the statistics, and the PSDSG 2013 standard.</p></div><div class="feat"><div class="ic">🏛️</div><h3>Coverage &amp; instruments</h3><p>General government and public corporations, the debt instruments from SDRs to other payables, and where to find the data.</p></div><div class="feat"><div class="ic">🗂️</div><h3>Classifying public debt</h3><p>By residence, creditor, maturity, instrument type and currency — and general government debt versus public sector debt.</p></div><div class="feat"><div class="ic">📊</div><h3>Gross, net &amp; convergence</h3><p>Gross versus net debt, the debt-to-GDP ratio, and the EAMU public-debt convergence ceiling.</p></div><div class="feat"><div class="ic">🛡️</div><h3>Risk &amp; sustainability</h3><p>Contingent liabilities, the debt sustainability indicators, and debt rescheduling versus restructuring.</p></div><div class="feat"><div class="ic">🎓</div><h3>Assessment &amp; certificate</h3><p>A shuffled final assessment drawn from a large question bank, with a downloadable certificate on success.</p></div></div>
 <div class="start-cta">
 <div class="cta-row">
-<button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button>
+<button class="btn btn-blue btn-lg" data-screen="hub">Submit</button>
 <a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a>
 </div>
 <p class="cta-note">Sign in is required to access course modules, assessments, progress tracking and certificates.</p>
@@ -417,7 +417,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();

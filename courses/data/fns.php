@@ -12,7 +12,7 @@
 <div class="feat-grid"><div class="feat"><div class="ic">🍚</div><h3>Foundations of FNS</h3><p>What food and nutrition security means, the global and EAC context, and the types of food insecurity.</p></div><div class="feat"><div class="ic">🧱</div><h3>The four pillars</h3><p>Availability, access, utilization and stability — how each pillar works and how they depend on one another.</p></div><div class="feat"><div class="ic">📊</div><h3>Household assessment tools</h3><p>The IPC, Food Consumption Score, dietary diversity, coping-strategy and hunger scales used to measure food security.</p></div><div class="feat"><div class="ic">📏</div><h3>Nutrition indicators</h3><p>Anthropometric measures, MUAC, and infant and young child feeding (IYCF) indicators, with survey design and data quality.</p></div><div class="feat"><div class="ic">🏛️</div><h3>The EAC FNS framework</h3><p>The regional assessment framework, its core indicators, and how they map to the four pillars and global goals.</p></div><div class="feat"><div class="ic">🔗</div><h3>Connecting the framework</h3><p>Overcoming fragmentation — the institutional architecture and harmonised methodologies that tie the system together.</p></div><div class="feat"><div class="ic">🎓</div><h3>Assessment &amp; certificate</h3><p>A shuffled final assessment drawn from a question bank, with a downloadable certificate on success.</p></div></div>
 <div class="start-cta">
 <div class="cta-row">
-<button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button>
+<button class="btn btn-blue btn-lg" data-screen="hub">Submit</button>
 <a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a>
 </div>
 <p class="cta-note">Sign in is required to access course modules, assessments, progress tracking and certificates.</p>
@@ -7703,7 +7703,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();

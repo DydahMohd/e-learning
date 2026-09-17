@@ -305,7 +305,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();

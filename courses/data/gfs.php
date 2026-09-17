@@ -12,7 +12,7 @@
 <div class="feat-grid"><div class="feat"><div class="ic">🏛️</div><h3>Foundations of GFS</h3><p>What GFS is, the EAC context and its fiscal goals, the GFSM 2014 framework, and cash versus accrual recording.</p></div><div class="feat"><div class="ic">📐</div><h3>Analytical framework &amp; transactions</h3><p>The integrated GFSM 2014 framework, the five transaction types, the fiscal balance, and how it is financed.</p></div><div class="feat"><div class="ic">🗂️</div><h3>Coverage, sources &amp; classifications</h3><p>The public sector — general government and public corporations — the data sources, and the economic, functional (COFOG) and revenue classifications.</p></div><div class="feat"><div class="ic">📊</div><h3>Fiscal analysis &amp; EAMU convergence</h3><p>The fiscal balance, the indicators used in international comparisons, the 3%/6%/50% convergence ceilings, and net worth.</p></div><div class="feat"><div class="ic">⛏️</div><h3>Debt &amp; natural resources</h3><p>GFS treatment of debt restructuring and the classification of natural resource revenues, with a sustainability lens.</p></div><div class="feat"><div class="ic">🎓</div><h3>Assessment &amp; certificate</h3><p>A shuffled final assessment drawn from a question bank, with a downloadable certificate on success.</p></div></div>
 <div class="start-cta">
 <div class="cta-row">
-<button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button>
+<button class="btn btn-blue btn-lg" data-screen="hub">Submit</button>
 <a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a>
 </div>
 <p class="cta-note">Sign in is required to access course modules, assessments, progress tracking and certificates.</p>
@@ -419,7 +419,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();
