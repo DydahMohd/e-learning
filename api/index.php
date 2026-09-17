@@ -54,6 +54,12 @@ function courseContentSourcePath(int $courseId, string $contentPath): ?string {
         7 => 'courses/data/ess.php',
     ];
     $candidate = $builtIn[$courseId] ?? $contentPath;
+    if (!isset($builtIn[$courseId]) && preg_match('#^courses/([a-z0-9-]+)\.php$#', str_replace('\\', '/', $contentPath), $match)) {
+        $managedDataPath = 'courses/data/' . $match[1] . '.php';
+        if (is_file($root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $managedDataPath))) {
+            $candidate = $managedDataPath;
+        }
+    }
     $file = realpath($root . DIRECTORY_SEPARATOR . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $candidate));
     if (!$file || !str_starts_with($file, $root . DIRECTORY_SEPARATOR) || !is_readable($file)) {
         return null;
@@ -387,6 +393,9 @@ function validateCourseContentPath(mixed $value): string {
 function sanitiseManagedCourseContent(string $content): string {
     if (strlen($content) > 5 * 1024 * 1024) jsonError('Course content file must not exceed 5 MB.', 422);
     $content = preg_replace('/<\?(?:php|=)?[\s\S]*?\?>/i', '', $content) ?? '';
+    $content = preg_replace('#<script\b[^>]*>[\s\S]*?</script>#i', '', $content) ?? '';
+    $content = preg_replace('#<style\b[^>]*>[\s\S]*?</style>#i', '', $content) ?? '';
+    if (preg_match('#<body\b[^>]*>([\s\S]*?)</body>#i', $content, $body)) $content = $body[1];
     $allowed = '<p><h2><h3><h4><h5><ul><ol><li><strong><b><em><i><blockquote><table><thead><tbody><tr><th><td><a><br><hr>';
     $content = strip_tags($content, $allowed);
     $content = preg_replace('/\s+on[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content) ?? $content;
@@ -395,6 +404,23 @@ function sanitiseManagedCourseContent(string $content): string {
     $content = trim($content);
     if ($content === '') jsonError('The uploaded course content is empty.', 422);
     return $content;
+}
+
+function sanitiseStructuredCourseContent(string $content): ?string {
+    if (!preg_match('/id=["\']screen-hub["\']/i', $content) || !preg_match('/id=["\']screen-module["\']/i', $content)) return null;
+    $content = preg_replace('/<\?(?:php|=)?[\s\S]*?\?>/i', '', $content) ?? '';
+    $content = preg_replace('#<script\b[^>]*>[\s\S]*?</script>#i', '', $content) ?? '';
+    $content = preg_replace('#<style\b[^>]*>[\s\S]*?</style>#i', '', $content) ?? '';
+    $content = preg_replace('#<(?:iframe|object|embed)\b[^>]*>[\s\S]*?</(?:iframe|object|embed)>#i', '', $content) ?? '';
+    if (preg_match('#<body\b[^>]*>([\s\S]*?)</body>#i', $content, $body)) $content = $body[1];
+    $firstSection = stripos($content, '<section');
+    $lastSection = strripos($content, '</section>');
+    if ($firstSection === false || $lastSection === false) return null;
+    $content = substr($content, $firstSection, $lastSection + strlen('</section>') - $firstSection);
+    $content = preg_replace('/\s+on[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content) ?? $content;
+    $content = preg_replace('/\s+(?:style|srcdoc)\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $content) ?? $content;
+    $content = preg_replace('/\s+(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/i', '', $content) ?? $content;
+    return trim($content) ?: null;
 }
 
 function createManagedCourseFiles(int $courseId, string $slug, string $title, array $modules): string {
@@ -409,6 +435,9 @@ function createManagedCourseFiles(int $courseId, string $slug, string $title, ar
     if (file_exists($entryFile) || file_exists($dataFile)) jsonError('A course content file already uses this slug.', 409);
 
     $safeTitle = htmlspecialchars($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $structuredContent = count($modules) === 1 && !empty($modules[0]['structured'])
+        ? trim((string)($modules[0]['content'] ?? ''))
+        : '';
     $bars = '';
     $decks = '';
     foreach ($modules as $index => $uploadedModule) {
@@ -420,7 +449,9 @@ function createManagedCourseFiles(int $courseId, string $slug, string $title, ar
         $decks .= '<div class="deck" data-mid="' . $moduleId . '" data-n="1" id="deck-' . $moduleId . '"><div class="slide active" data-i="0"><div class="slide-inner"><div class="slide-head"><div class="sn">' . $number . '</div><h3>' . $moduleTitle . '</h3></div>' . $moduleContent . '</div></div></div>';
     }
     $moduleCount = count($modules);
-    $module = '<section class="screen" id="screen-hub"><div class="hub-head"><div class="wrap"><div><h2>Course content</h2><p>' . $safeTitle . '</p></div><div class="hub-prog"><b><span id="hubDone">0</span>/<span id="hubTotal">' . $moduleCount . '</span></b><small>modules completed</small></div></div></div><div class="hub-body"><div class="wrap">' . $bars . '</div></div></section><section class="screen" id="screen-module"><div class="decks">' . $decks . '</div></section>';
+    $module = $structuredContent !== ''
+        ? $structuredContent
+        : '<section class="screen" id="screen-hub"><div class="hub-head"><div class="wrap"><div><h2>Course content</h2><p>' . $safeTitle . '</p></div><div class="hub-prog"><b><span id="hubDone">0</span>/<span id="hubTotal">' . $moduleCount . '</span></b><small>modules completed</small></div></div></div><div class="hub-body"><div class="wrap">' . $bars . '</div></div></section><section class="screen" id="screen-module"><div class="decks">' . $decks . '</div></section>';
     $entry = "<?php\ndeclare(strict_types=1);\n\$courseKey = " . var_export($slug, true) . ";\n\$courseDataKey = " . var_export($slug, true) . ";\n\$courseId = " . $courseId . ";\n\$courseTitle = " . var_export($title, true) . ";\nrequire __DIR__ . '/../includes/course-template.php';\n";
     if (file_put_contents($dataFile, $module, LOCK_EX) === false || file_put_contents($entryFile, $entry, LOCK_EX) === false) {
         if (is_file($dataFile)) unlink($dataFile);
@@ -599,7 +630,7 @@ try {
         $sql='SELECT id,slug,title,description,category,difficulty,duration,contentPath,icon,rating,studentCount,publicationStatus,createdAt FROM courses WHERE publicationStatus=\'published\''; $p=[];
         if($search!==''){ $sql.=' AND (title LIKE ? OR description LIKE ? OR category LIKE ?)'; $term='%'.$search.'%'; $p=[$term,$term,$term]; }
         if($category!==''){ $sql.=' AND category=?'; $p[]=$category; } if($difficulty!==''){ $sql.=' AND difficulty=?'; $p[]=$difficulty; }
-        $sql.=" ORDER BY CASE slug WHEN 'fsi' THEN 1 WHEN 'mfs' THEN 2 WHEN 'gfs' THEN 3 WHEN 'psds' THEN 4 WHEN 'fns' THEN 5 WHEN 'poverty' THEN 6 WHEN 'ess' THEN 7 ELSE 99 END, title ASC"; $s=db()->prepare($sql); $s->execute($p); $rows=$s->fetchAll();
+        $sql.=" ORDER BY title ASC"; $s=db()->prepare($sql); $s->execute($p); $rows=$s->fetchAll();
         jsonResponse(['success'=>true,'courses'=>array_map('normaliseCourse',$rows)]);
     }
 
@@ -966,6 +997,12 @@ try {
                 $rawContent=(string)($uploadedFile['content']??'');
                 $totalUploadBytes+=strlen($rawContent);
                 if ($totalUploadBytes > 5 * 1024 * 1024) jsonError('All course module files together must not exceed 5 MB.',422);
+                $structured=sanitiseStructuredCourseContent($rawContent);
+                if ($structured !== null) {
+                    if (count($d['contentFiles']) !== 1) jsonError('Upload a complete structured course by itself, or upload separate module files.',422);
+                    $uploadedModules[]=['title'=>$title,'content'=>$structured,'structured'=>true];
+                    continue;
+                }
                 $moduleTitle=trim((string)pathinfo($uploadName, PATHINFO_FILENAME));
                 $moduleTitle=preg_replace('/^[0-9]+[-_. ]*/','',$moduleTitle) ?? $moduleTitle;
                 $moduleTitle=trim(str_replace(['-','_'], ' ', $moduleTitle)) ?: ('Module '.($index+1));
@@ -983,6 +1020,7 @@ try {
                 $contentPath=createManagedCourseFiles($id,$slug,$title,$uploadedModules);
                 $createdEntry=$contentPath;
             }
+            db()->prepare('INSERT INTO assessment_settings (courseId,questionsPerAttempt,passMark,minutes,intro) VALUES (?,20,80,20,?) ON DUPLICATE KEY UPDATE courseId=VALUES(courseId)')->execute([$id,'']);
         } catch (PDOException $e) {
             if ((int)($e->errorInfo[1] ?? 0)===1062) jsonError('That course slug is already in use.',409);
             throw $e;
@@ -1002,7 +1040,7 @@ try {
     if (preg_match('#^/api/admin/courses/(\d+)/questions$#',$uri,$m)) {
         requireAdmin(); $cid=(int)$m[1]; if(!courseById($cid)) jsonError('Course not found.',404);
         if($method==='GET') { $type=(string)($_GET['type']??''); $all=[]; foreach(['module_quiz','final'] as $kind){if($type!==''&&$type!==$kind)continue;$a=databaseAssessment($cid,$kind);foreach(($a['questions']??[]) as $q){$q['questionType']=$kind;$all[]=$q;}} jsonResponse(['success'=>true,'questions'=>$all]); }
-        requireMethod('POST'); $d=validateAssessmentQuestion(getJsonBody()); $db=db(); $db->beginTransaction(); try{$s=$db->prepare('INSERT INTO assessment_questions (courseId,questionType,moduleId,quizKey,title,questionText,explanation,sortOrder,isActive) VALUES (?,?,?,?,?,?,?,?,?)');$s->execute([$cid,$d['questionType'],$d['moduleId'],$d['quizKey'],$d['title'],$d['questionText'],$d['explanation'],$d['sortOrder'],$d['isActive']]);$id=(int)$db->lastInsertId();$o=$db->prepare('INSERT INTO assessment_options (questionId,optionText,isCorrect,sortOrder) VALUES (?,?,?,?)');foreach($d['options'] as $option)$o->execute([$id,$option['text'],(int)$option['correct'],$option['sortOrder']]);$db->commit();}catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;} audit('assessment_question_created','assessment_question',$id,['courseId'=>$cid,'type'=>$d['questionType']]);jsonResponse(['success'=>true,'id'=>$id],201);
+        requireMethod('POST'); $d=validateAssessmentQuestion(getJsonBody()); if($d['questionType']==='module_quiz'){if(!$d['moduleId'])jsonError('Select a Module ID for a module quiz.',422);$moduleIds=courseAssessment($cid)['moduleIds']??[];if(!in_array($d['moduleId'],$moduleIds,true))jsonError('That Module ID does not exist in this course.',422);} $db=db(); $db->beginTransaction(); try{$s=$db->prepare('INSERT INTO assessment_questions (courseId,questionType,moduleId,quizKey,title,questionText,explanation,sortOrder,isActive) VALUES (?,?,?,?,?,?,?,?,?)');$s->execute([$cid,$d['questionType'],$d['moduleId'],$d['quizKey'],$d['title'],$d['questionText'],$d['explanation'],$d['sortOrder'],$d['isActive']]);$id=(int)$db->lastInsertId();$o=$db->prepare('INSERT INTO assessment_options (questionId,optionText,isCorrect,sortOrder) VALUES (?,?,?,?)');foreach($d['options'] as $option)$o->execute([$id,$option['text'],(int)$option['correct'],$option['sortOrder']]);$verify=$db->prepare('SELECT COUNT(*) total FROM assessment_options WHERE questionId=?');$verify->execute([$id]);if((int)($verify->fetch()['total']??0)!==count($d['options']))throw new RuntimeException('Question options were not fully persisted.');$db->commit();}catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;} audit('assessment_question_created','assessment_question',$id,['courseId'=>$cid,'type'=>$d['questionType']]);jsonResponse(['success'=>true,'id'=>$id,'persisted'=>true,'courseId'=>$cid],201);
     }
     if (preg_match('#^/api/admin/questions/(\d+)$#',$uri,$m)) {
         requireAdmin(); $id=(int)$m[1]; $s=db()->prepare('SELECT id,courseId FROM assessment_questions WHERE id=?');$s->execute([$id]);$existing=$s->fetch();if(!$existing)jsonError('Question not found.',404);
@@ -1017,6 +1055,7 @@ try {
         if(!$course) jsonError('Course not found.',404);
         $d=getJsonBody();
         $status=validateCoursePublicationStatus($d['status']??'');
+        if($status==='published' && count(courseAssessment($cid)['moduleIds']??[])<1) jsonError('A course must contain at least one valid module before publishing.',422);
         db()->prepare('UPDATE courses SET publicationStatus=? WHERE id=?')->execute([$status,$cid]);
         audit('course_status_updated','course',$cid,['from'=>coursePublicationStatus($course),'to'=>$status]);
         jsonResponse(['success'=>true,'id'=>$cid,'status'=>$status]);
@@ -1071,22 +1110,97 @@ try {
     }
     if ($uri === '/api/admin/analytics') {
         requireAdmin();
-        $q=db()->query("SELECT COUNT(*) users FROM users WHERE role='student'")->fetch();
-        $c=db()->query("SELECT COUNT(*) courses, SUM(publicationStatus='draft') draftCourses, SUM(publicationStatus='published') publishedCourses, SUM(publicationStatus='archived') archivedCourses FROM courses")->fetch();
-        $e=db()->query("SELECT COUNT(*) enrollments, SUM(status='completed') completedEnrollments, ROUND(AVG(progress),1) averageProgress FROM enrollments")->fetch();
-        $a=db()->query('SELECT COUNT(*) quizAttempts, ROUND(AVG(score),1) averageQuizScore FROM quiz_attempts')->fetch();
+
+        $courseId = isset($_GET['courseId']) && ctype_digit((string)$_GET['courseId']) ? (int)$_GET['courseId'] : 0;
+        $country = trim((string)($_GET['country'] ?? ''));
+        $sex = trim((string)($_GET['sex'] ?? ''));
+        $jobTitle = trim((string)($_GET['jobTitle'] ?? ''));
+        $organization = trim((string)($_GET['organization'] ?? ''));
+        $dateFrom = trim((string)($_GET['dateFrom'] ?? ''));
+        $dateTo = trim((string)($_GET['dateTo'] ?? ''));
+        if ($dateFrom !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateFrom)) jsonError('Invalid dateFrom.');
+        if ($dateTo !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateTo)) jsonError('Invalid dateTo.');
+
+        $where = ["u.role='student'"];
+        $params = [];
+        if ($courseId > 0) { $where[] = 'e.courseId = ?'; $params[] = $courseId; }
+        if ($country !== '') { $where[] = 'u.country = ?'; $params[] = $country; }
+        if ($sex !== '') { $where[] = 'u.sex = ?'; $params[] = $sex; }
+        if ($jobTitle !== '') { $where[] = 'u.jobTitle = ?'; $params[] = $jobTitle; }
+        if ($organization !== '') { $where[] = 'u.organization = ?'; $params[] = $organization; }
+        if ($dateFrom !== '') { $where[] = 'e.enrolledAt >= ?'; $params[] = $dateFrom . ' 00:00:00'; }
+        if ($dateTo !== '') { $where[] = 'e.enrolledAt < DATE_ADD(?, INTERVAL 1 DAY)'; $params[] = $dateTo . ' 00:00:00'; }
+        $whereSql = implode(' AND ', $where);
+
+        $summarySql = "SELECT COUNT(DISTINCT e.id) enrollments, COUNT(DISTINCT e.userId) registeredLearners, SUM(e.status='completed') completedEnrollments, ROUND(AVG(e.progress),1) averageProgress, ROUND(AVG(CASE WHEN e.completedAt IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,e.enrolledAt,e.completedAt)/60 END),1) averageCompletionHours FROM enrollments e JOIN users u ON u.id=e.userId WHERE $whereSql";
+        $stmt = db()->prepare($summarySql); $stmt->execute($params); $summary = $stmt->fetch() ?: [];
+
+        $certSql = "SELECT COUNT(DISTINCT c.id) certificatesIssued FROM certificates c JOIN enrollments e ON e.userId=c.userId AND e.courseId=c.courseId JOIN users u ON u.id=c.userId WHERE $whereSql";
+        $stmt = db()->prepare($certSql); $stmt->execute($params); $cert = $stmt->fetch() ?: [];
+
+        $scoreSql = "SELECT COUNT(*) assessedLearners, ROUND(AVG(cp.assessmentScore),1) averageScore, SUM(cp.assessmentPassed=1) passedLearners FROM course_progress cp JOIN enrollments e ON e.userId=cp.userId AND e.courseId=cp.courseId JOIN users u ON u.id=cp.userId WHERE cp.assessmentScore IS NOT NULL AND $whereSql";
+        $stmt = db()->prepare($scoreSql); $stmt->execute($params); $score = $stmt->fetch() ?: [];
+
+        $distribution = function(string $field, string $alias='label') use ($whereSql, $params) {
+            $allowed = ['u.country','u.sex','u.jobTitle','u.organization'];
+            if (!in_array($field,$allowed,true)) return [];
+            $sql = "SELECT COALESCE(NULLIF(TRIM($field),''),'Not specified') $alias, COUNT(DISTINCT e.userId) value FROM enrollments e JOIN users u ON u.id=e.userId WHERE $whereSql GROUP BY $field ORDER BY value DESC, $alias ASC LIMIT 20";
+            $st=db()->prepare($sql); $st->execute($params); return $st->fetchAll();
+        };
+
+        $scoreBandsSql = "SELECT CASE WHEN cp.assessmentScore < 50 THEN '0–49' WHEN cp.assessmentScore < 60 THEN '50–59' WHEN cp.assessmentScore < 70 THEN '60–69' WHEN cp.assessmentScore < 80 THEN '70–79' WHEN cp.assessmentScore < 90 THEN '80–89' ELSE '90–100' END label, COUNT(*) value FROM course_progress cp JOIN enrollments e ON e.userId=cp.userId AND e.courseId=cp.courseId JOIN users u ON u.id=cp.userId WHERE cp.assessmentScore IS NOT NULL AND $whereSql GROUP BY label ORDER BY MIN(cp.assessmentScore)";
+        $stmt=db()->prepare($scoreBandsSql); $stmt->execute($params); $scoreBands=$stmt->fetchAll();
+
+        $completionTrendSql = "SELECT DATE_FORMAT(e.completedAt,'%Y-%m') monthKey, DATE_FORMAT(e.completedAt,'%b %Y') label, COUNT(*) value FROM enrollments e JOIN users u ON u.id=e.userId WHERE e.completedAt IS NOT NULL AND $whereSql GROUP BY monthKey,label ORDER BY monthKey ASC";
+        $stmt=db()->prepare($completionTrendSql); $stmt->execute($params); $completionTrend=$stmt->fetchAll();
+
+        $byCourseSql = "SELECT c.id courseId,c.title courseName,c.category,COUNT(e.id) registered,SUM(e.status='completed') completed,ROUND(100*SUM(e.status='completed')/NULLIF(COUNT(e.id),0),1) completionRate,COUNT(DISTINCT cert.id) certificates,ROUND(AVG(cp.assessmentScore),1) averageScore,ROUND(100*SUM(CASE WHEN cp.assessmentScore IS NOT NULL AND cp.assessmentPassed=1 THEN 1 ELSE 0 END)/NULLIF(SUM(cp.assessmentScore IS NOT NULL),0),1) passRate,ROUND(AVG(CASE WHEN e.completedAt IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,e.enrolledAt,e.completedAt)/60 END),1) averageCompletionHours FROM courses c LEFT JOIN enrollments e ON e.courseId=c.id LEFT JOIN users u ON u.id=e.userId AND u.role='student' LEFT JOIN certificates cert ON cert.userId=e.userId AND cert.courseId=e.courseId LEFT JOIN course_progress cp ON cp.userId=e.userId AND cp.courseId=e.courseId";
+        $courseWhere=[]; $courseParams=[];
+        if ($courseId>0){$courseWhere[]='c.id=?';$courseParams[]=$courseId;}
+        if ($country!==''){$courseWhere[]='u.country=?';$courseParams[]=$country;}
+        if ($sex!==''){$courseWhere[]='u.sex=?';$courseParams[]=$sex;}
+        if ($jobTitle!==''){$courseWhere[]='u.jobTitle=?';$courseParams[]=$jobTitle;}
+        if ($organization!==''){$courseWhere[]='u.organization=?';$courseParams[]=$organization;}
+        if ($dateFrom!==''){$courseWhere[]='e.enrolledAt>=?';$courseParams[]=$dateFrom.' 00:00:00';}
+        if ($dateTo!==''){$courseWhere[]='e.enrolledAt<DATE_ADD(?, INTERVAL 1 DAY)';$courseParams[]=$dateTo.' 00:00:00';}
+        if($courseWhere)$byCourseSql.=' WHERE '.implode(' AND ',$courseWhere);
+        $byCourseSql.=' GROUP BY c.id,c.title,c.category ORDER BY c.title';
+        $stmt=db()->prepare($byCourseSql);$stmt->execute($courseParams);$byCourse=$stmt->fetchAll();
+
+        $courses=db()->query("SELECT id,title,category FROM courses ORDER BY title")->fetchAll();
+        $optionRows=function(string $column){$allowed=['country','sex','jobTitle','organization'];if(!in_array($column,$allowed,true))return [];return db()->query("SELECT DISTINCT $column value FROM users WHERE role='student' AND $column IS NOT NULL AND TRIM($column)<>'' ORDER BY $column")->fetchAll();};
+
+        $enrollments=(int)($summary['enrollments']??0);
+        $completed=(int)($summary['completedEnrollments']??0);
+        $assessed=(int)($score['assessedLearners']??0);
+        $passed=(int)($score['passedLearners']??0);
         jsonResponse([
             'success'=>true,
-            'users'=>(int)$q['users'],
-            'courses'=>(int)$c['courses'],
-            'draftCourses'=>(int)($c['draftCourses']??0),
-            'publishedCourses'=>(int)($c['publishedCourses']??0),
-            'archivedCourses'=>(int)($c['archivedCourses']??0),
-            'enrollments'=>(int)($e['enrollments']??0),
-            'completedEnrollments'=>(int)($e['completedEnrollments']??0),
-            'averageProgress'=>(float)($e['averageProgress']??0),
-            'quizAttempts'=>(int)($a['quizAttempts']??0),
-            'averageQuizScore'=>(float)($a['averageQuizScore']??0),
+            'registeredLearners'=>(int)($summary['registeredLearners']??0),
+            'enrollments'=>$enrollments,
+            'completedEnrollments'=>$completed,
+            'completionRate'=>$enrollments>0?round($completed/$enrollments*100,1):0,
+            'certificatesIssued'=>(int)($cert['certificatesIssued']??0),
+            'averageProgress'=>(float)($summary['averageProgress']??0),
+            'assessedLearners'=>$assessed,
+            'passedLearners'=>$passed,
+            'passRate'=>$assessed>0?round($passed/$assessed*100,1):0,
+            'averageScore'=>(float)($score['averageScore']??0),
+            'averageCompletionHours'=>(float)($summary['averageCompletionHours']??0),
+            'scoreBands'=>$scoreBands,
+            'completionTrend'=>$completionTrend,
+            'countryDistribution'=>$distribution('u.country'),
+            'genderDistribution'=>$distribution('u.sex'),
+            'jobRoleDistribution'=>$distribution('u.jobTitle'),
+            'organizationDistribution'=>$distribution('u.organization'),
+            'byCourse'=>$byCourse,
+            'filters'=>[
+                'courses'=>$courses,
+                'countries'=>array_column($optionRows('country'),'value'),
+                'genders'=>array_column($optionRows('sex'),'value'),
+                'jobTitles'=>array_column($optionRows('jobTitle'),'value'),
+                'organizations'=>array_column($optionRows('organization'),'value'),
+            ],
         ]);
     }
 

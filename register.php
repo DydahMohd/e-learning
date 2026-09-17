@@ -87,7 +87,7 @@
 
         <div class="actions">
             <a href="index.php" class="btn back">← Back</a>
-            <button id="registerButton" class="btn submit" type="submit">Start the course →</button>
+            <button id="registerButton" class="btn submit" type="submit">Submit</button>
         </div>
     </form>
     <p class="note">Your details are used only to personalise your experience and certificate within this session.</p>
@@ -117,7 +117,7 @@
         errorBox.textContent = message || 'Registration failed.';
         errorBox.classList.add('show');
         submitButton.disabled = false;
-        submitButton.textContent = 'Start the course →';
+        submitButton.textContent = 'Submit';
     }
 
     function value(id) {

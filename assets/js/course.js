@@ -143,6 +143,22 @@ function loadDatabaseQuizzes(){
   });
 }
 
+function ensureDatabaseQuizMounts(){
+  const bank=Array.isArray(window.__databaseQuizzes)?window.__databaseQuizzes:[];
+  bank.forEach((question,index)=>{
+    const key=String(question.id||('db-'+index));
+    if(document.querySelector('.quiz-mount[data-quiz="'+CSS.escape(key)+'"]')) return;
+    const moduleId=String(question.moduleId||'');
+    const deck=moduleId?document.querySelector('.deck[data-mid="'+CSS.escape(moduleId)+'"]'):null;
+    const target=(deck&&deck.querySelector('.slide:last-child .slide-inner'))||document.querySelector('.deck .slide:last-child .slide-inner');
+    if(!target) return;
+    const mount=document.createElement('div');
+    mount.className='quiz-mount';
+    mount.dataset.quiz=key;
+    target.appendChild(mount);
+  });
+}
+
 function bindStaticQuizzes(){
   document.querySelectorAll('.quiz:not([data-bound])').forEach(box=>{
     const opts=[...box.querySelectorAll('.opt')];
@@ -284,7 +300,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();
@@ -332,7 +348,7 @@ function initFlow(){
   const sx=document.getElementById('regSector'); if(sx) sx.addEventListener('change',()=>{const w=document.getElementById('regSectorOtherWrap'); if(w) w.style.display=sx.value==='Other'?'flex':'none';});
   const submit=document.getElementById('submitTest'); if(submit) submit.addEventListener('click',()=>submitTest(false));
   const png=document.getElementById('certPng'); if(png){ png.textContent='⬇ Download certificate (PDF)'; png.addEventListener('click',downloadOfficialCertificatePdf); }
-  const prn=document.getElementById('certPrint'); if(prn) prn.addEventListener('click',()=>window.print());
+  const prn=document.getElementById('certPrint'); if(prn) prn.addEventListener('click',printOfficialCertificatePdf);
   const ps=document.getElementById('prevSlide'); if(ps) ps.addEventListener('click',prevSlide);
   const ns=document.getElementById('nextSlide'); if(ns) ns.addEventListener('click',nextSlide);
   document.addEventListener('keydown',e=>{ if(!document.getElementById('screen-module').classList.contains('active'))return;
@@ -599,21 +615,33 @@ function configureCertificatePreview(){
   if(!svg||svg.dataset.eacStyled==='1') return;
   svg.dataset.eacStyled='1';
   svg.setAttribute('font-family',"'Times New Roman',Times,serif");
+  const ns='http://www.w3.org/2000/svg';
+  const defs=document.createElementNS(ns,'defs');
+  defs.innerHTML='<pattern id="eac-wave-watermark" width="500" height="100" patternUnits="userSpaceOnUse">'+
+    '<path id="eac-water-wave-a" d="M-30 28 C70 2 145 54 245 28 S420 2 530 28" fill="none"/>'+
+    '<path id="eac-water-wave-b" d="M-30 78 C70 52 145 104 245 78 S420 52 530 78" fill="none"/>'+
+    '<text font-family="Times New Roman,serif" font-size="13" font-weight="bold" fill="#063f78" opacity=".075"><textPath href="#eac-water-wave-a">EAST AFRICAN COMMUNITY   EAST AFRICAN COMMUNITY</textPath></text>'+
+    '<text font-family="Times New Roman,serif" font-size="13" font-weight="bold" fill="#00843d" opacity=".06"><textPath href="#eac-water-wave-b">EAST AFRICAN COMMUNITY   EAST AFRICAN COMMUNITY</textPath></text></pattern>';
+  svg.insertBefore(defs,svg.firstChild);
+  const watermark=document.createElementNS(ns,'rect');
+  watermark.setAttribute('x','34');watermark.setAttribute('y','34');watermark.setAttribute('width','932');watermark.setAttribute('height','639');watermark.setAttribute('fill','url(#eac-wave-watermark)');watermark.setAttribute('pointer-events','none');
+  const firstContent=[...svg.children].find(node=>node.tagName&&node.tagName.toLowerCase()!=='defs');
+  if(firstContent&&firstContent.nextSibling) svg.insertBefore(watermark,firstContent.nextSibling); else svg.appendChild(watermark);
   const texts=[...svg.querySelectorAll('text')];
   const find=text=>texts.find(node=>node.textContent.trim()===text);
   const community=find('EAST AFRICAN COMMUNITY');
-  if(community){community.setAttribute('font-family',"'Times New Roman',Times,serif");community.setAttribute('fill','#063f78');}
+  if(community){community.setAttribute('x','500');community.setAttribute('text-anchor','middle');community.setAttribute('font-family',"'Times New Roman',Times,serif");community.setAttribute('fill','#063f78');}
   const title=find('Certificate of Completion');
-  if(title){title.setAttribute('font-family',"Georgia,'Times New Roman',serif");title.setAttribute('font-style','italic');title.setAttribute('font-weight','normal');title.setAttribute('font-size','38');}
+  if(title){title.setAttribute('x','500');title.setAttribute('text-anchor','middle');title.setAttribute('font-family',"Georgia,'Times New Roman',serif");title.setAttribute('font-style','normal');title.setAttribute('font-weight','bold');title.setAttribute('font-size','38');}
   ['This is to certify that','has successfully completed the online course on'].forEach(text=>{
     const node=find(text);if(node){node.setAttribute('font-family',"Georgia,'Times New Roman',serif");node.setAttribute('font-style','italic');node.setAttribute('fill','#063f78');}
   });
   const offered=find('offered under the EAC Statistics E-Learning Programme');
   if(offered){offered.setAttribute('font-family',"Georgia,'Times New Roman',serif");offered.setAttribute('font-style','italic');offered.setAttribute('fill','#063f78');}
   const name=document.getElementById('cert-name');
-  if(name){name.setAttribute('font-family',"'Kunstler Script','Monotype Corsiva','Edwardian Script ITC',cursive");name.setAttribute('font-style','italic');name.setAttribute('font-weight','normal');name.setAttribute('fill','#063f78');}
+  if(name){name.setAttribute('x','500');name.setAttribute('text-anchor','middle');name.setAttribute('font-family',"Georgia,'Times New Roman',serif");name.setAttribute('font-style','normal');name.setAttribute('font-weight','bold');name.setAttribute('fill','#063f78');}
   const course=document.getElementById('cert-course');
-  if(course){course.setAttribute('font-family',"Georgia,'Times New Roman',serif");course.setAttribute('font-weight','bold');}
+  if(course){course.setAttribute('x','500');course.setAttribute('text-anchor','middle');course.setAttribute('font-family',"Georgia,'Times New Roman',serif");course.setAttribute('font-weight','bold');}
   const date=document.getElementById('cert-date');
   if(date){date.setAttribute('font-family',"Georgia,'Times New Roman',serif");date.setAttribute('font-style','italic');}
   const signature=find('East African Community');
@@ -621,13 +649,7 @@ function configureCertificatePreview(){
   const seal=document.createElementNS('http://www.w3.org/2000/svg','g');
   seal.setAttribute('id','certificate-achievement-seal');
   seal.setAttribute('transform','translate(500 555)');
-  seal.innerHTML='<circle r="54" fill="#d69200" stroke="#7b4800" stroke-width="2"/>'+
-    '<circle r="47" fill="#f7bd20" stroke="#fff07a" stroke-width="2"/>'+
-    '<circle r="39" fill="#d99100" stroke="#704000" stroke-width="1.5"/>'+
-    '<circle r="31" fill="#f3b719" stroke="#ffe780" stroke-width="1.5"/>'+
-    '<path d="M0-23 6.8-7.4 23.8-7.4 10 2.8 15 19-0 9.5-15 19-10 2.8-23.8-7.4-6.8-7.4Z" fill="#ffd95a" stroke="#754300" stroke-width="1.3"/>'+
-    '<text x="0" y="-39" text-anchor="middle" font-family="Times New Roman,serif" font-size="7" font-weight="bold" fill="#2c1a00">EAST AFRICAN COMMUNITY</text>'+
-    '<text x="0" y="44" text-anchor="middle" font-family="Times New Roman,serif" font-size="6.5" font-weight="bold" fill="#2c1a00">EXCELLENCE • HONOUR • ACHIEVEMENT</text>';
+  seal.innerHTML='<image href="../images/certificate-gold-seal-v2.png" x="-55" y="-55" width="110" height="110" preserveAspectRatio="xMidYMid meet"/>';
   const certId=document.getElementById('cert-id');
   if(certId) svg.insertBefore(seal,certId); else svg.appendChild(seal);
 }
@@ -656,29 +678,50 @@ function ensureOfficialCertificate(){
     return certificate;
   });
 }
+function getOfficialCertificatePdf(){
+  if(window.__eacOfficialCertificatePdf) return Promise.resolve(window.__eacOfficialCertificatePdf);
+  if(window.__eacOfficialCertificatePdfPromise) return window.__eacOfficialCertificatePdfPromise;
+  window.__eacOfficialCertificatePdfPromise=ensureOfficialCertificate().then(function(certificate){
+    return fetch(API_ROOT+'/certificates/'+encodeURIComponent(certificate.id)+'/download',{
+      headers:{Accept:'application/pdf',Authorization:'Bearer '+token()}
+    }).then(function(response){
+      if(!response.ok) return response.json().catch(function(){return {};}).then(function(data){throw new Error(data.error||'Could not load certificate.');});
+      return response.blob();
+    }).then(function(blob){
+      const result={blob:blob,certificate:certificate,url:URL.createObjectURL(blob)};
+      window.__eacOfficialCertificatePdf=result;
+      return result;
+    });
+  }).finally(function(){window.__eacOfficialCertificatePdfPromise=null;});
+  return window.__eacOfficialCertificatePdfPromise;
+}
+function renderOfficialCertificatePdf(){
+  const stage=document.querySelector('#screen-certificate .cert-stage');
+  if(!stage) return Promise.resolve();
+  stage.classList.add('certificate-pdf-loading');
+  return getOfficialCertificatePdf().then(function(result){
+    stage.classList.remove('certificate-pdf-loading');
+    stage.classList.add('certificate-pdf-stage');
+    stage.innerHTML='<object class="certificate-pdf-preview" type="application/pdf" data="'+result.url+'#toolbar=0&navpanes=0&view=FitH" aria-label="Official EAC certificate PDF"><iframe class="certificate-pdf-preview" src="'+result.url+'#toolbar=0&navpanes=0&view=FitH" title="Official EAC certificate PDF"></iframe></object>';
+  }).catch(function(error){stage.classList.remove('certificate-pdf-loading');console.warn('Certificate preview:',error.message);});
+}
 function populateCert(){
   if(!STATE.certId) STATE.certId=genCertId();
   updateCertificatePreview(null);
-  ensureOfficialCertificate().catch(function(error){ console.warn('Official certificate:',error.message); });
+  ensureOfficialCertificate().then(renderOfficialCertificatePdf).catch(function(error){ console.warn('Official certificate:',error.message); });
+}
+function printOfficialCertificatePdf(){
+  getOfficialCertificatePdf().then(function(result){window.open(result.url,'_blank','noopener');}).catch(function(error){alert(error.message||'Could not open the certificate.');});
 }
 function downloadOfficialCertificatePdf(){
   const btn=document.getElementById('certPng');
   const original=btn?btn.textContent:'';
   if(btn){btn.disabled=true;btn.textContent='Preparing PDF…';}
-  ensureOfficialCertificate().then(function(certificate){
-    return fetch(API_ROOT+'/certificates/'+encodeURIComponent(certificate.id)+'/download',{
-      headers:{Accept:'application/pdf',Authorization:'Bearer '+token()}
-    }).then(function(response){
-      if(!response.ok) return response.json().catch(function(){return {};}).then(function(data){throw new Error(data.error||'Could not download certificate.');});
-      return response.blob().then(function(blob){return {blob:blob,certificate:certificate};});
-    });
-  }).then(function(result){
-    const url=URL.createObjectURL(result.blob);
+  getOfficialCertificatePdf().then(function(result){
     const a=document.createElement('a');
-    a.href=url;
+    a.href=result.url;
     a.download='EAC_Certificate_'+String(result.certificate.certificateNumber||COURSE.code||'certificate').replace(/[^a-z0-9._-]+/gi,'_')+'.pdf';
     document.body.appendChild(a);a.click();a.remove();
-    setTimeout(function(){URL.revokeObjectURL(url);},2000);
   }).catch(function(error){
     alert(error.message||'Could not download the certificate.');
   }).finally(function(){if(btn){btn.disabled=false;btn.textContent=original||'⬇ Download certificate (PDF)';}});
@@ -714,6 +757,7 @@ function initialiseStandaloneHeaderCourseNav(){
 
 window.addEventListener('DOMContentLoaded',async()=>{
   await loadDatabaseQuizzes();
+  ensureDatabaseQuizMounts();
   renderQuizzes(); /* bindStaticQuizzes() is legacy-only and intentionally disabled. */ renderDragdrops(); bindStaticDragdrops(); renderReveals(); initVoiceovers(); initFlow();
   initialiseStandaloneHeaderCourseNav();
   const returning=loadState();

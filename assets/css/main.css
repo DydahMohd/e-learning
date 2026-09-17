@@ -233,8 +233,8 @@ body.course-view-active > .site-footer {
     --eac-navy: #0c2340;
     --eac-navy-dark: #081a30;
 
-    --eac-blue: #1a4480;
-    --eac-blue-light: #2e6cb5;
+    --eac-blue: #48A6DB;
+    --eac-blue-light: #48A6DB;
     --eac-blue-soft: #eaf1f9;
 
     --eac-gold: #c9a227;
@@ -3270,3 +3270,17 @@ body.course-view-active #platformHomeLink{background:transparent}
 @media(max-width:900px){
   .nav-dropdown-menu{left:auto;right:0}
 }
+
+/* EAC brand colour and descriptive catalogue headings. */
+.welcome-hero {
+    background: var(--eac-blue);
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+}
+.welcome-hero h2,
+body.dark-mode .welcome-hero h2,
+.welcome-hero p { color: #102d46; }
+.course-card-header { background: var(--eac-blue); align-items: center; }
+.course-card-title { margin: 0; color: #102d46; font-size: 1.15rem; line-height: 1.4; }
+.theme-toggle { width: auto; gap: .45rem; padding: .5rem .65rem; }
+.theme-toggle span { font-size: .8rem; white-space: nowrap; }

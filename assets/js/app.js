@@ -151,15 +151,10 @@ async function loadCourses() {
    COURSE GRID
 ========================================================= */
 
-const COURSE_DISPLAY_ORDER = ['fsi', 'mfs', 'gfs', 'psds', 'fns', 'poverty', 'ess'];
 function sortCoursesForDisplay(list) {
-    const rank = new Map(COURSE_DISPLAY_ORDER.map((slug, index) => [slug, index]));
-    return [...list].sort((a, b) => {
-        const ar = rank.has(String(a.slug || '').toLowerCase()) ? rank.get(String(a.slug || '').toLowerCase()) : 999;
-        const br = rank.has(String(b.slug || '').toLowerCase()) ? rank.get(String(b.slug || '').toLowerCase()) : 999;
-        if (ar !== br) return ar - br;
-        return String(a.title || '').localeCompare(String(b.title || ''));
-    });
+    return [...list].sort((a, b) =>
+        String(a.title || '').localeCompare(String(b.title || ''), 'en', { sensitivity: 'base' })
+    );
 }
 
 function renderCourseGrid() {
@@ -214,18 +209,13 @@ function renderCourseGrid() {
 
                     <div class="course-card-header">
 
-                        <div class="course-code" aria-hidden="true">${escapeHtml((course.slug || course.category || 'STAT').slice(0,4).toUpperCase())}</div>
+                        <h3 class="course-card-title">${escapeHtml(displayCourse.title || 'Untitled Course')}</h3>
 </div>
 
 
                     <div class="course-card-body">
                         
-                        <h3>
-                            ${escapeHtml(
-                                displayCourse.title ||
-                                'Untitled Course'
-                            )}
-                        </h3>
+
 
 
                         <p>
@@ -367,8 +357,6 @@ function renderSidebar() {
                     data-id="${Number(course.id)}"
                     onclick="openCourse(${Number(course.id)})"
                 >
-
-                    <span class="course-nav-code">${escapeHtml((course.slug || course.category || 'STAT').slice(0,3).toUpperCase())}</span>
 
                     <span>
                         ${escapeHtml(

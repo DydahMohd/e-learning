@@ -67,11 +67,14 @@ $headerVariant = $headerVariant ?? 'standard';
         <select id="languageSelect" data-language aria-label="Choose language" class="language-select">
             <option value="en">EN</option><option value="sw">SW</option><option value="fr">FR</option>
         </select>
-        <button type="button" class="btn-icon" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+        <button type="button" class="btn-icon theme-toggle" id="themeToggle" aria-label="Switch to dark mode"><i class="fas fa-moon" aria-hidden="true"></i><span>Eye comfort</span></button>
         <div class="user-chip" id="userChip">
             <div class="user-avatar" id="userAvatar" aria-hidden="true">U</div>
             <span id="userName">User</span>
         </div>
+        <a class="btn btn-ghost-white btn-sm hidden" href="<?= htmlspecialchars($basePath) ?>admin.php" data-admin-only id="adminDashboardBtn">
+            <i class="fas fa-shield-halved"></i> Admin Dashboard
+        </a>
         <button type="button" class="btn btn-ghost-white btn-sm" id="authBtn">Sign In</button>
         <a class="btn btn-gold btn-sm" href="<?= htmlspecialchars($basePath) ?>register.php" data-guest-only>Register</a>
         <button type="button" class="btn btn-ghost-white btn-sm hidden" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sign Out</button>

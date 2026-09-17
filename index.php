@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!-- Google tag (gtag.js) --> 
+     <script async
+      src="https://www.googletagmanager.com/gtag/js?id=G-HWL5N4C3RJ">
+    </script>
+     <script>
+      window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-HWL5N4C3RJ'); 
+      </script>
+   
     <link rel="stylesheet" href="assets/css/main.css?v=<?= (int) filemtime(__DIR__ . '/assets/css/main.css') ?>">
     <link rel="stylesheet" href="assets/css/pages/index.css?v=<?= (int) filemtime(__DIR__ . '/assets/css/pages/index.css') ?>">
 
@@ -14,7 +23,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Main Stylesheet -->
-    </head>
+
+</head>
 <body>
 <?php $basePath = ""; $activePage = "courses"; $headerVariant = "standard"; include __DIR__ . "/includes/header.php"; ?>
 

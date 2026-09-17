@@ -580,7 +580,14 @@ class EACApi {
     getNotifications() { return this.request('/notifications'); }
     markNotificationRead(id) { return this.request(`/notifications/${encodeURIComponent(id)}/read`, {method:'POST'}); }
     submitFeedback(courseId, rating, comment='') { return this.request('/feedback', {method:'POST', body:JSON.stringify({courseId,rating,comment})}); }
-    getAdminAnalytics() { return this.request('/admin/analytics'); }
+    getAdminAnalytics(filters = {}) {
+        const params = new URLSearchParams();
+        Object.entries(filters || {}).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && String(value).trim() !== '') params.set(key, String(value));
+        });
+        const query = params.toString();
+        return this.request('/admin/analytics' + (query ? '?' + query : ''));
+    }
 
 
     /* =====================================================
@@ -930,8 +937,8 @@ function applyDarkMode() {
 
         button.innerHTML =
             dark
-                ? '<i class="fas fa-sun"></i>'
-                : '<i class="fas fa-moon"></i>';
+                ? '<i class="fas fa-sun" aria-hidden="true"></i><span>Eye comfort</span>'
+                : '<i class="fas fa-moon" aria-hidden="true"></i><span>Eye comfort</span>';
 
 
         button.setAttribute(
@@ -1063,6 +1070,8 @@ Object.assign(eacTextTranslations, {
     'Country': {sw:'Nchi',fr:'Pays'},
     'Role / job title': {sw:'Wadhifa / cheo cha kazi',fr:'Fonction / intitulé du poste'},
     'Select…': {sw:'Chagua…',fr:'Sélectionnez…'},
+    'Submit': {sw:'Wasilisha',fr:'Envoyer'},
+    'Eye comfort': {sw:'Faraja ya macho',fr:'Confort visuel'},
     'Start the course →': {sw:'Anza kozi →',fr:'Commencer le cours →'},
     'Administrator?': {sw:'Msimamizi?',fr:'Administrateur ?'},
     'Sign in to administration': {sw:'Ingia kwenye usimamizi',fr:'Se connecter à l’administration'},
@@ -1319,7 +1328,7 @@ function updateAuthUI() {
         });
 
     document.querySelectorAll('[data-admin-only]').forEach(element => {
-        element.style.display = user?.role === 'admin' ? '' : 'none';
+        element.classList.toggle('hidden', user?.role !== 'admin');
     });
     document.querySelectorAll('[data-guest-only]').forEach(element => {
         element.style.display = user ? 'none' : '';

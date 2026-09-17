@@ -12,7 +12,7 @@
 <div class="feat-grid"><div class="feat"><div class="ic">🧱</div><h3>Built on the fundamentals</h3><p>Every concept is defined and built up from first principles — no prior statistics assumed.</p></div><div class="feat"><div class="ic">🧮</div><h3>Worked examples throughout</h3><p>Real calculations — hedonic rent, user-cost durables, food and poverty lines, FGT indicators, the MPI — worked step by step.</p></div><div class="feat"><div class="ic">🎯</div><h3>Learn by doing</h3><p>Knowledge checks and drag-and-drop activities in every module turn reading into understanding.</p></div><div class="feat"><div class="ic">🌍</div><h3>Grounded in the EAC</h3><p>Examples, survey names and frameworks reflect the eight Partner States and EAC guidelines.</p></div><div class="feat"><div class="ic">📊</div><h3>Monetary and multidimensional</h3><p>Covers both official lenses on poverty — income/consumption and the Multidimensional Poverty Index.</p></div><div class="feat"><div class="ic">📚</div><h3>Sources you can trust</h3><p>Built from EAC, World Bank, OPHI/UNDP and FAO guidance, cited in every module.</p></div></div>
 <div class="start-cta">
 <div class="cta-row">
-<button class="btn btn-blue btn-lg" data-screen="hub">Start the course →</button>
+<button class="btn btn-blue btn-lg" data-screen="hub">Submit</button>
 <a class="btn btn-ghost btn-lg" href="../register.php">Create learner account</a>
 </div>
 <p class="cta-note">Sign in is required to access course modules, assessments, progress tracking and certificates.</p>
@@ -904,7 +904,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+id); if(!el) return;
   el.classList.add('active');
-  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent=(REG_NEXT==='assessment')?'Register & start the assessment →':'Start the course →'; }
+  if(id==='register'){ const rb=document.getElementById('regSubmit'); if(rb) rb.textContent='Submit'; }
   if(id==='assessment') renderTest();
   if(id==='certificate') populateCert();
   if(id==='hub') updateHub();
