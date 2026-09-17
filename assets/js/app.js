@@ -276,7 +276,7 @@ function renderCourseGrid() {
                                 ${
                                     enrolled
                                         ? eacT('Continue Learning')
-                                        : eacT('Start the Course')
+                                        : eacT('View Course')
                                 }
                             </button>
 
